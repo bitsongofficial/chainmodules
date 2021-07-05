@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/bitsongofficial/go-bitsong/types"
+	"github.com/bitsongofficial/chainmodules/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

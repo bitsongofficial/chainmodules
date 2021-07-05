@@ -6,7 +6,7 @@ import "cosmos/bank/v1beta1/bank.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/bitsongofficial/bitsong/x/fantoken/types";
+option go_package = "github.com/bitsongofficial/chainmodules/x/fantoken/types";
 option (gogoproto.goproto_getters_all) = false;
 
 message SocialProof {
