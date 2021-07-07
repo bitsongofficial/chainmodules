@@ -9,17 +9,6 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/bitsongofficial/chainmodules/x/fantoken/types";
 option (gogoproto.goproto_getters_all) = false;
 
-message SocialProof {
-    string social = 1;
-    string handler = 2;
-    string proof_uri = 3;
-    google.protobuf.Timestamp expire_at = 4 [
-        (gogoproto.moretags)   = "yaml:\"expire_at\"",
-        (gogoproto.stdtime) = true,
-        (gogoproto.nullable) = false
-    ];
-}
-
 // FanToken defines a standard for the fungible token
 message FanToken {
     option (gogoproto.goproto_getters) = false;
@@ -37,7 +26,6 @@ message FanToken {
         (gogoproto.moretags) = "yaml:\"meta_data\"",
         (gogoproto.nullable) = false
     ];
-    repeated SocialProof social_proofs = 6;
 }
 
 // Params defines fantoken module's parameters
