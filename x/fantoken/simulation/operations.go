@@ -3,6 +3,7 @@ package simulation
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -316,7 +317,7 @@ func selectOneFanToken(
 func randStringBetween(r *rand.Rand, min, max int) string {
 	strLen := simtypes.RandIntBetween(r, min, max)
 	randStr := simtypes.RandStringOfLength(r, strLen)
-	return randStr
+	return strings.ToLower(randStr)
 }
 
 func genFanToken(ctx sdk.Context,

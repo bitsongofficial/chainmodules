@@ -28,7 +28,7 @@ func NewDecodeStore(cdc codec.Marshaler) func(kvA, kvB kv.Pair) string {
 			cdc.MustUnmarshalBinaryBare(kvA.Value, &symbolA)
 			cdc.MustUnmarshalBinaryBare(kvB.Value, &symbolB)
 			return fmt.Sprintf("%v\n%v", symbolA, symbolB)
-		case bytes.Equal(kvA.Key[:1], types.PrefixFanTokenForSymbol):
+		case bytes.Equal(kvA.Key[:1], types.PrefixTokenForDenom):
 			var symbolA, symbolB gogotypes.StringValue
 			cdc.MustUnmarshalBinaryBare(kvA.Value, &symbolA)
 			cdc.MustUnmarshalBinaryBare(kvB.Value, &symbolB)
