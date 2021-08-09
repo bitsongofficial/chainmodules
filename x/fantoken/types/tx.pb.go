@@ -1496,10 +1496,7 @@ func (m *MsgIssueFanToken) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1549,10 +1546,7 @@ func (m *MsgIssueFanTokenResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1698,10 +1692,7 @@ func (m *MsgTransferFanTokenOwner) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1751,10 +1742,7 @@ func (m *MsgTransferFanTokenOwnerResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1888,10 +1876,7 @@ func (m *MsgEditFanToken) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1941,10 +1926,7 @@ func (m *MsgEditFanTokenResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2123,10 +2105,7 @@ func (m *MsgMintFanToken) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2176,10 +2155,7 @@ func (m *MsgMintFanTokenResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2326,10 +2302,7 @@ func (m *MsgBurnFanToken) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2379,10 +2352,7 @@ func (m *MsgBurnFanTokenResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {

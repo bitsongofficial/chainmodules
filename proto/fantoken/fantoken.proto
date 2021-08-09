@@ -4,7 +4,6 @@ package bitsong.fantoken;
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/bank/v1beta1/bank.proto";
 import "gogoproto/gogo.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/bitsongofficial/chainmodules/x/fantoken/types";
 option (gogoproto.goproto_getters_all) = false;
