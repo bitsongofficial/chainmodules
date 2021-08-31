@@ -32,8 +32,17 @@ message MsgIssueDenom {
 
     string id = 1;
     string name = 2;
-    string schema = 3;
-    string sender = 4;
+    repeated string creators = 3;
+    repeated string split_shares = 4 [
+        (gogoproto.moretags)   = "yaml:\"split_shares\"",
+        (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+        (gogoproto.nullable)   = false
+      ];
+    repeated string royalty_shares = 5 [
+        (gogoproto.moretags)   = "yaml:\"royalty_shares\"",
+        (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+        (gogoproto.nullable)   = false
+      ];
 }
 
 // MsgIssueDenomResponse defines the Msg/IssueDenom response type.
@@ -59,9 +68,8 @@ message MsgEditNFT {
     string id = 1;
     string denom_id = 2 [ (gogoproto.moretags) = "yaml:\"denom_id\"" ];
     string name = 3;
-    string uri = 4 [ (gogoproto.customname) = "URI" ];
-    string data = 5;
-    string sender = 6;
+    string data = 4;
+    string sender = 5;
 }
 
 // MsgEditNFTResponse defines the Msg/EditNFT response type.
@@ -78,6 +86,7 @@ message MsgMintNFT {
     string data = 5;
     string sender = 6;
     string recipient = 7;
+    bool isPrimary = 8;
 }
 
 // MsgMintNFTResponse defines the Msg/MintNFT response type.
