@@ -17,6 +17,7 @@ message BaseNFT {
     string uri = 3 [ (gogoproto.customname) = "URI" ];
     string data = 4;
     string owner = 5;
+    bool isPrimary = 6;
 }
 
 // Denom defines a type of NFT
@@ -25,8 +26,17 @@ message Denom {
 
     string id = 1;
     string name = 2;
-    string schema = 3;
-    string creator = 4;
+    repeated string creators = 3;
+    repeated string split_shares = 4 [
+        (gogoproto.moretags)   = "yaml:\"split_shares\"",
+        (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+        (gogoproto.nullable)   = false
+      ];
+    repeated string royalty_shares = 5 [
+        (gogoproto.moretags)   = "yaml:\"royalty_shares\"",
+        (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+        (gogoproto.nullable)   = false
+      ];
 }
 
 // IDCollection defines a type of collection with specified ID
