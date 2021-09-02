@@ -83,12 +83,12 @@ func (k Keeper) IsDenomCreator(ctx sdk.Context, denomID string, address sdk.AccA
 		return types.Denom{}, err
 	}
 
-	creator, err := sdk.AccAddressFromBech32(denom.Creator)
+	minter, err := sdk.AccAddressFromBech32(denom.Minter)
 	if err != nil {
 		panic(err)
 	}
 
-	if !creator.Equals(address) {
+	if !minter.Equals(address) {
 		return types.Denom{}, sdkerrors.Wrapf(types.ErrUnauthorized, "%s is not the creator of %s", address, denomID)
 	}
 

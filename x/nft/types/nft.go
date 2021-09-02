@@ -13,13 +13,14 @@ import (
 var _ exported.NFT = BaseNFT{}
 
 // NewBaseNFT creates a new NFT instance
-func NewBaseNFT(id, name string, owner sdk.AccAddress, uri, data string) BaseNFT {
+func NewBaseNFT(id, name string, owner sdk.AccAddress, uri, data string, isPrimary bool) BaseNFT {
 	return BaseNFT{
-		Id:    id,
-		Name:  name,
-		Owner: owner.String(),
-		URI:   uri,
-		Data:  data,
+		Id:        id,
+		Name:      name,
+		Owner:     owner.String(),
+		URI:       uri,
+		Data:      data,
+		IsPrimary: isPrimary,
 	}
 }
 
@@ -52,6 +53,11 @@ func (bnft BaseNFT) GetURI() string {
 // GetData return the Data of BaseNFT
 func (bnft BaseNFT) GetData() string {
 	return bnft.Data
+}
+
+// GetPrimaryStatus return the IsPrimary of BaseNFT
+func (bnft BaseNFT) GetPrimaryStatus() bool {
+	return bnft.IsPrimary
 }
 
 // ----------------------------------------------------------------------------

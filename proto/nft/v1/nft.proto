@@ -37,6 +37,7 @@ message Denom {
         (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
         (gogoproto.nullable)   = false
       ];
+    string minter = 6;
 }
 
 // IDCollection defines a type of collection with specified ID

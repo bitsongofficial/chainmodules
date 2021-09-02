@@ -27,6 +27,7 @@ func (k Keeper) SetGenesisCollection(ctx sdk.Context, collection types.Collectio
 			nft.GetURI(),
 			nft.GetData(),
 			nft.GetOwner(),
+			nft.GetPrimaryStatus(),
 		); err != nil {
 			return err
 		}
@@ -47,6 +48,7 @@ func (k Keeper) SetCollection(ctx sdk.Context, collection types.Collection, send
 			nft.GetData(),
 			sender,
 			nft.GetOwner(),
+			nft.GetPrimaryStatus(),
 		); err != nil {
 			return err
 		}

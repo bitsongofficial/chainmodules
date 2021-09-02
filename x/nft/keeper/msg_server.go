@@ -4,6 +4,7 @@ package keeper
 
 import (
 	"context"
+	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -30,7 +31,7 @@ func (m msgServer) IssueDenom(goCtx context.Context, msg *types.MsgIssueDenom) (
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.IssueDenom(ctx, msg.Id, msg.Name, msg.Schema, sender); err != nil {
+	if err := m.Keeper.IssueDenom(ctx, msg.Id, msg.Name, msg.Creators, msg.SplitShares, msg.RoyaltyShares, sender); err != nil {
 		return nil, err
 	}
 
@@ -71,6 +72,7 @@ func (m msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types
 		msg.Data,
 		sender,
 		recipient,
+		msg.IsPrimary,
 	); err != nil {
 		return nil, err
 	}
@@ -82,6 +84,7 @@ func (m msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types
 			sdk.NewAttribute(types.AttributeKeyDenomID, msg.DenomId),
 			sdk.NewAttribute(types.AttributeKeyTokenURI, msg.URI),
 			sdk.NewAttribute(types.AttributeKeyRecipient, msg.Recipient),
+			sdk.NewAttribute(types.AttributeKeyIsPrimary, strconv.FormatBool(msg.IsPrimary)),
 		),
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
@@ -103,7 +106,6 @@ func (m msgServer) EditNFT(goCtx context.Context, msg *types.MsgEditNFT) (*types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.Keeper.EditNFT(ctx, msg.DenomId, msg.Id,
 		msg.Name,
-		msg.URI,
 		msg.Data,
 		sender,
 	); err != nil {
@@ -115,7 +117,6 @@ func (m msgServer) EditNFT(goCtx context.Context, msg *types.MsgEditNFT) (*types
 			types.EventTypeEditNFT,
 			sdk.NewAttribute(types.AttributeKeyTokenID, msg.Id),
 			sdk.NewAttribute(types.AttributeKeyDenomID, msg.DenomId),
-			sdk.NewAttribute(types.AttributeKeyTokenURI, msg.URI),
 			sdk.NewAttribute(types.AttributeKeyOwner, msg.Sender),
 		),
 		sdk.NewEvent(

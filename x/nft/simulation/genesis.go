@@ -12,6 +12,7 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/bitsongofficial/chainmodules/x/nft/types"
+	// sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -24,19 +25,23 @@ func RandomizedGenState(simState *module.SimulationState) {
 	collections := types.NewCollections(
 		types.NewCollection(
 			types.Denom{
-				Id:      doggos,
-				Name:    doggos,
-				Schema:  "",
-				Creator: "",
+				Id:   doggos,
+				Name: doggos,
+				// Creators:  []string{},
+				// SplitShares: []sdk.Dec{},
+				// RoyaltyShares: []sdk.Dec{},
+				Minter: "",
 			},
 			types.NFTs{},
 		),
 		types.NewCollection(
 			types.Denom{
-				Id:      kitties,
-				Name:    kitties,
-				Schema:  "",
-				Creator: "",
+				Id:   kitties,
+				Name: kitties,
+				// Creators:  []string{},
+				// SplitShares: []sdk.Dec{},
+				// RoyaltyShares: []sdk.Dec{},
+				Minter: "",
 			},
 			types.NFTs{}),
 	)
@@ -49,14 +54,15 @@ func RandomizedGenState(simState *module.SimulationState) {
 				acc.Address,
 				simtypes.RandStringOfLength(simState.Rand, 45), // tokenURI
 				simtypes.RandStringOfLength(simState.Rand, 10),
+				true,
 			)
 
 			// 50% doggos and 50% kitties
 			if simState.Rand.Intn(100) < 50 {
-				collections[0].Denom.Creator = baseNFT.Owner
+				collections[0].Denom.Minter = baseNFT.Owner
 				collections[0] = collections[0].AddNFT(baseNFT)
 			} else {
-				collections[1].Denom.Creator = baseNFT.Owner
+				collections[1].Denom.Minter = baseNFT.Owner
 				collections[1] = collections[1].AddNFT(baseNFT)
 			}
 		}
