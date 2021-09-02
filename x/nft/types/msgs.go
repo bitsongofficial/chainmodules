@@ -25,12 +25,14 @@ var (
 )
 
 // NewMsgIssueDenom is a constructor function for MsgSetName
-func NewMsgIssueDenom(denomID, denomName, schema, sender string) *MsgIssueDenom {
+func NewMsgIssueDenom(denomID, denomName string, creators []string, splitShares []sdk.Dec, royaltyShares []sdk.Dec, sender string) *MsgIssueDenom {
 	return &MsgIssueDenom{
-		Sender: sender,
-		Id:     denomID,
-		Name:   denomName,
-		Schema: schema,
+		Id:            denomID,
+		Name:          denomName,
+		Creators:      creators,
+		SplitShares:   splitShares,
+		RoyaltyShares: royaltyShares,
+		Sender:        sender,
 	}
 }
 
@@ -46,9 +48,32 @@ func (msg MsgIssueDenom) ValidateBasic() error {
 		return err
 	}
 
+	for _, creator := range msg.Creators {
+		if _, err := sdk.AccAddressFromBech32(creator); err != nil {
+			return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		}
+	}
+
 	if _, err := sdk.AccAddressFromBech32(msg.Sender); err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
+
+	sum := sdk.NewDec(0)
+	for _, share := range msg.SplitShares {
+		sum = sum.Add(share)
+	}
+	if !sum.Equal(sdk.NewDec(100)) {
+		return sdkerrors.Wrapf(ErrInvalidSplitShares, "invalid split shares, its sum is not 100")
+	}
+
+	sum = sdk.NewDec(0)
+	for _, share := range msg.RoyaltyShares {
+		sum = sum.Add(share)
+	}
+	if !sum.LT(sdk.NewDec(100)) {
+		return sdkerrors.Wrapf(ErrInvalidRoyaltyShares, "invalid royalty shares, its sum should be less than 100")
+	}
+
 	return ValidateDenomName(msg.Name)
 }
 
@@ -118,13 +143,12 @@ func (msg MsgTransferNFT) GetSigners() []sdk.AccAddress {
 
 // NewMsgEditNFT is a constructor function for MsgSetName
 func NewMsgEditNFT(
-	tokenID, denomID, tokenName, tokenURI, tokenData, sender string,
+	tokenID, denomID, tokenName, tokenData, sender string,
 ) *MsgEditNFT {
 	return &MsgEditNFT{
 		Id:      tokenID,
 		DenomId: denomID,
 		Name:    tokenName,
-		URI:     tokenURI,
 		Data:    tokenData,
 		Sender:  sender,
 	}
@@ -146,9 +170,6 @@ func (msg MsgEditNFT) ValidateBasic() error {
 		return err
 	}
 
-	if err := ValidateTokenURI(msg.URI); err != nil {
-		return err
-	}
 	return ValidateTokenID(msg.Id)
 }
 
@@ -179,6 +200,8 @@ func NewMsgMintNFT(
 		Data:      tokenData,
 		Sender:    sender,
 		Recipient: recipient,
+		// Think about how to set isPrimary flag when an nft is minted
+		// How to confirm if it is fresh one or minted by clone
 	}
 }
 

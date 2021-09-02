@@ -45,33 +45,33 @@ func TestMsgTransferNFTGetSignersMethod(t *testing.T) {
 }
 
 func TestMsgEditNFTValidateBasicMethod(t *testing.T) {
-	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenURI, tokenData, "")
+	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenData, "")
 
 	err := newMsgEditNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgEditNFT = types.NewMsgEditNFT("", denom, nftName, tokenURI, tokenData, address.String())
+	newMsgEditNFT = types.NewMsgEditNFT("", denom, nftName, tokenData, address.String())
 	err = newMsgEditNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgEditNFT = types.NewMsgEditNFT(id, "", nftName, tokenURI, tokenData, address.String())
+	newMsgEditNFT = types.NewMsgEditNFT(id, "", nftName, tokenData, address.String())
 	err = newMsgEditNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgEditNFT = types.NewMsgEditNFT(id, denom, nftName, tokenURI, tokenData, address.String())
+	newMsgEditNFT = types.NewMsgEditNFT(id, denom, nftName, tokenData, address.String())
 	err = newMsgEditNFT.ValidateBasic()
 	require.NoError(t, err)
 }
 
 func TestMsgEditNFTGetSignBytesMethod(t *testing.T) {
-	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenURI, tokenData, address.String())
+	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenData, address.String())
 	sortedBytes := newMsgEditNFT.GetSignBytes()
-	expected := `{"type":"bitsong/nft/MsgEditNFT","value":{"data":"https://google.com/token-1.json","denom_id":"denom","id":"id1","name":"report","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","uri":"https://google.com/token-1.json"}}`
+	expected := `{"type":"bitsong/nft/MsgEditNFT","value":{"data":"https://google.com/token-1.json","denom_id":"denom","id":"id1","name":"report","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq"}}`
 	require.Equal(t, expected, string(sortedBytes))
 }
 
 func TestMsgEditNFTGetSignersMethod(t *testing.T) {
-	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenURI, tokenData, address.String())
+	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenData, address.String())
 	signers := newMsgEditNFT.GetSigners()
 	require.Equal(t, 1, len(signers))
 	require.Equal(t, address.String(), signers[0].String())

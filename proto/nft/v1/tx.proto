@@ -43,6 +43,7 @@ message MsgIssueDenom {
         (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
         (gogoproto.nullable)   = false
       ];
+      string sender = 6;
 }
 
 // MsgIssueDenomResponse defines the Msg/IssueDenom response type.
