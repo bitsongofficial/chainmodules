@@ -65,10 +65,16 @@ func (s *IntegrationTestSuite) TestNft() {
 	// owner     := "owner"
 	denomName := "name"
 	denom := "denom"
+	creators := from.String()
+	splitShares := "100"
+	royaltyShares := "10"
 
 	//------test GetCmdIssueDenom()-------------
 	args := []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShares, royaltyShares),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -173,11 +179,9 @@ func (s *IntegrationTestSuite) TestNft() {
 
 	//------test GetCmdEditNFT()-------------
 	newTokenData := "newdata"
-	newTokenURI := "newuri"
 	newTokenName := "new Kitty Token"
 	args = []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, newTokenData),
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, newTokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, newTokenName),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -199,7 +203,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
 	newNftItem := respType.(*nfttypes.BaseNFT)
 	s.Require().Equal(newTokenName, newNftItem.Name)
-	s.Require().Equal(newTokenURI, newNftItem.URI)
 	s.Require().Equal(newTokenData, newNftItem.Data)
 
 	//------test GetCmdTransferNFT()-------------
@@ -226,7 +229,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	nftItem = respType.(*nfttypes.BaseNFT)
 	s.Require().Equal(tokenID, nftItem.Id)
 	s.Require().Equal(newTokenName, nftItem.Name)
-	s.Require().Equal(newTokenURI, nftItem.URI)
+	s.Require().Equal(tokenURI, nftItem.URI)
 	s.Require().Equal(newTokenData, nftItem.Data)
 	s.Require().Equal(recipient.String(), nftItem.Owner)
 
@@ -235,7 +238,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	args = []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, newTokenData),
 		fmt.Sprintf("--%s=%s", nftcli.FlagRecipient, from.String()),
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, newTokenURI),
+		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, tokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, newTokenName),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
