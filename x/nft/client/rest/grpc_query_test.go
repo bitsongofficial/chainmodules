@@ -63,13 +63,11 @@ func (s *IntegrationTestSuite) TestNft() {
 	// owner     := "owner"
 	denomName := "name"
 	denom := "denom"
-	schema := "schema"
 	baseURL := val.APIAddress
 
 	//------test GetCmdIssueDenom()-------------
 	args := []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
-		fmt.Sprintf("--%s=%s", nftcli.FlagSchema, schema),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -95,7 +93,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(resp, respType))
 	denomItem := respType.(*nfttypes.QueryDenomResponse)
 	s.Require().Equal(denomName, denomItem.Denom.Name)
-	s.Require().Equal(schema, denomItem.Denom.Schema)
 
 	//------test GetCmdQueryDenomByName()-------------
 	url = fmt.Sprintf("%s/chainmodules/nft/denoms/name/%s", baseURL, denomName)
@@ -106,7 +103,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	denomItem = respType.(*nfttypes.QueryDenomResponse)
 	s.Require().Equal(denomID, denomItem.Denom.Id)
 	s.Require().Equal(denomName, denomItem.Denom.Name)
-	s.Require().Equal(schema, denomItem.Denom.Schema)
 
 	//------test GetCmdQueryDenoms()-------------
 	url = fmt.Sprintf("%s/chainmodules/nft/denoms", baseURL)

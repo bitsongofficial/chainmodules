@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 )
 
@@ -23,11 +24,13 @@ const (
 )
 
 type issueDenomReq struct {
-	BaseReq rest.BaseReq `json:"base_req"`
-	Owner   string       `json:"owner"`
-	ID      string       `json:"id"`
-	Name    string       `json:"name"`
-	Schema  string       `json:"schema"`
+	BaseReq       rest.BaseReq `json:"base_req"`
+	Owner         string       `json:"owner"`
+	ID            string       `json:"id"`
+	Name          string       `json:"name"`
+	Creators      []string     `json:"creators"`
+	SplitShares   []sdk.Dec    `json:"split_shares"`
+	RoyaltyShares []sdk.Dec    `json:"royalty_shares"`
 }
 
 type mintNFTReq struct {
@@ -45,7 +48,6 @@ type editNFTReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Owner   string       `json:"owner"`
 	Name    string       `json:"name"`
-	URI     string       `json:"uri"`
 	Data    string       `json:"data"`
 }
 

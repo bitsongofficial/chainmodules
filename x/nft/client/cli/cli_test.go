@@ -65,12 +65,10 @@ func (s *IntegrationTestSuite) TestNft() {
 	// owner     := "owner"
 	denomName := "name"
 	denom := "denom"
-	schema := "schema"
 
 	//------test GetCmdIssueDenom()-------------
 	args := []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
-		fmt.Sprintf("--%s=%s", nftcli.FlagSchema, schema),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -96,7 +94,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
 	denomItem := respType.(*nfttypes.Denom)
 	s.Require().Equal(denomName, denomItem.Name)
-	s.Require().Equal(schema, denomItem.Schema)
 
 	//------test GetCmdQueryDenomByName()-------------
 	respType = proto.Message(&nfttypes.Denom{})
@@ -106,7 +103,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	denomItem = respType.(*nfttypes.Denom)
 	s.Require().Equal(denomName, denomItem.Name)
 	s.Require().Equal(denomID, denomItem.Id)
-	s.Require().Equal(schema, denomItem.Schema)
 
 	//------test GetCmdQueryDenoms()-------------
 	respType = proto.Message(&nfttypes.QueryDenomsResponse{})

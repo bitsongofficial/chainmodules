@@ -24,7 +24,6 @@ import (
 var (
 	denomID = "denomid"
 	denomNm = "denomnm"
-	schema  = "{a:a,b:b}"
 
 	denomID2 = "denomid2"
 	denomNm2 = "denom2nm"
@@ -41,7 +40,6 @@ var (
 	address2  = CreateTestAddrs(2)[1]
 	address3  = CreateTestAddrs(3)[2]
 	tokenURI  = "https://google.com/token-1.json" // nolint: gosec
-	tokenURI2 = "https://google.com/token-2.json" // nolint: gosec
 	tokenData = "{a:a,b:b}"                       // nolint: gosec
 
 	isCheckTx = false
@@ -114,11 +112,6 @@ func (suite *KeeperSuite) TestUpdateNFT() {
 	// EditNFT should fail when NFT doesn't exists
 	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID2, tokenNm2, tokenData, address)
 	suite.Error(err)
-
-	// GetNFT should get the NFT with new tokenURI
-	receivedNFT, err := suite.keeper.GetNFT(suite.ctx, denomID, tokenID)
-	suite.NoError(err)
-	suite.Equal(receivedNFT.GetURI(), tokenURI2)
 
 	// EditNFT should fail when address is not the owner
 	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID, tokenNm, tokenData, address2)
