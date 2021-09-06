@@ -190,7 +190,7 @@ func (msg MsgEditNFT) GetSigners() []sdk.AccAddress {
 
 // NewMsgMintNFT is a constructor function for MsgMintNFT
 func NewMsgMintNFT(
-	tokenID, denomID, tokenName, tokenURI, tokenData, sender, recipient string,
+	tokenID, denomID, tokenName, tokenURI, tokenData, sender, recipient string, isPrimary bool,
 ) *MsgMintNFT {
 	return &MsgMintNFT{
 		Id:        tokenID,
@@ -200,8 +200,7 @@ func NewMsgMintNFT(
 		Data:      tokenData,
 		Sender:    sender,
 		Recipient: recipient,
-		// Think about how to set isPrimary flag when an nft is minted
-		// How to confirm if it is fresh one or minted by clone
+		IsPrimary: isPrimary,
 	}
 }
 

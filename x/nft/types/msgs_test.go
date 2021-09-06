@@ -78,27 +78,27 @@ func TestMsgEditNFTGetSignersMethod(t *testing.T) {
 }
 
 func TestMsgMsgMintNFTValidateBasicMethod(t *testing.T) {
-	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, "", address2.String())
+	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, "", address2.String(), true)
 	err := newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT("", denom, nftName, tokenURI, tokenData, address.String(), address2.String())
+	newMsgMintNFT = types.NewMsgMintNFT("", denom, nftName, tokenURI, tokenData, address.String(), address2.String(), true)
 	err = newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT(id, "", nftName, tokenURI, tokenData, address.String(), address2.String())
+	newMsgMintNFT = types.NewMsgMintNFT(id, "", nftName, tokenURI, tokenData, address.String(), address2.String(), true)
 	err = newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, address.String(), address2.String())
+	newMsgMintNFT = types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, address.String(), address2.String(), true)
 	err = newMsgMintNFT.ValidateBasic()
 	require.NoError(t, err)
 }
 
 func TestMsgMintNFTGetSignBytesMethod(t *testing.T) {
-	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, address.String(), address2.String())
+	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, address.String(), address2.String(), true)
 	sortedBytes := newMsgMintNFT.GetSignBytes()
-	expected := `{"type":"bitsong/nft/MsgMintNFT","value":{"data":"https://google.com/token-1.json","denom_id":"denom","id":"id1","name":"report","recipient":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgp0ctjdj","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","uri":"https://google.com/token-1.json"}}`
+	expected := `{"type":"bitsong/nft/MsgMintNFT","value":{"data":"https://google.com/token-1.json","denom_id":"denom","id":"id1","isPrimary":true,"name":"report","recipient":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgp0ctjdj","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","uri":"https://google.com/token-1.json"}}`
 	require.Equal(t, expected, string(sortedBytes))
 }
 
