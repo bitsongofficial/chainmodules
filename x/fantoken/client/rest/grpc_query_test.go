@@ -103,7 +103,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(resp, respType))
 	tokenResp := respType.(*tokentypes.QueryFanTokenResponse)
-	err = clientCtx.InterfaceRegistry.UnpackAny(tokenResp.FanToken, &token)
+	token = tokenResp.FanToken
 	s.Require().NoError(err)
 	s.Require().Equal(name, token.GetName())
 	s.Require().Equal(symbol, token.GetSymbol())
