@@ -60,7 +60,7 @@ func GetCmdQueryFanToken() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintProto(res.FanToken)
+			return clientCtx.PrintProto(res.Token)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
@@ -104,7 +104,7 @@ func GetCmdQueryFanTokens() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintObjectLegacy(res.FanTokens)
+			return clientCtx.PrintObjectLegacy(res.Tokens)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
