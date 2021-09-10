@@ -29,7 +29,7 @@ func (k Keeper) FanToken(c context.Context, req *types.QueryFanTokenRequest) (*t
 		return nil, status.Errorf(codes.NotFound, "token %s not found", req.Denom)
 	}
 
-	return &types.QueryFanTokenResponse{FanToken: &types.FanToken{
+	return &types.QueryFanTokenResponse{Token: &types.FanToken{
 		Name:      token.GetName(),
 		MaxSupply: token.GetMaxSupply(),
 		Mintable:  token.GetMintable(),
@@ -93,7 +93,7 @@ func (k Keeper) FanTokens(c context.Context, req *types.QueryFanTokensRequest) (
 		})
 	}
 
-	return &types.QueryFanTokensResponse{FanTokens: result, Pagination: pageRes}, nil
+	return &types.QueryFanTokensResponse{Tokens: result, Pagination: pageRes}, nil
 }
 
 // Params return the all the parameter in tonken module
