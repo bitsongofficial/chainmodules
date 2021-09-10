@@ -36,7 +36,7 @@ message QueryFanTokenRequest {
 
 // QueryFanTokenResponse is response type for the Query/FanToken RPC method
 message QueryFanTokenResponse {
-    fantoken.FanToken FanToken = 1;
+    fantoken.FanToken token = 1;
 }
 
 // QueryFanTokensRequest is request type for the Query/FanTokens RPC method
@@ -48,7 +48,7 @@ message QueryFanTokensRequest {
 
 // QueryFanTokensResponse is response type for the Query/FanTokens RPC method
 message QueryFanTokensResponse {
-    repeated fantoken.FanToken FanTokens = 1;
+    repeated fantoken.FanToken tokens = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
