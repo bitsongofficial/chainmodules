@@ -33,7 +33,7 @@ func (k Keeper) FanToken(c context.Context, req *types.QueryFanTokenRequest) (*t
 		Name:      token.GetName(),
 		MaxSupply: token.GetMaxSupply(),
 		Mintable:  token.GetMintable(),
-		Owner:     string(token.GetOwner()),
+		Owner:     token.GetOwner().String(),
 		MetaData:  token.GetMetaData(),
 	}}, nil
 }
@@ -88,7 +88,7 @@ func (k Keeper) FanTokens(c context.Context, req *types.QueryFanTokensRequest) (
 			Name:      token.GetName(),
 			MaxSupply: token.GetMaxSupply(),
 			Mintable:  token.GetMintable(),
-			Owner:     string(token.GetOwner()),
+			Owner:     token.GetOwner().String(),
 			MetaData:  token.GetMetaData(),
 		})
 	}

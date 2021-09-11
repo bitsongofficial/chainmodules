@@ -36,6 +36,11 @@ func (suite *KeeperTestSuite) TestGRPCQueryToken() {
 	suite.Require().NoError(err)
 	suite.Require().NotNil(tokenResp1)
 
+	suite.Require().Equal(tokenResp1.Token.Name, "Bitcoin Network")
+	suite.Require().Equal(tokenResp1.Token.MaxSupply, sdk.NewInt(22000000))
+	suite.Require().Equal(tokenResp1.Token.Owner, addr.String())
+	suite.Require().Equal(tokenResp1.Token.MetaData, denomMetaData)
+
 	tokenResp2, err := queryClient.FanToken(gocontext.Background(), &types.QueryFanTokenRequest{Denom: "ubtc"})
 	suite.Require().NoError(err)
 	suite.Require().NotNil(tokenResp2)
