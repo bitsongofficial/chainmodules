@@ -60,7 +60,7 @@ func GetCmdQueryFanToken() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintProto(res.FanToken)
+			return clientCtx.PrintProto(res.Token)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
@@ -104,16 +104,7 @@ func GetCmdQueryFanTokens() *cobra.Command {
 				return err
 			}
 
-			tokens := make([]types.FanTokenI, 0, len(res.FanTokens))
-			for _, eviAny := range res.FanTokens {
-				var evi types.FanTokenI
-				if err = clientCtx.InterfaceRegistry.UnpackAny(eviAny, &evi); err != nil {
-					return err
-				}
-				tokens = append(tokens, evi)
-			}
-
-			return clientCtx.PrintObjectLegacy(tokens)
+			return clientCtx.PrintObjectLegacy(res.Tokens)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)

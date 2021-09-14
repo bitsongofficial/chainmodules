@@ -26,6 +26,7 @@ type FanTokenI interface {
 	GetMaxSupply() sdk.Int
 	GetMintable() bool
 	GetOwner() sdk.AccAddress
+	GetMetaData() banktypes.Metadata
 
 	ToMainCoin(coin sdk.Coin) (sdk.DecCoin, error)
 	ToMinCoin(coin sdk.DecCoin) (sdk.Coin, error)
@@ -76,6 +77,11 @@ func (t FanToken) GetMintable() bool {
 func (t FanToken) GetOwner() sdk.AccAddress {
 	owner, _ := sdk.AccAddressFromBech32(t.Owner)
 	return owner
+}
+
+// GetMetaData returns metadata of the fantoken
+func (t FanToken) GetMetaData() banktypes.Metadata {
+	return t.MetaData
 }
 
 func (t FanToken) String() string {

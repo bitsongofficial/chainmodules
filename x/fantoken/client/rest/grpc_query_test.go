@@ -93,7 +93,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(resp, respType))
 	tokensResp := respType.(*tokentypes.QueryFanTokensResponse)
-	s.Require().Equal(1, len(tokensResp.FanTokens))
+	s.Require().Equal(1, len(tokensResp.Tokens))
 
 	//------test GetCmdQueryFanToken()-------------
 	url = fmt.Sprintf("%s/chainmodules/fantoken/tokens/%s", baseURL, tokenSymbol)
@@ -103,7 +103,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(resp, respType))
 	tokenResp := respType.(*tokentypes.QueryFanTokenResponse)
-	err = clientCtx.InterfaceRegistry.UnpackAny(tokenResp.FanToken, &token)
+	token = tokenResp.Token
 	s.Require().NoError(err)
 	s.Require().Equal(name, token.GetName())
 	s.Require().Equal(symbol, token.GetSymbol())

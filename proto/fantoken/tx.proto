@@ -29,7 +29,7 @@ service Msg {
 message MsgIssueFanToken {
     string symbol = 1;
     string name = 2;
-    bytes max_supply = 3 [
+    string max_supply = 3 [
         (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
         (gogoproto.moretags)   = "yaml:\"max_supply\"",
         (gogoproto.nullable)   = false
@@ -69,7 +69,7 @@ message MsgEditFanTokenResponse {}
 message MsgMintFanToken {
     string recipient = 1;
     string denom = 2;
-    bytes amount = 3 [
+    string amount = 3 [
         (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
         (gogoproto.moretags)   = "yaml:\"amount\"",
         (gogoproto.nullable)   = false
@@ -83,7 +83,7 @@ message MsgMintFanTokenResponse {}
 // MsgBurnFanToken defines an SDK message for burning some fan tokens
 message MsgBurnFanToken {
     string denom = 1;
-    bytes amount = 2 [
+    string amount = 2 [
         (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
         (gogoproto.moretags)   = "yaml:\"amount\"",
         (gogoproto.nullable)   = false

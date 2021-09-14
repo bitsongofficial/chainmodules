@@ -12,7 +12,6 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -88,20 +87,19 @@ func (s *IntegrationTestSuite) TestToken() {
 	tokenSymbol := gjson.Get(txResp.RawLog, "0.events.0.attributes.0.value").String()
 
 	//------test GetCmdQueryFanTokens()-------------
-	tokens := &[]tokentypes.FanTokenI{}
+	tokens := &[]tokentypes.FanToken{}
 	bz, err = tokentestutil.QueryFanTokensExec(clientCtx, from.String())
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.LegacyAmino.UnmarshalJSON(bz.Bytes(), tokens))
 	s.Require().Equal(1, len(*tokens))
 
 	//------test GetCmdQueryFanToken()-------------
-	var token tokentypes.FanTokenI
-	respType = proto.Message(&types.Any{})
+	var token *tokentypes.FanToken
+	respType = proto.Message(&tokentypes.FanToken{})
 	bz, err = tokentestutil.QueryFanTokenExec(clientCtx, tokenSymbol)
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
-	err = clientCtx.InterfaceRegistry.UnpackAny(respType.(*types.Any), &token)
-	s.Require().NoError(err)
+	token = respType.(*tokentypes.FanToken)
 	s.Require().Equal(name, token.GetName())
 	s.Require().Equal(symbol, token.GetSymbol())
 
@@ -192,13 +190,12 @@ func (s *IntegrationTestSuite) TestToken() {
 	txResp = respType.(*sdk.TxResponse)
 	s.Require().Equal(expectedCode, txResp.Code)
 
-	var token2 tokentypes.FanTokenI
-	respType = proto.Message(&types.Any{})
+	var token2 *tokentypes.FanToken
+	respType = proto.Message(&tokentypes.FanToken{})
 	bz, err = tokentestutil.QueryFanTokenExec(clientCtx, tokenSymbol)
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
-	err = clientCtx.InterfaceRegistry.UnpackAny(respType.(*types.Any), &token2)
-	s.Require().NoError(err)
+	token2 = respType.(*tokentypes.FanToken)
 	s.Require().Equal(newMintable, token2.GetMintable())
 
 	//------test GetCmdTransferTokenOwner()-------------
@@ -218,14 +215,4 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType), bz.String())
 	txResp = respType.(*sdk.TxResponse)
 	s.Require().Equal(expectedCode, txResp.Code)
-
-	var token3 tokentypes.FanTokenI
-	respType = proto.Message(&types.Any{})
-	bz, err = tokentestutil.QueryFanTokenExec(clientCtx, tokenSymbol)
-	s.Require().NoError(err)
-	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
-	err = clientCtx.InterfaceRegistry.UnpackAny(respType.(*types.Any), &token3)
-	s.Require().NoError(err)
-	s.Require().Equal(to, token3.GetOwner())
-	// ---------------------------------------------------------------------------
 }

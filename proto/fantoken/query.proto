@@ -2,11 +2,9 @@ syntax = "proto3";
 package bitsong.fantoken;
 
 import "cosmos/base/v1beta1/coin.proto";
-import "cosmos_proto/cosmos.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/any.proto";
 import "fantoken/fantoken.proto";
 
 option go_package = "github.com/bitsongofficial/chainmodules/x/fantoken/types";
@@ -38,8 +36,7 @@ message QueryFanTokenRequest {
 
 // QueryFanTokenResponse is response type for the Query/FanToken RPC method
 message QueryFanTokenResponse {
-    google.protobuf.Any FanToken = 1
-        [ (cosmos_proto.accepts_interface) = "ContentI" ];
+    fantoken.FanToken token = 1;
 }
 
 // QueryFanTokensRequest is request type for the Query/FanTokens RPC method
@@ -51,9 +48,7 @@ message QueryFanTokensRequest {
 
 // QueryFanTokensResponse is response type for the Query/FanTokens RPC method
 message QueryFanTokensResponse {
-    repeated google.protobuf.Any FanTokens = 1
-        [ (cosmos_proto.accepts_interface) = "ContentI" ];
-
+    repeated fantoken.FanToken tokens = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

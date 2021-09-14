@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gogo/protobuf/proto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -30,17 +28,14 @@ func (k Keeper) FanToken(c context.Context, req *types.QueryFanTokenRequest) (*t
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "token %s not found", req.Denom)
 	}
-	msg, ok := token.(proto.Message)
-	if !ok {
-		return nil, status.Errorf(codes.Internal, "can't protomarshal %T", token)
-	}
 
-	any, err := codectypes.NewAnyWithValue(msg)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return &types.QueryFanTokenResponse{FanToken: any}, nil
+	return &types.QueryFanTokenResponse{Token: &types.FanToken{
+		Name:      token.GetName(),
+		MaxSupply: token.GetMaxSupply(),
+		Mintable:  token.GetMintable(),
+		Owner:     token.GetOwner().String(),
+		MetaData:  token.GetMetaData(),
+	}}, nil
 }
 
 func (k Keeper) FanTokens(c context.Context, req *types.QueryFanTokensRequest) (*types.QueryFanTokensResponse, error) {
@@ -87,20 +82,18 @@ func (k Keeper) FanTokens(c context.Context, req *types.QueryFanTokensRequest) (
 			return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 		}
 	}
-	result := make([]*codectypes.Any, len(tokens))
-	for i, token := range tokens {
-		msg, ok := token.(proto.Message)
-		if !ok {
-			return nil, status.Errorf(codes.Internal, "%T does not implement proto.Message", token)
-		}
-
-		var err error
-		if result[i], err = codectypes.NewAnyWithValue(msg); err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
-		}
+	var result []*types.FanToken
+	for _, token := range tokens {
+		result = append(result, &types.FanToken{
+			Name:      token.GetName(),
+			MaxSupply: token.GetMaxSupply(),
+			Mintable:  token.GetMintable(),
+			Owner:     token.GetOwner().String(),
+			MetaData:  token.GetMetaData(),
+		})
 	}
 
-	return &types.QueryFanTokensResponse{FanTokens: result, Pagination: pageRes}, nil
+	return &types.QueryFanTokensResponse{Tokens: result, Pagination: pageRes}, nil
 }
 
 // Params return the all the parameter in tonken module
