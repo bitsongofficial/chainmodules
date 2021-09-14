@@ -18,8 +18,6 @@ var (
 	address2 = CreateTestAddrs(2)[1]
 	// nolint: gosec
 	tokenURI = "https://google.com/token-1.json"
-	// nolint: gosec
-	tokenData = "https://google.com/token-1.json"
 )
 
 // CreateTestAddrs creates test addresses

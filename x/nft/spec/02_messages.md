@@ -1,6 +1,3 @@
-> Copyright (c) 2016-2021 Shanghai Bianjie AI Technology Inc. (licensed under the Apache License, Version 2.0)
-> Modifications Copyright (c) 2021, CRO Protocol Labs ("Crypto.org") (licensed under the Apache License, Version 2.0)
-
 # Messages
 
 ## MsgIssueDenom
@@ -8,18 +5,22 @@
 This message defines a type of non-fungible tokens, there can be multiple non-fungible tokens of the same type. Note
 that both, `Id` and `Name`, are required to be unique globally.
 
-| **Field** | **Type** | **Description**                                                                                                 |
-| :-------- | :------- | :-------------------------------------------------------------------------------------------------------------- |
-| Id        | `string` | The denomination ID of the NFT, necessary as multiple denominations are able to be represented on each chain.   |
-| Name      | `string` | The denomination name of the NFT, necessary as multiple denominations are able to be represented on each chain. |
-| Sender    | `string` | The account address of the user creating the denomination.                                                      |
-| Schema    | `string` | NFT specifications defined under this category                                                                  |
+| **Field**      | **Type**    | **Description**                                                                                                 |
+| :------------- | :---------- | :-------------------------------------------------------------------------------------------------------------- |
+| Id             | `string`    | The denomination ID of the NFT, necessary as multiple denominations are able to be represented on each chain.   |
+| Name           | `string`    | The denomination name of the NFT, necessary as multiple denominations are able to be represented on each chain. |
+| Creators       | `[]string`  | The creators of the denomination.                                                                               |
+| SplitShares    | `[]sdk.dec` | Payment % share in the primary sale                                                                             |
+| RoyaltyShare   | `sdk.dec`   | Payment % share in the secondary sale                                                                           |
+| Sender         | `string`    | The account address of the user creating the denomination.                                                      |
 
 ```go
 type MsgIssueDenom struct {
     Id     string
     Name   string
-    Schema string
+    Creators []string
+    SplitShares []sdk.dec
+    RoyaltyShare sdk.dec
     Sender string
 }
 ```
@@ -52,7 +53,7 @@ type MsgTransferNFT struct {
 
 ## MsgEditNFT
 
-This message type allows the `TokenURI` to be updated. `Sender` of this message should be the `Owner` of the NFT and
+This message type allows the `Name` and `Data` to be updated. `Sender` of this message should be the `Owner` of the NFT and
 `Creator` of the denomination corresponding to `DenomId`.
 
 | **Field** | **Type** | **Description**                                                                                                  |
@@ -60,7 +61,6 @@ This message type allows the `TokenURI` to be updated. `Sender` of this message 
 | Id        | `string` | The unique ID of the NFT being edited.                                                                           |
 | DenomId   | `string` | The unique ID of the denomination, necessary as multiple denominations are able to be represented on each chain. |
 | Name      | `string` | The name of the NFT being edited.                                                                                |
-| URI       | `string` | The URI pointing to a JSON object that contains subsequent tokenData information off-chain                       |
 | Data      | `string` | The data of the NFT                                                                                              |
 | Sender    | `string` | The creator of the message                                                                                       |
 
@@ -70,7 +70,6 @@ type MsgEditNFT struct {
     Id      string
     DenomId string
     Name    string
-    URI     string
     Data    string
     Sender  string
 }
@@ -92,6 +91,7 @@ added to existing `Owner`'s `IDCollection`.
 | Data      | `string` | The data of the NFT.                                                                       |
 | Sender    | `string` | The sender of the Message                                                                  |
 | Recipient | `string` | The recipiet of the new NFT                                                                |
+| IsPrimary | `bool`   | The indication flag which shows if the nft was minted from scratch or sold through auction |
 
 ```go
 // MsgMintNFT defines an SDK message for creating a new NFT.
@@ -103,6 +103,7 @@ type MsgMintNFT struct {
     Data      string
     Sender    string
     Recipient string
+    IsPrimary bool
 }
 ```
 

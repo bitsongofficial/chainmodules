@@ -20,4 +20,5 @@ var (
 	AttributeKeyTokenURI  = "token_uri"
 	AttributeKeyDenomID   = "denom_id"
 	AttributeKeyDenomName = "denom_name"
+	AttributeKeyIsPrimary = "is_primary"
 )

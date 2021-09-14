@@ -158,8 +158,6 @@ func SimulateMsgEditNFT(k keeper.Keeper, ak types.AccountKeeper, bk types.BankKe
 			nftID,
 			denom,
 			"",
-			simtypes.RandStringOfLength(r, 45), // tokenURI
-			simtypes.RandStringOfLength(r, 10), // tokenData
 			ownerAddr.String(),
 		)
 
@@ -211,7 +209,7 @@ func SimulateMsgMintNFT(k keeper.Keeper, ak types.AccountKeeper, bk types.BankKe
 			return simtypes.NoOpMsg(types.ModuleName, types.EventTypeMintNFT, err.Error()), nil, err
 		}
 
-		randomSenderAddress, _ := sdk.AccAddressFromBech32(denom.Creator) // nolint: errcheck
+		randomSenderAddress, _ := sdk.AccAddressFromBech32(denom.Minter) // nolint: errcheck
 		randomRecipient, _ := simtypes.RandomAcc(r, accs)
 
 		msg := types.NewMsgMintNFT(
@@ -219,9 +217,9 @@ func SimulateMsgMintNFT(k keeper.Keeper, ak types.AccountKeeper, bk types.BankKe
 			denom.Id, // denom
 			"",
 			simtypes.RandStringOfLength(r, 45), // tokenURI
-			simtypes.RandStringOfLength(r, 10), // tokenData
 			randomSenderAddress.String(),       // sender
 			randomRecipient.Address.String(),   // recipient
+			true,
 		)
 
 		account := ak.GetAccount(ctx, randomSenderAddress)
@@ -355,9 +353,9 @@ func getRandomNFTFromOwnerAndCreator(ctx sdk.Context, k keeper.Keeper, r *rand.R
 		return nil, "", "", err
 	}
 
-	creator, _ := sdk.AccAddressFromBech32(denom.Creator) // nolint: errcheck
+	minter, _ := sdk.AccAddressFromBech32(denom.Minter) // nolint: errcheck
 
-	owner, err := k.GetOwner(ctx, creator, denom.Id)
+	owner, err := k.GetOwner(ctx, minter, denom.Id)
 	if err != nil {
 		return nil, "", "", err
 	}

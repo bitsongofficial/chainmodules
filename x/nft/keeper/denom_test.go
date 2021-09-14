@@ -10,7 +10,7 @@ func (suite *KeeperSuite) TestIsCreator() {
 	// denom should exist already (see `SetupTest()` of `KeeperSuite`)
 	denom, err := suite.keeper.GetDenom(suite.ctx, denomID)
 	suite.NoError(err)
-	suite.Equal(denom.Creator, address.String())
+	suite.Equal(denom.Minter, address.String())
 
 	_, err = suite.keeper.IsDenomCreator(suite.ctx, "nonExistentDenom", address)
 	if suite.Error(err) {

@@ -1,12 +1,9 @@
-> Copyright (c) 2016-2021 Shanghai Bianjie AI Technology Inc. (licensed under the Apache License, Version 2.0)
-> Modifications Copyright (c) 2021, CRO Protocol Labs ("Crypto.org") (licensed under the Apache License, Version 2.0)
-
 # State
 
 ## NFT
 
 NFT defines the tokenData of non-fungible tokens, mainly including ID, owner, and tokenURI. NFT can be transferred
-through `MsgTransferNFT`, or you can edit `tokenURI` information through `MsgEditNFT` transaction. The name of the
+through `MsgTransferNFT`, or you can edit nft data through `MsgEditNFT` transaction. The name of the
 collection and the id of nft identify the unique assets in the system. The `NFT` Interface inherits the BaseNFT struct
 and includes getter functions for the asset data. It also includes a Stringer function in order to print the struct.
 The interface may change if tokenData is moved to its own module as it might no longer be necessary for the flexibility

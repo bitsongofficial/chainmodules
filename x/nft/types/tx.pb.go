@@ -6,6 +6,7 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
@@ -30,10 +31,12 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // MsgIssueDenom defines an SDK message for creating a new denom.
 type MsgIssueDenom struct {
-	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name   string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Schema string `protobuf:"bytes,3,opt,name=schema,proto3" json:"schema,omitempty"`
-	Sender string `protobuf:"bytes,4,opt,name=sender,proto3" json:"sender,omitempty"`
+	Id           string                                   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name         string                                   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Creators     []string                                 `protobuf:"bytes,3,rep,name=creators,proto3" json:"creators,omitempty"`
+	SplitShares  []github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,4,rep,name=split_shares,json=splitShares,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"split_shares" yaml:"split_shares"`
+	RoyaltyShare github_com_cosmos_cosmos_sdk_types.Dec   `protobuf:"bytes,5,opt,name=royalty_share,json=royaltyShare,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"royalty_share" yaml:"royalty_share"`
+	Sender       string                                   `protobuf:"bytes,6,opt,name=sender,proto3" json:"sender,omitempty"`
 }
 
 func (m *MsgIssueDenom) Reset()         { *m = MsgIssueDenom{} }
@@ -189,9 +192,7 @@ type MsgEditNFT struct {
 	Id      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	DenomId string `protobuf:"bytes,2,opt,name=denom_id,json=denomId,proto3" json:"denom_id,omitempty" yaml:"denom_id"`
 	Name    string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	URI     string `protobuf:"bytes,4,opt,name=uri,proto3" json:"uri,omitempty"`
-	Data    string `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
-	Sender  string `protobuf:"bytes,6,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender  string `protobuf:"bytes,4,opt,name=sender,proto3" json:"sender,omitempty"`
 }
 
 func (m *MsgEditNFT) Reset()         { *m = MsgEditNFT{} }
@@ -270,9 +271,9 @@ type MsgMintNFT struct {
 	DenomId   string `protobuf:"bytes,2,opt,name=denom_id,json=denomId,proto3" json:"denom_id,omitempty" yaml:"denom_id"`
 	Name      string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	URI       string `protobuf:"bytes,4,opt,name=uri,proto3" json:"uri,omitempty"`
-	Data      string `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
-	Sender    string `protobuf:"bytes,6,opt,name=sender,proto3" json:"sender,omitempty"`
-	Recipient string `protobuf:"bytes,7,opt,name=recipient,proto3" json:"recipient,omitempty"`
+	Sender    string `protobuf:"bytes,5,opt,name=sender,proto3" json:"sender,omitempty"`
+	Recipient string `protobuf:"bytes,6,opt,name=recipient,proto3" json:"recipient,omitempty"`
+	IsPrimary bool   `protobuf:"varint,7,opt,name=isPrimary,proto3" json:"isPrimary,omitempty"`
 }
 
 func (m *MsgMintNFT) Reset()         { *m = MsgMintNFT{} }
@@ -438,40 +439,46 @@ func init() {
 func init() { proto.RegisterFile("nft/v1/tx.proto", fileDescriptor_714f8ececec76715) }
 
 var fileDescriptor_714f8ececec76715 = []byte{
-	// 515 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x94, 0x41, 0x6f, 0xd3, 0x30,
-	0x14, 0xc7, 0x9b, 0xa6, 0xb4, 0xec, 0x21, 0x3a, 0xc9, 0x8c, 0x11, 0x2a, 0x48, 0x51, 0x24, 0x10,
-	0xa7, 0x44, 0x63, 0xb7, 0x1d, 0x2b, 0x40, 0xea, 0x21, 0x48, 0x44, 0xdb, 0x85, 0x0b, 0x4a, 0x13,
-	0x27, 0x35, 0x6a, 0xec, 0x2a, 0x76, 0xa6, 0xed, 0x3b, 0x70, 0x80, 0x6f, 0xc0, 0x17, 0xe0, 0x7b,
-	0x4c, 0xe2, 0xb2, 0x23, 0xa7, 0x09, 0xda, 0x0b, 0x67, 0x3e, 0x01, 0x8a, 0xe3, 0x74, 0xce, 0x08,
-	0x3b, 0x81, 0xc4, 0xed, 0xe5, 0xfd, 0xed, 0x97, 0xdf, 0xdf, 0xcf, 0xcf, 0xb0, 0x4d, 0x13, 0xe1,
-	0x1d, 0xef, 0x79, 0xe2, 0xc4, 0x5d, 0xe6, 0x4c, 0x30, 0x34, 0x9c, 0x11, 0xc1, 0x19, 0x4d, 0x5d,
-	0x9a, 0x08, 0xf7, 0x78, 0x6f, 0xb4, 0x93, 0xb2, 0x94, 0x49, 0xc9, 0x2b, 0xa3, 0x6a, 0x95, 0x43,
-	0xe0, 0xb6, 0xcf, 0xd3, 0x29, 0xe7, 0x05, 0x7e, 0x8e, 0x29, 0xcb, 0xd0, 0x10, 0xba, 0x24, 0xb6,
-	0x8c, 0x47, 0xc6, 0xd3, 0xad, 0xa0, 0x4b, 0x62, 0x84, 0xa0, 0x47, 0xc3, 0x0c, 0x5b, 0x5d, 0x99,
-	0x91, 0x31, 0xda, 0x85, 0x3e, 0x8f, 0xe6, 0x38, 0x0b, 0x2d, 0x53, 0x66, 0xd5, 0x97, 0xcc, 0x63,
-	0x1a, 0xe3, 0xdc, 0xea, 0xa9, 0xbc, 0xfc, 0x3a, 0xe8, 0xfd, 0xf8, 0x34, 0x36, 0x9c, 0x7b, 0x70,
-	0xb7, 0xf1, 0xab, 0x00, 0xf3, 0x25, 0xa3, 0x1c, 0x3b, 0xef, 0x0d, 0x18, 0xfa, 0x3c, 0x3d, 0xcc,
-	0x43, 0xca, 0x13, 0x9c, 0xbf, 0x7a, 0x79, 0xf8, 0x1b, 0x85, 0x0b, 0x37, 0xe3, 0x72, 0xcf, 0x5b,
-	0x12, 0x57, 0x24, 0x93, 0x3b, 0x3f, 0x2f, 0xc6, 0xdb, 0xa7, 0x61, 0xb6, 0x38, 0x70, 0x6a, 0xc5,
-	0x09, 0x06, 0x32, 0x9c, 0xc6, 0x1a, 0x89, 0xa9, 0x93, 0xa0, 0x07, 0xb0, 0x95, 0xe3, 0x88, 0x2c,
-	0x09, 0xa6, 0x42, 0x41, 0x5e, 0x26, 0x14, 0xa7, 0x05, 0xbb, 0x4d, 0x9a, 0x0d, 0xe8, 0x67, 0x03,
-	0xc0, 0xe7, 0xe9, 0x8b, 0x98, 0x88, 0xbf, 0x01, 0x59, 0x1f, 0xad, 0xa9, 0x1d, 0xed, 0x7d, 0x30,
-	0x8b, 0x9c, 0x54, 0x68, 0x93, 0xc1, 0xea, 0x62, 0x6c, 0x1e, 0x05, 0xd3, 0xa0, 0xcc, 0x95, 0xcb,
-	0xe3, 0x50, 0x84, 0xd6, 0x8d, 0x6a, 0x79, 0x19, 0x6b, 0x3e, 0xfb, 0x2d, 0x27, 0xbe, 0x03, 0xe8,
-	0x12, 0x77, 0xe3, 0xe2, 0x4b, 0xe5, 0xc2, 0x27, 0xf4, 0x3f, 0x77, 0xd1, 0xec, 0xd6, 0xa0, 0xbd,
-	0x5b, 0x95, 0x47, 0x65, 0x66, 0xe3, 0xf1, 0x9d, 0xb4, 0x38, 0x29, 0x72, 0xfa, 0x0f, 0x6f, 0x53,
-	0x83, 0x40, 0xfd, 0xab, 0x26, 0x78, 0xf6, 0xd1, 0x04, 0xd3, 0xe7, 0x29, 0x0a, 0x00, 0xb4, 0xe9,
-	0x7a, 0xe8, 0x36, 0xa7, 0xd2, 0x6d, 0x4c, 0xc4, 0xe8, 0xf1, 0xb5, 0x72, 0x5d, 0x1b, 0x4d, 0x61,
-	0x50, 0x77, 0x6f, 0xd4, 0xb2, 0x43, 0x69, 0x23, 0xe7, 0xcf, 0x9a, 0x5e, 0xaa, 0xbe, 0xce, 0x6d,
-	0xa5, 0x94, 0xd6, 0x5a, 0xea, 0xca, 0xbd, 0x42, 0x47, 0x70, 0x4b, 0x1f, 0x61, 0xbb, 0x65, 0x8b,
-	0xa6, 0x8f, 0x9e, 0x5c, 0xaf, 0xeb, 0x84, 0x75, 0x1f, 0xdb, 0x08, 0x95, 0xd6, 0x4a, 0x78, 0xa5,
-	0x27, 0x93, 0xd7, 0x67, 0xdf, 0xed, 0xce, 0xd9, 0xca, 0x36, 0xce, 0x57, 0xb6, 0xf1, 0x6d, 0x65,
-	0x1b, 0x1f, 0xd6, 0x76, 0xe7, 0x7c, 0x6d, 0x77, 0xbe, 0xae, 0xed, 0xce, 0x9b, 0xfd, 0x94, 0x88,
-	0x79, 0x31, 0x73, 0x23, 0x96, 0x79, 0xaa, 0x16, 0x4b, 0x12, 0x12, 0x91, 0x70, 0xe1, 0x45, 0xf3,
-	0x90, 0xd0, 0x8c, 0xc5, 0xc5, 0x02, 0x73, 0xef, 0xc4, 0x2b, 0xdf, 0x5a, 0x71, 0xba, 0xc4, 0x7c,
-	0xd6, 0x97, 0xcf, 0xe8, 0xfe, 0xaf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x93, 0xfb, 0x91, 0x89, 0x7f,
-	0x05, 0x00, 0x00,
+	// 624 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x95, 0xcd, 0x4e, 0xdb, 0x40,
+	0x10, 0xc7, 0xe3, 0x38, 0x24, 0xb0, 0x7c, 0x49, 0x0b, 0xa5, 0xae, 0xd5, 0xda, 0xc8, 0x52, 0x11,
+	0x97, 0xda, 0xa2, 0xdc, 0x38, 0x5a, 0x80, 0x94, 0x43, 0xaa, 0xd6, 0x85, 0x4b, 0x2f, 0xc8, 0xd8,
+	0x1b, 0x67, 0x4b, 0xbc, 0x1b, 0xed, 0x6e, 0x10, 0xb9, 0xf4, 0x09, 0x7a, 0x68, 0xdf, 0xa0, 0x0f,
+	0xd3, 0x03, 0x47, 0x2e, 0x95, 0xaa, 0x1e, 0xa2, 0x36, 0x5c, 0x7a, 0xe6, 0x09, 0x2a, 0xaf, 0xed,
+	0xc4, 0xa6, 0x06, 0xa9, 0x52, 0x39, 0x65, 0x67, 0xfe, 0xd9, 0x99, 0xdf, 0xcc, 0x4e, 0x26, 0x60,
+	0x95, 0x74, 0x85, 0x73, 0xbe, 0xe3, 0x88, 0x0b, 0x7b, 0xc0, 0xa8, 0xa0, 0x70, 0xe5, 0x14, 0x0b,
+	0x4e, 0x49, 0x64, 0x93, 0xae, 0xb0, 0xcf, 0x77, 0xf4, 0xf5, 0x88, 0x46, 0x54, 0x4a, 0x4e, 0x72,
+	0x4a, 0xbf, 0x65, 0x7d, 0xad, 0x83, 0xe5, 0x0e, 0x8f, 0xda, 0x9c, 0x0f, 0xd1, 0x3e, 0x22, 0x34,
+	0x86, 0x2b, 0xa0, 0x8e, 0x43, 0x4d, 0xd9, 0x54, 0xb6, 0x17, 0xbc, 0x3a, 0x0e, 0x21, 0x04, 0x0d,
+	0xe2, 0xc7, 0x48, 0xab, 0x4b, 0x8f, 0x3c, 0x43, 0x1d, 0xcc, 0x07, 0x0c, 0xf9, 0x82, 0x32, 0xae,
+	0xa9, 0x9b, 0xea, 0xf6, 0x82, 0x37, 0xb5, 0x61, 0x0f, 0x2c, 0xf1, 0x41, 0x1f, 0x8b, 0x13, 0xde,
+	0xf3, 0x19, 0xe2, 0x5a, 0x23, 0xd1, 0xdd, 0x83, 0xcb, 0xb1, 0x59, 0xfb, 0x31, 0x36, 0xb7, 0x22,
+	0x2c, 0x7a, 0xc3, 0x53, 0x3b, 0xa0, 0xb1, 0x13, 0x50, 0x1e, 0x53, 0x9e, 0x7d, 0xbc, 0xe0, 0xe1,
+	0x99, 0x23, 0x46, 0x03, 0xc4, 0xed, 0x7d, 0x14, 0xdc, 0x8c, 0xcd, 0xb5, 0x91, 0x1f, 0xf7, 0xf7,
+	0xac, 0x62, 0x2c, 0xcb, 0x5b, 0x94, 0xe6, 0x5b, 0x69, 0xc1, 0x33, 0xb0, 0xcc, 0xe8, 0xc8, 0xef,
+	0x8b, 0x51, 0xaa, 0x6b, 0x73, 0x09, 0xa2, 0x7b, 0xf8, 0xcf, 0xa9, 0xd6, 0xd3, 0x54, 0xa5, 0x60,
+	0x96, 0xb7, 0x94, 0xd9, 0x32, 0x1b, 0xdc, 0x00, 0x4d, 0x8e, 0x48, 0x88, 0x98, 0xd6, 0x94, 0x8d,
+	0xc8, 0xac, 0xbd, 0xc6, 0xef, 0x2f, 0xa6, 0x62, 0x3d, 0x06, 0x8f, 0x4a, 0x5d, 0xf4, 0x10, 0x1f,
+	0x50, 0xc2, 0x91, 0xf5, 0x51, 0x01, 0x2b, 0x1d, 0x1e, 0x1d, 0x31, 0x9f, 0xf0, 0x2e, 0x62, 0xaf,
+	0x0e, 0x8f, 0xfe, 0x6a, 0xb0, 0x0d, 0xe6, 0xc3, 0xe4, 0xce, 0x09, 0x0e, 0xd3, 0x26, 0xbb, 0x6b,
+	0x37, 0x63, 0x73, 0x35, 0x65, 0xca, 0x15, 0xcb, 0x6b, 0xc9, 0x63, 0x3b, 0x2c, 0x90, 0xa8, 0x45,
+	0x12, 0xf8, 0x14, 0x2c, 0x30, 0x14, 0xe0, 0x01, 0x46, 0x44, 0x68, 0x0d, 0x29, 0xcd, 0x1c, 0x19,
+	0xa7, 0x06, 0x36, 0xca, 0x34, 0x53, 0xd0, 0x0f, 0x00, 0x74, 0x78, 0x74, 0x10, 0x62, 0xf1, 0x3f,
+	0x18, 0xf3, 0xa1, 0x51, 0x0b, 0x43, 0x33, 0xe3, 0x6e, 0x54, 0x74, 0x70, 0x1d, 0xc0, 0x59, 0xfe,
+	0x29, 0xd5, 0x37, 0x45, 0x62, 0x75, 0x30, 0x79, 0x30, 0xac, 0x27, 0x40, 0x1d, 0x32, 0x9c, 0x32,
+	0xb9, 0xad, 0xc9, 0xd8, 0x54, 0x8f, 0xbd, 0xb6, 0x97, 0xf8, 0x0a, 0xc4, 0x73, 0x77, 0x77, 0xba,
+	0x79, 0xab, 0xd3, 0x89, 0x8a, 0xf9, 0x6b, 0x86, 0x63, 0x9f, 0x8d, 0xb4, 0xd6, 0xa6, 0xb2, 0x3d,
+	0xef, 0xcd, 0x1c, 0xa5, 0x6a, 0xb3, 0xb2, 0xa6, 0xd5, 0xbe, 0x97, 0xc5, 0xba, 0x43, 0x46, 0x1e,
+	0x70, 0x4e, 0x4a, 0x04, 0x59, 0xae, 0x9c, 0xe0, 0xe5, 0x67, 0x15, 0xa8, 0x1d, 0x1e, 0x41, 0x0f,
+	0x80, 0xc2, 0x4a, 0x78, 0x66, 0x97, 0x77, 0x89, 0x5d, 0x9a, 0x75, 0xfd, 0xf9, 0xbd, 0x72, 0x1e,
+	0x1b, 0xb6, 0x41, 0x2b, 0x7f, 0x47, 0xbd, 0xe2, 0x46, 0xa6, 0xe9, 0xd6, 0xdd, 0x5a, 0x31, 0x54,
+	0x3e, 0xa9, 0x55, 0xa1, 0x32, 0xad, 0x32, 0xd4, 0xad, 0x09, 0x83, 0xc7, 0x60, 0xb1, 0xf8, 0xe3,
+	0x34, 0x2a, 0xae, 0x14, 0x74, 0x7d, 0xeb, 0x7e, 0xbd, 0x48, 0x98, 0xbf, 0x63, 0x15, 0x61, 0xa6,
+	0x55, 0x12, 0xde, 0x7a, 0x13, 0xf7, 0xcd, 0xe5, 0x2f, 0xa3, 0x76, 0x39, 0x31, 0x94, 0xab, 0x89,
+	0xa1, 0xfc, 0x9c, 0x18, 0xca, 0xa7, 0x6b, 0xa3, 0x76, 0x75, 0x6d, 0xd4, 0xbe, 0x5f, 0x1b, 0xb5,
+	0x77, 0xbb, 0x85, 0x2d, 0x97, 0xc5, 0xa2, 0xdd, 0x2e, 0x0e, 0xb0, 0xdf, 0x77, 0x82, 0x9e, 0x8f,
+	0x49, 0x4c, 0xc3, 0x61, 0x1f, 0x71, 0xe7, 0xc2, 0x49, 0xfe, 0x21, 0xe4, 0xda, 0x3b, 0x6d, 0xca,
+	0xe5, 0xbf, 0xfb, 0x27, 0x00, 0x00, 0xff, 0xff, 0x68, 0x6f, 0xd3, 0xe2, 0x35, 0x06, 0x00, 0x00,
 }
 
 func (this *MsgIssueDenom) Equal(that interface{}) bool {
@@ -499,7 +506,23 @@ func (this *MsgIssueDenom) Equal(that interface{}) bool {
 	if this.Name != that1.Name {
 		return false
 	}
-	if this.Schema != that1.Schema {
+	if len(this.Creators) != len(that1.Creators) {
+		return false
+	}
+	for i := range this.Creators {
+		if this.Creators[i] != that1.Creators[i] {
+			return false
+		}
+	}
+	if len(this.SplitShares) != len(that1.SplitShares) {
+		return false
+	}
+	for i := range this.SplitShares {
+		if !this.SplitShares[i].Equal(that1.SplitShares[i]) {
+			return false
+		}
+	}
+	if !this.RoyaltyShare.Equal(that1.RoyaltyShare) {
 		return false
 	}
 	if this.Sender != that1.Sender {
@@ -568,12 +591,6 @@ func (this *MsgEditNFT) Equal(that interface{}) bool {
 	if this.Name != that1.Name {
 		return false
 	}
-	if this.URI != that1.URI {
-		return false
-	}
-	if this.Data != that1.Data {
-		return false
-	}
 	if this.Sender != that1.Sender {
 		return false
 	}
@@ -610,13 +627,13 @@ func (this *MsgMintNFT) Equal(that interface{}) bool {
 	if this.URI != that1.URI {
 		return false
 	}
-	if this.Data != that1.Data {
-		return false
-	}
 	if this.Sender != that1.Sender {
 		return false
 	}
 	if this.Recipient != that1.Recipient {
+		return false
+	}
+	if this.IsPrimary != that1.IsPrimary {
 		return false
 	}
 	return true
@@ -911,14 +928,40 @@ func (m *MsgIssueDenom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x32
 	}
-	if len(m.Schema) > 0 {
-		i -= len(m.Schema)
-		copy(dAtA[i:], m.Schema)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Schema)))
-		i--
-		dAtA[i] = 0x1a
+	{
+		size := m.RoyaltyShare.Size()
+		i -= size
+		if _, err := m.RoyaltyShare.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x2a
+	if len(m.SplitShares) > 0 {
+		for iNdEx := len(m.SplitShares) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size := m.SplitShares[iNdEx].Size()
+				i -= size
+				if _, err := m.SplitShares[iNdEx].MarshalTo(dAtA[i:]); err != nil {
+					return 0, err
+				}
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Creators) > 0 {
+		for iNdEx := len(m.Creators) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Creators[iNdEx])
+			copy(dAtA[i:], m.Creators[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Creators[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
 	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
@@ -1059,20 +1102,6 @@ func (m *MsgEditNFT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.Data) > 0 {
-		i -= len(m.Data)
-		copy(dAtA[i:], m.Data)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Data)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.URI) > 0 {
-		i -= len(m.URI)
-		copy(dAtA[i:], m.URI)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.URI)))
-		i--
 		dAtA[i] = 0x22
 	}
 	if len(m.Name) > 0 {
@@ -1142,24 +1171,27 @@ func (m *MsgMintNFT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.IsPrimary {
+		i--
+		if m.IsPrimary {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x38
+	}
 	if len(m.Recipient) > 0 {
 		i -= len(m.Recipient)
 		copy(dAtA[i:], m.Recipient)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Recipient)))
 		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x32
 	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.Data) > 0 {
-		i -= len(m.Data)
-		copy(dAtA[i:], m.Data)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Data)))
 		i--
 		dAtA[i] = 0x2a
 	}
@@ -1309,10 +1341,20 @@ func (m *MsgIssueDenom) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Schema)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
+	if len(m.Creators) > 0 {
+		for _, s := range m.Creators {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
 	}
+	if len(m.SplitShares) > 0 {
+		for _, e := range m.SplitShares {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = m.RoyaltyShare.Size()
+	n += 1 + l + sovTx(uint64(l))
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1381,14 +1423,6 @@ func (m *MsgEditNFT) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.URI)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Data)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1427,10 +1461,6 @@ func (m *MsgMintNFT) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Data)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1438,6 +1468,9 @@ func (m *MsgMintNFT) Size() (n int) {
 	l = len(m.Recipient)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.IsPrimary {
+		n += 2
 	}
 	return n
 }
@@ -1582,7 +1615,7 @@ func (m *MsgIssueDenom) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Schema", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Creators", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1610,9 +1643,79 @@ func (m *MsgIssueDenom) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Schema = string(dAtA[iNdEx:postIndex])
+			m.Creators = append(m.Creators, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SplitShares", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			var v github_com_cosmos_cosmos_sdk_types.Dec
+			m.SplitShares = append(m.SplitShares, v)
+			if err := m.SplitShares[len(m.SplitShares)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RoyaltyShare", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.RoyaltyShare.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
@@ -1650,7 +1753,10 @@ func (m *MsgIssueDenom) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1700,7 +1806,10 @@ func (m *MsgIssueDenomResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1878,7 +1987,10 @@ func (m *MsgTransferNFT) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1928,7 +2040,10 @@ func (m *MsgTransferNFTResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2070,70 +2185,6 @@ func (m *MsgEditNFT) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field URI", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.URI = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Data = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
 			var stringLen uint64
@@ -2170,7 +2221,10 @@ func (m *MsgEditNFT) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2220,7 +2274,10 @@ func (m *MsgEditNFTResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2394,38 +2451,6 @@ func (m *MsgMintNFT) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Data = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
 			var stringLen uint64
@@ -2456,7 +2481,7 @@ func (m *MsgMintNFT) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 7:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Recipient", wireType)
 			}
@@ -2488,13 +2513,36 @@ func (m *MsgMintNFT) Unmarshal(dAtA []byte) error {
 			}
 			m.Recipient = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsPrimary", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsPrimary = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2544,7 +2592,10 @@ func (m *MsgMintNFTResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2690,7 +2741,10 @@ func (m *MsgBurnNFT) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2740,7 +2794,10 @@ func (m *MsgBurnNFTResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {

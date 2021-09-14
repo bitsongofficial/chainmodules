@@ -4,7 +4,6 @@ package cli
 
 import (
 	"fmt"
-	"io/ioutil"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -48,7 +47,9 @@ func GetCmdIssueDenom() *cobra.Command {
 			"$ %s tx nft issue <denom-id> "+
 				"--from=<key-name> "+
 				"--name=<denom-name> "+
-				"--schema=<schema-content or path to schema.json> "+
+				"--creators=<creators> "+
+				"--split-shares=<split-shares> "+
+				"--royalty-shares=<royalty-shares> "+
 				"--chain-id=<chain-id> "+
 				"--fees=<fee>",
 			version.AppName,
@@ -64,19 +65,42 @@ func GetCmdIssueDenom() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			schema, err := cmd.Flags().GetString(FlagSchema)
+			creatorsStr, err := cmd.Flags().GetString(FlagCreators)
 			if err != nil {
 				return err
 			}
-			optionsContent, err := ioutil.ReadFile(schema)
-			if err == nil {
-				schema = string(optionsContent)
+			creators := strings.Split(creatorsStr, ",")
+
+			splitSharesStr, err := cmd.Flags().GetString(FlagSplitShares)
+			if err != nil {
+				return err
+			}
+			splitSharesStrArray := strings.Split(splitSharesStr, ",")
+			splitShares := []sdk.Dec{}
+			for _, share := range splitSharesStrArray {
+				shareDec, err := sdk.NewDecFromStr(share)
+				if err != nil {
+					return err
+				}
+				splitShares = append(splitShares, shareDec)
+			}
+
+			royaltySharesStr, err := cmd.Flags().GetString(FlagRoyaltyShare)
+			if err != nil {
+				return err
+			}
+
+			royaltyShare, err := sdk.NewDecFromStr(royaltySharesStr)
+			if err != nil {
+				return err
 			}
 
 			msg := types.NewMsgIssueDenom(
 				args[0],
 				denomName,
-				schema,
+				creators,
+				splitShares,
+				royaltyShare,
 				clientCtx.GetFromAddress().String(),
 			)
 			if err := msg.ValidateBasic(); err != nil {
@@ -136,19 +160,15 @@ func GetCmdMintNFT() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			tokenData, err := cmd.Flags().GetString(FlagTokenData)
-			if err != nil {
-				return err
-			}
 
 			msg := types.NewMsgMintNFT(
 				args[1],
 				args[0],
 				tokenName,
 				tokenURI,
-				tokenData,
 				sender,
 				recipient,
+				true,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -186,20 +206,11 @@ func GetCmdEditNFT() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			tokenURI, err := cmd.Flags().GetString(FlagTokenURI)
-			if err != nil {
-				return err
-			}
-			tokenData, err := cmd.Flags().GetString(FlagTokenData)
-			if err != nil {
-				return err
-			}
+
 			msg := types.NewMsgEditNFT(
 				args[1],
 				args[0],
 				tokenName,
-				tokenURI,
-				tokenData,
 				clientCtx.GetFromAddress().String(),
 			)
 			if err := msg.ValidateBasic(); err != nil {

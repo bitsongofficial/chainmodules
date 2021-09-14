@@ -33,7 +33,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	s.T().Log("setting up integration test suite")
 
 	cfg := simapp.NewConfig()
-	cfg.NumValidators = 2
+	cfg.NumValidators = 4
 
 	s.cfg = cfg
 	s.network = network.New(s.T(), cfg)
@@ -60,17 +60,23 @@ func (s *IntegrationTestSuite) TestNft() {
 	from := val.Address
 	tokenName := "Kitty Token"
 	tokenURI := "uri"
-	tokenData := "data"
 	tokenID := "kitty"
 	// owner     := "owner"
 	denomName := "name"
 	denom := "denom"
-	schema := "schema"
+	creator1 := from.String()
+	creator2 := s.network.Validators[2].Address.String()
+	creator3 := s.network.Validators[3].Address.String()
+	creators := creator1 + "," + creator2
+	splitShares := "50,30,20"
+	royaltyShare := "10"
 
 	//------test GetCmdIssueDenom()-------------
 	args := []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
-		fmt.Sprintf("--%s=%s", nftcli.FlagSchema, schema),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -79,6 +85,56 @@ func (s *IntegrationTestSuite) TestNft() {
 
 	respType := proto.Message(&sdk.TxResponse{})
 	expectedCode := uint32(0)
+
+	_, err := nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
+	s.Require().EqualError(err, "mismatch creators and split shares: mismatch creators count")
+
+	creators = creator1 + "," + creator2 + "," + creator3
+	splitShares = "50,30,10"
+
+	args = []string{
+		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
+
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	_, err = nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
+	s.Require().EqualError(err, "its sum is not 100: invalid split shares")
+
+	splitShares = "50,30,20"
+	royaltyShare = "100"
+
+	args = []string{
+		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
+
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	_, err = nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
+	s.Require().EqualError(err, "it should be less than 100: invalid royalty share")
+
+	royaltyShare = "10"
+
+	args = []string{
+		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
+
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
 
 	bz, err := nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
 	s.Require().NoError(err)
@@ -96,7 +152,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
 	denomItem := respType.(*nfttypes.Denom)
 	s.Require().Equal(denomName, denomItem.Name)
-	s.Require().Equal(schema, denomItem.Schema)
 
 	//------test GetCmdQueryDenomByName()-------------
 	respType = proto.Message(&nfttypes.Denom{})
@@ -106,7 +161,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	denomItem = respType.(*nfttypes.Denom)
 	s.Require().Equal(denomName, denomItem.Name)
 	s.Require().Equal(denomID, denomItem.Id)
-	s.Require().Equal(schema, denomItem.Schema)
 
 	//------test GetCmdQueryDenoms()-------------
 	respType = proto.Message(&nfttypes.QueryDenomsResponse{})
@@ -119,7 +173,6 @@ func (s *IntegrationTestSuite) TestNft() {
 
 	//------test GetCmdMintNFT()-------------
 	args = []string{
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, tokenData),
 		fmt.Sprintf("--%s=%s", nftcli.FlagRecipient, from.String()),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, tokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, tokenName),
@@ -154,7 +207,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(tokenID, nftItem.Id)
 	s.Require().Equal(tokenName, nftItem.Name)
 	s.Require().Equal(tokenURI, nftItem.URI)
-	s.Require().Equal(tokenData, nftItem.Data)
 	s.Require().Equal(from.String(), nftItem.Owner)
 
 	//------test GetCmdQueryOwner()-------------
@@ -176,12 +228,8 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(1, len(collectionItem.Collection.NFTs))
 
 	//------test GetCmdEditNFT()-------------
-	newTokenData := "newdata"
-	newTokenURI := "newuri"
 	newTokenName := "new Kitty Token"
 	args = []string{
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, newTokenData),
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, newTokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, newTokenName),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -203,8 +251,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
 	newNftItem := respType.(*nfttypes.BaseNFT)
 	s.Require().Equal(newTokenName, newNftItem.Name)
-	s.Require().Equal(newTokenURI, newNftItem.URI)
-	s.Require().Equal(newTokenData, newNftItem.Data)
 
 	//------test GetCmdTransferNFT()-------------
 	recipient := sdk.AccAddress(crypto.AddressHash([]byte("dgsbl")))
@@ -230,16 +276,14 @@ func (s *IntegrationTestSuite) TestNft() {
 	nftItem = respType.(*nfttypes.BaseNFT)
 	s.Require().Equal(tokenID, nftItem.Id)
 	s.Require().Equal(newTokenName, nftItem.Name)
-	s.Require().Equal(newTokenURI, nftItem.URI)
-	s.Require().Equal(newTokenData, nftItem.Data)
+	s.Require().Equal(tokenURI, nftItem.URI)
 	s.Require().Equal(recipient.String(), nftItem.Owner)
 
 	//------test GetCmdBurnNFT()-------------
 	newTokenID := "dgsbl"
 	args = []string{
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, newTokenData),
 		fmt.Sprintf("--%s=%s", nftcli.FlagRecipient, from.String()),
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, newTokenURI),
+		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, tokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, newTokenName),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
