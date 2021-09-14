@@ -33,7 +33,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	s.T().Log("setting up integration test suite")
 
 	cfg := simapp.NewConfig()
-	cfg.NumValidators = 2
+	cfg.NumValidators = 4
 
 	s.cfg = cfg
 	s.network = network.New(s.T(), cfg)
@@ -64,8 +64,11 @@ func (s *IntegrationTestSuite) TestNft() {
 	// owner     := "owner"
 	denomName := "name"
 	denom := "denom"
-	creators := from.String()
-	splitShares := "100"
+	creator1 := from.String()
+	creator2 := s.network.Validators[2].Address.String()
+	creator3 := s.network.Validators[3].Address.String()
+	creators := creator1 + "," + creator2 + "," + creator3
+	splitShares := "50,30,20"
 	royaltyShares := "10"
 
 	//------test GetCmdIssueDenom()-------------
@@ -73,7 +76,7 @@ func (s *IntegrationTestSuite) TestNft() {
 		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
 		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
 		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
-		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShares, royaltyShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShares),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -84,6 +87,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	expectedCode := uint32(0)
 
 	bz, err := nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
+	// s.Require().EqualError(err, "")
 	s.Require().NoError(err)
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType), bz.String())
 	txResp := respType.(*sdk.TxResponse)

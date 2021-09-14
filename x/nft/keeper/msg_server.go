@@ -31,7 +31,7 @@ func (m msgServer) IssueDenom(goCtx context.Context, msg *types.MsgIssueDenom) (
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.IssueDenom(ctx, msg.Id, msg.Name, msg.Creators, msg.SplitShares, msg.RoyaltyShares, sender); err != nil {
+	if err := m.Keeper.IssueDenom(ctx, msg.Id, msg.Name, msg.Creators, msg.SplitShares, msg.RoyaltyShare, sender); err != nil {
 		return nil, err
 	}
 

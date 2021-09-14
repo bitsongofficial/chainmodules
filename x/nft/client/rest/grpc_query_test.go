@@ -65,14 +65,14 @@ func (s *IntegrationTestSuite) TestNft() {
 	baseURL := val.APIAddress
 	creators := from.String()
 	splitShares := "100"
-	royaltyShares := "10"
+	royaltyShare := "10"
 
 	//------test GetCmdIssueDenom()-------------
 	args := []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
 		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
 		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
-		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShares, royaltyShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),

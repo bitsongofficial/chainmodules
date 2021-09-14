@@ -31,8 +31,8 @@ message Denom {
         (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
         (gogoproto.nullable)   = false
       ];
-    repeated string royalty_shares = 5 [
-        (gogoproto.moretags)   = "yaml:\"royalty_shares\"",
+    string royalty_share = 5 [
+        (gogoproto.moretags)   = "yaml:\"royalty_share\"",
         (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
         (gogoproto.nullable)   = false
       ];

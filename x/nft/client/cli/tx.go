@@ -85,18 +85,14 @@ func GetCmdIssueDenom() *cobra.Command {
 				splitShares = append(splitShares, shareDec)
 			}
 
-			royaltySharesStr, err := cmd.Flags().GetString(FlagRoyaltyShares)
+			royaltySharesStr, err := cmd.Flags().GetString(FlagRoyaltyShare)
 			if err != nil {
 				return err
 			}
-			royaltySharesStrArray := strings.Split(royaltySharesStr, ",")
-			royaltyShares := []sdk.Dec{}
-			for _, share := range royaltySharesStrArray {
-				shareDec, err := sdk.NewDecFromStr(share)
-				if err != nil {
-					return err
-				}
-				royaltyShares = append(royaltyShares, shareDec)
+
+			royaltyShare, err := sdk.NewDecFromStr(royaltySharesStr)
+			if err != nil {
+				return err
 			}
 
 			msg := types.NewMsgIssueDenom(
@@ -104,7 +100,7 @@ func GetCmdIssueDenom() *cobra.Command {
 				denomName,
 				creators,
 				splitShares,
-				royaltyShares,
+				royaltyShare,
 				clientCtx.GetFromAddress().String(),
 			)
 			if err := msg.ValidateBasic(); err != nil {

@@ -12,11 +12,11 @@ const (
 	FlagRecipient = "recipient"
 	FlagOwner     = "owner"
 
-	FlagDenomName     = "name"
-	FlagDenomID       = "denom-id"
-	FlagCreators      = "creators"
-	FlagSplitShares   = "split-shares"
-	FlagRoyaltyShares = "royalty-shares"
+	FlagDenomName    = "name"
+	FlagDenomID      = "denom-id"
+	FlagCreators     = "creators"
+	FlagSplitShares  = "split-shares"
+	FlagRoyaltyShare = "royalty-share"
 )
 
 var (
@@ -31,7 +31,7 @@ var (
 func init() {
 	FsIssueDenom.String(FlagCreators, "", "Creators of the denom")
 	FsIssueDenom.String(FlagSplitShares, "", "Split shares of the denom")
-	FsIssueDenom.String(FlagRoyaltyShares, "", "Royalty shares of the denom")
+	FsIssueDenom.String(FlagRoyaltyShare, "", "Royalty share of the denom")
 	FsIssueDenom.String(FlagDenomName, "", "The name of the denom")
 
 	FsMintNFT.String(FlagTokenURI, "", "URI for supplemental off-chain tokenData (should return a JSON object)")

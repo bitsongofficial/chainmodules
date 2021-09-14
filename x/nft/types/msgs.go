@@ -25,14 +25,14 @@ var (
 )
 
 // NewMsgIssueDenom is a constructor function for MsgSetName
-func NewMsgIssueDenom(denomID, denomName string, creators []string, splitShares []sdk.Dec, royaltyShares []sdk.Dec, sender string) *MsgIssueDenom {
+func NewMsgIssueDenom(denomID, denomName string, creators []string, splitShares []sdk.Dec, royaltyShare sdk.Dec, sender string) *MsgIssueDenom {
 	return &MsgIssueDenom{
-		Id:            denomID,
-		Name:          denomName,
-		Creators:      creators,
-		SplitShares:   splitShares,
-		RoyaltyShares: royaltyShares,
-		Sender:        sender,
+		Id:           denomID,
+		Name:         denomName,
+		Creators:     creators,
+		SplitShares:  splitShares,
+		RoyaltyShare: royaltyShare,
+		Sender:       sender,
 	}
 }
 
@@ -46,6 +46,10 @@ func (msg MsgIssueDenom) Type() string { return TypeMsgIssueDenom }
 func (msg MsgIssueDenom) ValidateBasic() error {
 	if err := ValidateDenomID(msg.Id); err != nil {
 		return err
+	}
+
+	if len(msg.Creators) != len(msg.SplitShares) {
+		return sdkerrors.Wrapf(ErrMismatchCreatorsCount, "mismatch creators and split shares")
 	}
 
 	for _, creator := range msg.Creators {
@@ -66,12 +70,8 @@ func (msg MsgIssueDenom) ValidateBasic() error {
 		return sdkerrors.Wrapf(ErrInvalidSplitShares, "invalid split shares, its sum is not 100")
 	}
 
-	sum = sdk.NewDec(0)
-	for _, share := range msg.RoyaltyShares {
-		sum = sum.Add(share)
-	}
-	if !sum.LT(sdk.NewDec(100)) {
-		return sdkerrors.Wrapf(ErrInvalidRoyaltyShares, "invalid royalty shares, its sum should be less than 100")
+	if !msg.RoyaltyShare.LT(sdk.NewDec(100)) {
+		return sdkerrors.Wrapf(ErrInvalidRoyaltyShare, "invalid royalty share, its sum should be less than 100")
 	}
 
 	return ValidateDenomName(msg.Name)

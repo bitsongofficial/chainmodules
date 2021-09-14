@@ -24,13 +24,13 @@ const (
 )
 
 type issueDenomReq struct {
-	BaseReq       rest.BaseReq `json:"base_req"`
-	Owner         string       `json:"owner"`
-	ID            string       `json:"id"`
-	Name          string       `json:"name"`
-	Creators      []string     `json:"creators"`
-	SplitShares   []sdk.Dec    `json:"split_shares"`
-	RoyaltyShares []sdk.Dec    `json:"royalty_shares"`
+	BaseReq      rest.BaseReq `json:"base_req"`
+	Owner        string       `json:"owner"`
+	ID           string       `json:"id"`
+	Name         string       `json:"name"`
+	Creators     []string     `json:"creators"`
+	SplitShares  []sdk.Dec    `json:"split_shares"`
+	RoyaltyShare sdk.Dec      `json:"royalty_share"`
 }
 
 type mintNFTReq struct {

@@ -42,7 +42,7 @@ func issueDenomHandlerFn(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the message
-		msg := types.NewMsgIssueDenom(req.ID, req.Name, req.Creators, req.SplitShares, req.RoyaltyShares, req.Owner)
+		msg := types.NewMsgIssueDenom(req.ID, req.Name, req.Creators, req.SplitShares, req.RoyaltyShare, req.Owner)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return

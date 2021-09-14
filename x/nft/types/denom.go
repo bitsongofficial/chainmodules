@@ -7,13 +7,13 @@ import (
 )
 
 // NewDenom return a new denom
-func NewDenom(id, name string, creators []string, splitShares []sdk.Dec, royaltyShares []sdk.Dec, sender sdk.AccAddress) Denom {
+func NewDenom(id, name string, creators []string, splitShares []sdk.Dec, royaltyShare sdk.Dec, sender sdk.AccAddress) Denom {
 	return Denom{
-		Id:            id,
-		Name:          name,
-		Creators:      creators,
-		SplitShares:   splitShares,
-		RoyaltyShares: royaltyShares,
-		Minter:        sender.String(),
+		Id:           id,
+		Name:         name,
+		Creators:     creators,
+		SplitShares:  splitShares,
+		RoyaltyShare: royaltyShare,
+		Minter:       sender.String(),
 	}
 }
