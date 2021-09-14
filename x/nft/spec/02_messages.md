@@ -5,14 +5,14 @@
 This message defines a type of non-fungible tokens, there can be multiple non-fungible tokens of the same type. Note
 that both, `Id` and `Name`, are required to be unique globally.
 
-| **Field**      | **Type** | **Description**                                                                                                 |
-| :------------- | :------- | :-------------------------------------------------------------------------------------------------------------- |
-| Id             | `string` | The denomination ID of the NFT, necessary as multiple denominations are able to be represented on each chain.   |
-| Name           | `string` | The denomination name of the NFT, necessary as multiple denominations are able to be represented on each chain. |
-| Creators       | `[]string` | The creators of the denomination.                                                                             |
-| SplitShares    | `[]sdk.dec` | Payment % share in the primary sale                                                                          |
-| RoyaltyShares  | `[]sdk.dec` | Payment % share in the secondary sale                                                                        |
-| Sender         | `string` | The account address of the user creating the denomination.                                                      |
+| **Field**      | **Type**    | **Description**                                                                                                 |
+| :------------- | :---------- | :-------------------------------------------------------------------------------------------------------------- |
+| Id             | `string`    | The denomination ID of the NFT, necessary as multiple denominations are able to be represented on each chain.   |
+| Name           | `string`    | The denomination name of the NFT, necessary as multiple denominations are able to be represented on each chain. |
+| Creators       | `[]string`  | The creators of the denomination.                                                                               |
+| SplitShares    | `[]sdk.dec` | Payment % share in the primary sale                                                                             |
+| RoyaltyShare   | `sdk.dec`   | Payment % share in the secondary sale                                                                           |
+| Sender         | `string`    | The account address of the user creating the denomination.                                                      |
 
 ```go
 type MsgIssueDenom struct {
@@ -20,7 +20,7 @@ type MsgIssueDenom struct {
     Name   string
     Creators []string
     SplitShares []sdk.dec
-    RoyaltyShares []sdk.dec
+    RoyaltyShare sdk.dec
     Sender string
 }
 ```

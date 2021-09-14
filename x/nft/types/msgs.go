@@ -67,11 +67,11 @@ func (msg MsgIssueDenom) ValidateBasic() error {
 		sum = sum.Add(share)
 	}
 	if !sum.Equal(sdk.NewDec(100)) {
-		return sdkerrors.Wrapf(ErrInvalidSplitShares, "invalid split shares, its sum is not 100")
+		return sdkerrors.Wrapf(ErrInvalidSplitShares, "its sum is not 100")
 	}
 
 	if !msg.RoyaltyShare.LT(sdk.NewDec(100)) {
-		return sdkerrors.Wrapf(ErrInvalidRoyaltyShare, "invalid royalty share, its sum should be less than 100")
+		return sdkerrors.Wrapf(ErrInvalidRoyaltyShare, "it should be less than 100")
 	}
 
 	return ValidateDenomName(msg.Name)

@@ -67,16 +67,16 @@ func (s *IntegrationTestSuite) TestNft() {
 	creator1 := from.String()
 	creator2 := s.network.Validators[2].Address.String()
 	creator3 := s.network.Validators[3].Address.String()
-	creators := creator1 + "," + creator2 + "," + creator3
+	creators := creator1 + "," + creator2
 	splitShares := "50,30,20"
-	royaltyShares := "10"
+	royaltyShare := "10"
 
 	//------test GetCmdIssueDenom()-------------
 	args := []string{
 		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
 		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
 		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
-		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -86,8 +86,57 @@ func (s *IntegrationTestSuite) TestNft() {
 	respType := proto.Message(&sdk.TxResponse{})
 	expectedCode := uint32(0)
 
+	_, err := nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
+	s.Require().EqualError(err, "mismatch creators and split shares: mismatch creators count")
+
+	creators = creator1 + "," + creator2 + "," + creator3
+	splitShares = "50,30,10"
+
+	args = []string{
+		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
+
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	_, err = nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
+	s.Require().EqualError(err, "its sum is not 100: invalid split shares")
+
+	splitShares = "50,30,20"
+	royaltyShare = "100"
+
+	args = []string{
+		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
+
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	_, err = nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
+	s.Require().EqualError(err, "it should be less than 100: invalid royalty share")
+
+	royaltyShare = "10"
+
+	args = []string{
+		fmt.Sprintf("--%s=%s", nftcli.FlagDenomName, denomName),
+		fmt.Sprintf("--%s=%s", nftcli.FlagCreators, creators),
+		fmt.Sprintf("--%s=%s", nftcli.FlagSplitShares, splitShares),
+		fmt.Sprintf("--%s=%s", nftcli.FlagRoyaltyShare, royaltyShare),
+
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
+
 	bz, err := nfttestutil.IssueDenomExec(val.ClientCtx, from.String(), denom, args...)
-	// s.Require().EqualError(err, "")
 	s.Require().NoError(err)
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType), bz.String())
 	txResp := respType.(*sdk.TxResponse)
