@@ -45,60 +45,60 @@ func TestMsgTransferNFTGetSignersMethod(t *testing.T) {
 }
 
 func TestMsgEditNFTValidateBasicMethod(t *testing.T) {
-	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenData, "")
+	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, "")
 
 	err := newMsgEditNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgEditNFT = types.NewMsgEditNFT("", denom, nftName, tokenData, address.String())
+	newMsgEditNFT = types.NewMsgEditNFT("", denom, nftName, address.String())
 	err = newMsgEditNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgEditNFT = types.NewMsgEditNFT(id, "", nftName, tokenData, address.String())
+	newMsgEditNFT = types.NewMsgEditNFT(id, "", nftName, address.String())
 	err = newMsgEditNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgEditNFT = types.NewMsgEditNFT(id, denom, nftName, tokenData, address.String())
+	newMsgEditNFT = types.NewMsgEditNFT(id, denom, nftName, address.String())
 	err = newMsgEditNFT.ValidateBasic()
 	require.NoError(t, err)
 }
 
 func TestMsgEditNFTGetSignBytesMethod(t *testing.T) {
-	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenData, address.String())
+	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, address.String())
 	sortedBytes := newMsgEditNFT.GetSignBytes()
-	expected := `{"type":"bitsong/nft/MsgEditNFT","value":{"data":"https://google.com/token-1.json","denom_id":"denom","id":"id1","name":"report","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq"}}`
+	expected := `{"type":"bitsong/nft/MsgEditNFT","value":{"denom_id":"denom","id":"id1","name":"report","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq"}}`
 	require.Equal(t, expected, string(sortedBytes))
 }
 
 func TestMsgEditNFTGetSignersMethod(t *testing.T) {
-	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, tokenData, address.String())
+	newMsgEditNFT := types.NewMsgEditNFT(id, denom, nftName, address.String())
 	signers := newMsgEditNFT.GetSigners()
 	require.Equal(t, 1, len(signers))
 	require.Equal(t, address.String(), signers[0].String())
 }
 
 func TestMsgMsgMintNFTValidateBasicMethod(t *testing.T) {
-	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, "", address2.String(), true)
+	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, "", address2.String(), true)
 	err := newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT("", denom, nftName, tokenURI, tokenData, address.String(), address2.String(), true)
+	newMsgMintNFT = types.NewMsgMintNFT("", denom, nftName, tokenURI, address.String(), address2.String(), true)
 	err = newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT(id, "", nftName, tokenURI, tokenData, address.String(), address2.String(), true)
+	newMsgMintNFT = types.NewMsgMintNFT(id, "", nftName, tokenURI, address.String(), address2.String(), true)
 	err = newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, address.String(), address2.String(), true)
+	newMsgMintNFT = types.NewMsgMintNFT(id, denom, nftName, tokenURI, address.String(), address2.String(), true)
 	err = newMsgMintNFT.ValidateBasic()
 	require.NoError(t, err)
 }
 
 func TestMsgMintNFTGetSignBytesMethod(t *testing.T) {
-	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, tokenData, address.String(), address2.String(), true)
+	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, address.String(), address2.String(), true)
 	sortedBytes := newMsgMintNFT.GetSignBytes()
-	expected := `{"type":"bitsong/nft/MsgMintNFT","value":{"data":"https://google.com/token-1.json","denom_id":"denom","id":"id1","isPrimary":true,"name":"report","recipient":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgp0ctjdj","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","uri":"https://google.com/token-1.json"}}`
+	expected := `{"type":"bitsong/nft/MsgMintNFT","value":{"denom_id":"denom","id":"id1","isPrimary":true,"name":"report","recipient":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgp0ctjdj","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","uri":"https://google.com/token-1.json"}}`
 	require.Equal(t, expected, string(sortedBytes))
 }
 

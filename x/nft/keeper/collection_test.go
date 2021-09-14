@@ -8,9 +8,9 @@ import (
 )
 
 func (suite *KeeperSuite) TestSetCollection() {
-	nft := types.NewBaseNFT(tokenID, tokenNm, address, tokenURI, tokenData, true)
+	nft := types.NewBaseNFT(tokenID, tokenNm, address, tokenURI, true)
 	// create a new NFT and add it to the collection created with the NFT mint
-	nft2 := types.NewBaseNFT(tokenID2, tokenNm, address, tokenURI, tokenData, true)
+	nft2 := types.NewBaseNFT(tokenID2, tokenNm, address, tokenURI, true)
 
 	denomE := types.Denom{
 		Id:     denomID,
@@ -36,7 +36,7 @@ func (suite *KeeperSuite) TestSetCollection() {
 
 func (suite *KeeperSuite) TestGetCollection() {
 	// MintNFT shouldn't fail when collection does not exist
-	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address, address, true)
+	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	// collection should exist
@@ -51,7 +51,7 @@ func (suite *KeeperSuite) TestGetCollection() {
 func (suite *KeeperSuite) TestGetCollections() {
 
 	// MintNFT shouldn't fail when collection does not exist
-	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address, address, true)
+	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	msg, fail := keeper.SupplyInvariant(suite.keeper)(suite.ctx)
@@ -60,15 +60,15 @@ func (suite *KeeperSuite) TestGetCollections() {
 
 func (suite *KeeperSuite) TestGetSupply() {
 	// MintNFT shouldn't fail when collection does not exist
-	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address, address, true)
+	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	// MintNFT shouldn't fail when collection does not exist
-	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID2, tokenNm2, tokenURI, tokenData, address, address2, true)
+	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID2, tokenNm2, tokenURI, address, address2, true)
 	suite.NoError(err)
 
 	// MintNFT shouldn't fail when collection does not exist
-	err = suite.keeper.MintNFT(suite.ctx, denomID2, tokenID, tokenNm2, tokenURI, tokenData, address, address2, true)
+	err = suite.keeper.MintNFT(suite.ctx, denomID2, tokenID, tokenNm2, tokenURI, address, address2, true)
 	suite.NoError(err)
 
 	supply := suite.keeper.GetTotalSupply(suite.ctx, denomID)

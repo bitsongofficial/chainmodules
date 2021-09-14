@@ -58,7 +58,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	from := val.Address
 	tokenName := "Kitty Token"
 	tokenURI := "uri"
-	tokenData := "data"
 	tokenID := "kitty"
 	// owner     := "owner"
 	denomName := "name"
@@ -122,7 +121,6 @@ func (s *IntegrationTestSuite) TestNft() {
 
 	//------test GetCmdMintNFT()-------------
 	args = []string{
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, tokenData),
 		fmt.Sprintf("--%s=%s", nftcli.FlagRecipient, from.String()),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, tokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, tokenName),
@@ -159,7 +157,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(tokenID, nftItem.NFT.Id)
 	s.Require().Equal(tokenName, nftItem.NFT.Name)
 	s.Require().Equal(tokenURI, nftItem.NFT.URI)
-	s.Require().Equal(tokenData, nftItem.NFT.Data)
 	s.Require().Equal(from.String(), nftItem.NFT.Owner)
 
 	//------test GetCmdQueryOwner()-------------

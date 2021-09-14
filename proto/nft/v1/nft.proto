@@ -15,9 +15,8 @@ message BaseNFT {
     string id = 1;
     string name = 2;
     string uri = 3 [ (gogoproto.customname) = "URI" ];
-    string data = 4;
-    string owner = 5;
-    bool isPrimary = 6;
+    string owner = 4;
+    bool isPrimary = 5;
 }
 
 // Denom defines a type of NFT

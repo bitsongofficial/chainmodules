@@ -72,7 +72,6 @@ func mintNFTHandlerFn(cliCtx client.Context) http.HandlerFunc {
 			req.DenomID,
 			req.Name,
 			req.URI,
-			req.Data,
 			req.Owner,
 			req.Recipient,
 			true,
@@ -103,7 +102,7 @@ func editNFTHandlerFn(cliCtx client.Context) http.HandlerFunc {
 			vars[RestParamTokenID],
 			vars[RestParamDenomID],
 			req.Name,
-			req.Data, req.Owner,
+			req.Owner,
 		)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

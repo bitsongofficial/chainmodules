@@ -60,7 +60,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	from := val.Address
 	tokenName := "Kitty Token"
 	tokenURI := "uri"
-	tokenData := "data"
 	tokenID := "kitty"
 	// owner     := "owner"
 	denomName := "name"
@@ -121,7 +120,6 @@ func (s *IntegrationTestSuite) TestNft() {
 
 	//------test GetCmdMintNFT()-------------
 	args = []string{
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, tokenData),
 		fmt.Sprintf("--%s=%s", nftcli.FlagRecipient, from.String()),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, tokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, tokenName),
@@ -156,7 +154,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(tokenID, nftItem.Id)
 	s.Require().Equal(tokenName, nftItem.Name)
 	s.Require().Equal(tokenURI, nftItem.URI)
-	s.Require().Equal(tokenData, nftItem.Data)
 	s.Require().Equal(from.String(), nftItem.Owner)
 
 	//------test GetCmdQueryOwner()-------------
@@ -178,10 +175,8 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(1, len(collectionItem.Collection.NFTs))
 
 	//------test GetCmdEditNFT()-------------
-	newTokenData := "newdata"
 	newTokenName := "new Kitty Token"
 	args = []string{
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, newTokenData),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, newTokenName),
 
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -203,7 +198,6 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
 	newNftItem := respType.(*nfttypes.BaseNFT)
 	s.Require().Equal(newTokenName, newNftItem.Name)
-	s.Require().Equal(newTokenData, newNftItem.Data)
 
 	//------test GetCmdTransferNFT()-------------
 	recipient := sdk.AccAddress(crypto.AddressHash([]byte("dgsbl")))
@@ -230,13 +224,11 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(tokenID, nftItem.Id)
 	s.Require().Equal(newTokenName, nftItem.Name)
 	s.Require().Equal(tokenURI, nftItem.URI)
-	s.Require().Equal(newTokenData, nftItem.Data)
 	s.Require().Equal(recipient.String(), nftItem.Owner)
 
 	//------test GetCmdBurnNFT()-------------
 	newTokenID := "dgsbl"
 	args = []string{
-		fmt.Sprintf("--%s=%s", nftcli.FlagTokenData, newTokenData),
 		fmt.Sprintf("--%s=%s", nftcli.FlagRecipient, from.String()),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenURI, tokenURI),
 		fmt.Sprintf("--%s=%s", nftcli.FlagTokenName, newTokenName),

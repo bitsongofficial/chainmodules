@@ -164,17 +164,12 @@ func GetCmdMintNFT() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			tokenData, err := cmd.Flags().GetString(FlagTokenData)
-			if err != nil {
-				return err
-			}
 
 			msg := types.NewMsgMintNFT(
 				args[1],
 				args[0],
 				tokenName,
 				tokenURI,
-				tokenData,
 				sender,
 				recipient,
 				true,
@@ -215,15 +210,11 @@ func GetCmdEditNFT() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			tokenData, err := cmd.Flags().GetString(FlagTokenData)
-			if err != nil {
-				return err
-			}
+
 			msg := types.NewMsgEditNFT(
 				args[1],
 				args[0],
 				tokenName,
-				tokenData,
 				clientCtx.GetFromAddress().String(),
 			)
 			if err := msg.ValidateBasic(); err != nil {

@@ -69,7 +69,6 @@ func (m msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types
 	if err := m.Keeper.MintNFT(ctx, msg.DenomId, msg.Id,
 		msg.Name,
 		msg.URI,
-		msg.Data,
 		sender,
 		recipient,
 		msg.IsPrimary,
@@ -106,7 +105,6 @@ func (m msgServer) EditNFT(goCtx context.Context, msg *types.MsgEditNFT) (*types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.Keeper.EditNFT(ctx, msg.DenomId, msg.Id,
 		msg.Name,
-		msg.Data,
 		sender,
 	); err != nil {
 		return nil, err

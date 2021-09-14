@@ -88,33 +88,33 @@ func TestKeeperSuite(t *testing.T) {
 
 func (suite *KeeperSuite) TestMintNFT() {
 	// MintNFT shouldn't fail when collection does not exist
-	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address, address, true)
+	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	// MintNFT shouldn't fail when collection exists
-	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID2, tokenNm2, tokenURI, tokenData, address, address, true)
+	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID2, tokenNm2, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	// MintNFT should fail when owner address is not the creator of denom
-	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID3, tokenNm3, tokenURI, tokenData, address2, address2, true)
+	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID3, tokenNm3, tokenURI, address2, address2, true)
 	suite.Error(err)
 }
 
 func (suite *KeeperSuite) TestUpdateNFT() {
 	// EditNFT should fail when NFT doesn't exists
-	err := suite.keeper.EditNFT(suite.ctx, denomID, tokenID, tokenNm3, tokenData, address)
+	err := suite.keeper.EditNFT(suite.ctx, denomID, tokenID, tokenNm3, address)
 	suite.Error(err)
 
 	// MintNFT shouldn't fail when collection does not exist
-	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address, address, true)
+	err = suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	// EditNFT should fail when NFT doesn't exists
-	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID2, tokenNm2, tokenData, address)
+	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID2, tokenNm2, address)
 	suite.Error(err)
 
 	// EditNFT should fail when address is not the owner
-	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID, tokenNm, tokenData, address2)
+	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID, tokenNm, address2)
 	if suite.Error(err) {
 		suite.EqualError(err, fmt.Sprintf("%s is not the owner of %s/%s: %s", address2, denomID, tokenID, types.ErrUnauthorized))
 	}
@@ -124,7 +124,7 @@ func (suite *KeeperSuite) TestUpdateNFT() {
 	suite.NoError(err)
 
 	// EditNFT should fail when address is not the creator of denom
-	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID, tokenNm, tokenData, address2)
+	err = suite.keeper.EditNFT(suite.ctx, denomID, tokenID, tokenNm, address2)
 	if suite.Error(err) {
 		suite.EqualError(err, fmt.Sprintf("%s is not the creator of %s: %s", address2, denomID, types.ErrUnauthorized))
 	}
@@ -133,7 +133,7 @@ func (suite *KeeperSuite) TestUpdateNFT() {
 func (suite *KeeperSuite) TestTransferOwner() {
 
 	// MintNFT shouldn't fail when collection does not exist
-	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address, address, true)
+	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	// invalid owner
@@ -153,7 +153,7 @@ func (suite *KeeperSuite) TestTransferOwner() {
 
 func (suite *KeeperSuite) TestBurnNFT() {
 	// MintNFT should not fail when collection does not exist
-	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address, address, true)
+	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, address, address, true)
 	suite.NoError(err)
 
 	// BurnNFT should fail when address is not the owner of nft

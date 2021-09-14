@@ -158,7 +158,6 @@ func SimulateMsgEditNFT(k keeper.Keeper, ak types.AccountKeeper, bk types.BankKe
 			nftID,
 			denom,
 			"",
-			simtypes.RandStringOfLength(r, 10), // tokenData
 			ownerAddr.String(),
 		)
 
@@ -218,7 +217,6 @@ func SimulateMsgMintNFT(k keeper.Keeper, ak types.AccountKeeper, bk types.BankKe
 			denom.Id, // denom
 			"",
 			simtypes.RandStringOfLength(r, 45), // tokenURI
-			simtypes.RandStringOfLength(r, 10), // tokenData
 			randomSenderAddress.String(),       // sender
 			randomRecipient.Address.String(),   // recipient
 			true,
