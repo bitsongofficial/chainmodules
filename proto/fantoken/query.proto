@@ -13,19 +13,19 @@ option go_package = "github.com/bitsongofficial/chainmodules/x/fantoken/types";
 service Query {
     // FanToken returns fantoken with fantoken name
     rpc FanToken(QueryFanTokenRequest) returns (QueryFanTokenResponse) {
-        option (google.api.http).get = "/chainmodules/fantoken/tokens/{denom}";
+        option (google.api.http).get = "/fantoken/tokens/{denom}";
     }
     // FanTokens returns the fantoken list
     rpc FanTokens(QueryFanTokensRequest) returns (QueryFanTokensResponse) {
-        option (google.api.http).get = "/chainmodules/fantoken/tokens";
+        option (google.api.http).get = "/fantoken/tokens";
     }
     // Params queries the fantoken parameters
     rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-        option (google.api.http).get = "/chainmodules/fantoken/params";
+        option (google.api.http).get = "/fantoken/params";
     }
     // TotalBurn queries all the burnt coins
     rpc TotalBurn(QueryTotalBurnRequest) returns (QueryTotalBurnResponse) {
-        option (google.api.http).get = "/chainmodules/fantoken/total_burn";
+        option (google.api.http).get = "/fantoken/total_burn";
     }
 }
 
