@@ -490,13 +490,13 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Auction_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"chainmodules", "auction", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Auction_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 0, 1, 0, 4, 1, 5, 1}, []string{"auction", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_AllAuctions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"chainmodules", "auction", "auctions"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_AllAuctions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"auction", "auctions"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_AuctionsByOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"chainmodules", "auction", "auctions", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_AuctionsByOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"auction", "auctions", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Bids_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"chainmodules", "auction", "bids", "auction_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Bids_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"auction", "bids", "auction_id"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

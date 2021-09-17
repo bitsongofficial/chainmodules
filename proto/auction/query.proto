@@ -12,19 +12,19 @@ option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
 service Query {
     // Auction queries the Auction for the given id
     rpc Auction(QueryAuctionRequest) returns (QueryAuctionResponse) {
-        option (google.api.http).get = "/chainmodules/auction/auction/{id}";
+        option (google.api.http).get = "/auction/auction/{id}";
     }
     // AllAuctions queries the all Auctions
     rpc AllAuctions(QueryAllAuctionsRequest) returns (QueryAllAuctionsResponse) {
-        option (google.api.http).get = "/chainmodules/auction/auctions";
+        option (google.api.http).get = "/auction/auctions";
     }
     // AuctionsByOwner queries the Auctions of the given owner
     rpc AuctionsByOwner(QueryAuctionsByOwnerRequest) returns (QueryAuctionsByOwnerResponse) {
-        option (google.api.http).get = "/chainmodules/auction/auctions/{owner}";
+        option (google.api.http).get = "/auction/auctions/{owner}";
     }
     // Bids queries the bids of the given auction id
     rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
-        option (google.api.http).get = "/chainmodules/auction/bids/{auction_id}";
+        option (google.api.http).get = "/auction/bids/{auction_id}";
     }
 }
 
