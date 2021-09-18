@@ -1,11 +1,11 @@
 // Copyright (c) 2016-2021 Shanghai Bianjie AI Technology Inc. (licensed under the Apache License, Version 2.0)
 // Modifications Copyright (c) 2021, CRO Protocol Labs ("Crypto.org") (licensed under the Apache License, Version 2.0)
 syntax = "proto3";
-package bitsong.nft.v1;
+package bitsong.nft.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "nft/v1/nft.proto";
+import "bitsong/nft/v1beta1/nft.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 
 option go_package = "github.com/bitsongofficial/chainmodules/x/nft/types";
@@ -69,7 +69,7 @@ message QueryOwnerRequest {
 
 // QueryOwnerResponse is the response type for the Query/Owner RPC method
 message QueryOwnerResponse {
-    Owner owner = 1;
+    bitsong.nft.v1beta1.Owner owner = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -82,7 +82,7 @@ message QueryCollectionRequest {
 
 // QueryCollectionResponse is the response type for the Query/Collection RPC method
 message QueryCollectionResponse {
-    Collection collection = 1;
+    bitsong.nft.v1beta1.Collection collection = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -93,7 +93,7 @@ message QueryDenomRequest {
 
 // QueryDenomResponse is the response type for the Query/Denom RPC method
 message QueryDenomResponse {
-    Denom denom = 1;
+    bitsong.nft.v1beta1.Denom denom = 1;
 }
 
 // QueryDenomByNameRequest is the request type for the Query/DenomByName RPC method
@@ -103,7 +103,7 @@ message QueryDenomByNameRequest {
 
 // QueryDenomByNameResponse is the response type for the Query/DenomByName RPC method
 message QueryDenomByNameResponse {
-    Denom denom = 1;
+    bitsong.nft.v1beta1.Denom denom = 1;
 }
 
 // QueryDenomsRequest is the request type for the Query/Denoms RPC method
@@ -127,5 +127,5 @@ message QueryNFTRequest {
 
 // QueryNFTResponse is the response type for the Query/NFT RPC method
 message QueryNFTResponse {
-    BaseNFT nft = 1 [ (gogoproto.customname) = "NFT" ];
+    bitsong.nft.v1beta1.BaseNFT nft = 1 [ (gogoproto.customname) = "NFT" ];
 }

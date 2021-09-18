@@ -1,7 +1,7 @@
 // Copyright (c) 2016-2021 Shanghai Bianjie AI Technology Inc. (licensed under the Apache License, Version 2.0)
 // Modifications Copyright (c) 2021, CRO Protocol Labs ("Crypto.org") (licensed under the Apache License, Version 2.0)
 syntax = "proto3";
-package bitsong.nft.v1;
+package bitsong.nft.v1beta1;
 
 import "gogoproto/gogo.proto";
 
@@ -52,13 +52,13 @@ message Owner {
     option (gogoproto.equal) = true;
 
     string address = 1;
-    repeated IDCollection id_collections = 2 [ (gogoproto.moretags) = "yaml:\"idcs\"", (gogoproto.customname) = "IDCollections", (gogoproto.nullable) = false ];
+    repeated bitsong.nft.v1beta1.IDCollection id_collections = 2 [ (gogoproto.moretags) = "yaml:\"idcs\"", (gogoproto.customname) = "IDCollections", (gogoproto.nullable) = false ];
 }
 
 // Collection defines a type of collection
 message Collection {
     option (gogoproto.equal) = true;
 
-    Denom denom = 1 [ (gogoproto.nullable) = false ];
-    repeated BaseNFT nfts = 2 [ (gogoproto.customname) = "NFTs", (gogoproto.nullable) = false ];
+    bitsong.nft.v1beta1.Denom denom = 1 [ (gogoproto.nullable) = false ];
+    repeated bitsong.nft.v1beta1.BaseNFT nfts = 2 [ (gogoproto.customname) = "NFTs", (gogoproto.nullable) = false ];
 }
