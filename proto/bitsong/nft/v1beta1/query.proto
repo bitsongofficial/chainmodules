@@ -14,37 +14,37 @@ option go_package = "github.com/bitsongofficial/chainmodules/x/nft/types";
 service Query {
     // Supply queries the total supply of a given denom or owner
     rpc Supply(QuerySupplyRequest) returns (QuerySupplyResponse) {
-        option (google.api.http).get = "/nft/collections/{denom_id}/supply";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/collections/{denom_id}/supply";
     }
 
     // Owner queries the NFTs of the specified owner
     rpc Owner(QueryOwnerRequest) returns (QueryOwnerResponse) {
-        option (google.api.http).get = "/nft/nfts";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/nfts";
     }
 
     // Collection queries the NFTs of the specified denom
     rpc Collection(QueryCollectionRequest) returns (QueryCollectionResponse) {
-        option (google.api.http).get = "/nft/collections/{denom_id}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/collections/{denom_id}";
     }
 
     // Denom queries the definition of a given denom
     rpc Denom(QueryDenomRequest) returns (QueryDenomResponse) {
-        option (google.api.http).get = "/nft/denoms/{denom_id}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/denoms/{denom_id}";
     }
 
     // DenomByName queries the definition of a given denom by name
     rpc DenomByName(QueryDenomByNameRequest) returns (QueryDenomByNameResponse) {
-        option (google.api.http).get = "/nft/denoms/name/{denom_name}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/denoms/name/{denom_name}";
     }
 
     // Denoms queries all the denoms
     rpc Denoms(QueryDenomsRequest) returns (QueryDenomsResponse) {
-        option (google.api.http).get = "/nft/denoms";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/denoms";
     }
 
     // NFT queries the NFT for the given denom and token ID
     rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
-        option (google.api.http).get = "/nft/nfts/{denom_id}/{token_id}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/nfts/{denom_id}/{token_id}";
     }
 }
 
