@@ -1,0 +1,102 @@
+syntax = "proto3";
+package bitsong.auction.v1beta1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Msg defines the Auction Msg service
+service Msg {
+    // OpenAuction defines a method for opening an auction
+    rpc OpenAuction(MsgOpenAuction) returns (MsgOpenAuctionResponse);
+
+    // EditAuction defines a method for editting an auction
+    rpc EditAuction(MsgEditAuction) returns (MsgEditAuctionResponse);
+
+    // CancelAuction defines a method for cancelling an auction
+    rpc CancelAuction(MsgCancelAuction) returns (MsgCancelAuctionResponse);
+
+    // OpenBid defines a method for opening a bid for an auction
+    rpc OpenBid(MsgOpenBid) returns (MsgOpenBidResponse);
+
+    // CancelBid defines a method for cancelling a bid for an auction
+    rpc CancelBid(MsgCancelBid) returns (MsgCancelBidResponse);
+    
+    // Withdraw defines a method for withdrawing nft for an auction winner
+    rpc Withdraw(MsgWithdraw) returns (MsgWithdrawResponse);
+}
+
+// MsgOpenAuction defines an SDK message for creating a new Auction.
+message MsgOpenAuction {
+    option (gogoproto.equal) = true;
+
+    uint32 auction_type = 1 [(gogoproto.moretags) = "yaml:\"auction_type\""];
+    string nft_id = 2;
+    uint64 duration = 3;
+    cosmos.base.v1beta1.Coin min_amount = 4 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
+    string owner = 5;
+    uint32 limit = 6;
+}
+
+// MsgOpenAuctionResponse defines the Msg/OpenAuction response type.
+message MsgOpenAuctionResponse {}
+
+
+// MsgEditAuction defines an SDK message for editing an Auction.
+message MsgEditAuction {
+    option (gogoproto.equal) = true;
+
+    uint64 id = 1;
+    uint64 duration = 2;
+    string owner = 3;
+}
+
+// MsgEditAuctionResponse defines the Msg/EditAuction response type.
+message MsgEditAuctionResponse {}
+
+// MsgCancelAuction defines an SDK message for cancelling an Auction.
+message MsgCancelAuction {
+    option (gogoproto.equal) = true;
+
+    uint64 id = 1;
+    string owner = 2;
+}
+
+// MsgCancelAuctionResponse defines the Msg/CancelAuction response type.
+message MsgCancelAuctionResponse {}
+
+// MsgOpenBid defines an SDK message for creating a new bid.
+message MsgOpenBid {
+    option (gogoproto.equal) = true;
+
+    uint64 auction_id = 1 [(gogoproto.moretags) = "yaml:\"auction_id\""];
+    string bidder = 2;
+    cosmos.base.v1beta1.Coin bid_amount = 3 [(gogoproto.moretags) = "yaml:\"bid_amount\"", (gogoproto.nullable) = false];
+}
+
+// MsgOpenBidResponse defines the Msg/OpenBid response type.
+message MsgOpenBidResponse {}
+
+// MsgCancelBid defines an SDK message for cancelling a bid.
+message MsgCancelBid {
+    option (gogoproto.equal) = true;
+
+    uint64 auction_id = 1 [(gogoproto.moretags) = "yaml:\"auction_id\""];
+    string bidder = 2;
+}
+
+// MsgCancelBidResponse defines the Msg/CancelBid response type.
+message MsgCancelBidResponse {}
+
+// MsgWithdraw defines an SDK message for withdraw.
+message MsgWithdraw {
+    option (gogoproto.equal) = true;
+
+    uint64 auction_id = 1 [(gogoproto.moretags) = "yaml:\"auction_id\""];
+    string recipient = 2;
+}
+
+// MsgWithdrawResponse defines the Msg/Withdraw response type.
+message MsgWithdrawResponse {}

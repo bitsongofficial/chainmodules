@@ -1,0 +1,14 @@
+syntax = "proto3";
+package bitsong.auction.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "bitsong/auction/v1beta1/auction.proto";
+
+option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
+
+// GenesisState defines the auction module's genesis state
+message GenesisState {
+    uint64 last_auction_id = 1 [(gogoproto.moretags) = "yaml:\"last_auction_id\""];
+    repeated Auction auctions = 2 [ (gogoproto.nullable) = false ];
+    repeated Bid bids = 3 [ (gogoproto.nullable) = false ];
+}

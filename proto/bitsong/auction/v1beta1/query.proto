@@ -1,0 +1,80 @@
+syntax = "proto3";
+package bitsong.auction.v1beta1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "bitsong/auction/v1beta1/auction.proto";
+
+option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
+
+// Query defines the gRPC querier service for Auction Module
+service Query {
+    // Auction queries the Auction for the given id
+    rpc Auction(QueryAuctionRequest) returns (QueryAuctionResponse) {
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auction/{id}";
+    }
+    // AllAuctions queries the all Auctions
+    rpc AllAuctions(QueryAllAuctionsRequest) returns (QueryAllAuctionsResponse) {
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions";
+    }
+    // AuctionsByOwner queries the Auctions of the given owner
+    rpc AuctionsByOwner(QueryAuctionsByOwnerRequest) returns (QueryAuctionsByOwnerResponse) {
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions/{owner}";
+    }
+    // Bids queries the bids of the given auction id
+    rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
+        option (google.api.http).get = "/bitsong/auction/v1beta1/bids/{auction_id}";
+    }
+}
+
+// QueryAuctionRequest is request type for the Query/Auction RPC method
+message QueryAuctionRequest {
+    uint64 id = 1;
+}
+
+// QueryAuctionResponse is response type for the Query/Auction RPC method
+message QueryAuctionResponse {
+    Auction auction = 1;
+}
+
+// QueryAllAuctionsRequest is the request type for the Query/AllAuctions RPC method
+message QueryAllAuctionsRequest {
+    // pagination defines an optional pagination for the request.
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryAllAuctionsResponse is the response type for the Query/AllAuctions RPC method
+message QueryAllAuctionsResponse {
+    repeated Auction auctions = 1 [ (gogoproto.nullable) = false ];
+    
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryAuctionsByOwnerRequest is the request type for the Query/AuctionsByOwner RPC method
+message QueryAuctionsByOwnerRequest {
+    string owner = 1 [ (gogoproto.moretags) = "yaml:\"owner\"" ];
+    // pagination defines an optional pagination for the request.
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryAuctionsByOwnerResponse is the response type for the Query/AuctionsByOwner RPC method
+message QueryAuctionsByOwnerResponse {
+    repeated Auction auctions = 1 [ (gogoproto.nullable) = false ];
+
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBidsRequest is the request type for the Query/Bids RPC method
+message QueryBidsRequest {
+    uint64 auction_id = 1 [ (gogoproto.moretags) = "yaml:\"auction_id\"" ];
+    // pagination defines an optional pagination for the request.
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryBidsResponse is the response type for the Query/Bids RPC method
+message QueryBidsResponse {
+    repeated Bid bids = 1 [ (gogoproto.nullable) = false ];
+
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

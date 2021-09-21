@@ -1,0 +1,31 @@
+syntax = "proto3";
+package bitsong.auction.v1beta1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Auction defines auction properties
+message Auction {
+    option (gogoproto.equal) = true;
+
+    uint64 id = 1;
+    uint32 auction_type = 2;
+    string nft_id = 3;
+    uint64 start_time = 4 [(gogoproto.moretags) = "yaml:\"start_time\""];
+    uint64 duration = 5 [(gogoproto.moretags) = "yaml:\"duration\""];
+    cosmos.base.v1beta1.Coin min_amount = 6 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
+    string owner = 7;
+    uint32 limit = 8;
+}
+
+// Bid defines auction bidder and its amount
+message Bid {
+    option (gogoproto.equal) = true;
+
+    uint64 auction_id = 1 [(gogoproto.moretags) = "yaml:\"auction_id\""];
+    string bidder = 2;
+    cosmos.base.v1beta1.Coin bid_amount = 3 [(gogoproto.moretags) = "yaml:\"bid_amount\"", (gogoproto.nullable) = false];
+}
