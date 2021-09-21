@@ -1,10 +1,10 @@
 syntax = "proto3";
-package bitsong.auction;
+package bitsong.auction.v1beta1;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "auction/auction.proto";
+import "bitsong/auction/v1beta1/auction.proto";
 
 option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
 
@@ -12,19 +12,19 @@ option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
 service Query {
     // Auction queries the Auction for the given id
     rpc Auction(QueryAuctionRequest) returns (QueryAuctionResponse) {
-        option (google.api.http).get = "/auction/auction/{id}";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auction/{id}";
     }
     // AllAuctions queries the all Auctions
     rpc AllAuctions(QueryAllAuctionsRequest) returns (QueryAllAuctionsResponse) {
-        option (google.api.http).get = "/auction/auctions";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions";
     }
     // AuctionsByOwner queries the Auctions of the given owner
     rpc AuctionsByOwner(QueryAuctionsByOwnerRequest) returns (QueryAuctionsByOwnerResponse) {
-        option (google.api.http).get = "/auction/auctions/{owner}";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions/{owner}";
     }
     // Bids queries the bids of the given auction id
     rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
-        option (google.api.http).get = "/auction/bids/{auction_id}";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/bids/{auction_id}";
     }
 }
 

@@ -1,8 +1,8 @@
 syntax = "proto3";
-package bitsong.auction;
+package bitsong.auction.v1beta1;
 
 import "gogoproto/gogo.proto";
-import "auction/auction.proto";
+import "bitsong/auction/v1beta1/auction.proto";
 
 option go_package = "github.com/bitsongofficial/chainmodules/x/auction/types";
 
