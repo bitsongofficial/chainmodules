@@ -87,7 +87,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	tokenSymbol := gjson.Get(txResp.RawLog, "0.events.0.attributes.0.value").String()
 
 	//------test GetCmdQueryFanTokens()-------------
-	url := fmt.Sprintf("%s/chainmodules/fantoken/tokens", baseURL)
+	url := fmt.Sprintf("%s/bitsong/fantoken/v1beta1/tokens", baseURL)
 	resp, err := rest.GetRequest(url)
 	respType = proto.Message(&tokentypes.QueryFanTokensResponse{})
 	s.Require().NoError(err)
@@ -96,7 +96,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().Equal(1, len(tokensResp.Tokens))
 
 	//------test GetCmdQueryFanToken()-------------
-	url = fmt.Sprintf("%s/chainmodules/fantoken/tokens/%s", baseURL, tokenSymbol)
+	url = fmt.Sprintf("%s/bitsong/fantoken/v1beta1/tokens/%s", baseURL, tokenSymbol)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&tokentypes.QueryFanTokenResponse{})
 	var token tokentypes.FanTokenI
@@ -109,7 +109,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().Equal(symbol, token.GetSymbol())
 
 	//------test GetCmdQueryParams()-------------
-	url = fmt.Sprintf("%s/chainmodules/fantoken/params", baseURL)
+	url = fmt.Sprintf("%s/bitsong/fantoken/v1beta1/params", baseURL)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&tokentypes.QueryParamsResponse{})
 	s.Require().NoError(err)

@@ -1,11 +1,11 @@
 // Copyright (c) 2016-2021 Shanghai Bianjie AI Technology Inc. (licensed under the Apache License, Version 2.0)
 // Modifications Copyright (c) 2021, CRO Protocol Labs ("Crypto.org") (licensed under the Apache License, Version 2.0)
 syntax = "proto3";
-package bitsong.nft.v1;
+package bitsong.nft.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "nft/v1/nft.proto";
+import "bitsong/nft/v1beta1/nft.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 
 option go_package = "github.com/bitsongofficial/chainmodules/x/nft/types";
@@ -14,37 +14,37 @@ option go_package = "github.com/bitsongofficial/chainmodules/x/nft/types";
 service Query {
     // Supply queries the total supply of a given denom or owner
     rpc Supply(QuerySupplyRequest) returns (QuerySupplyResponse) {
-        option (google.api.http).get = "/nft/collections/{denom_id}/supply";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/collections/{denom_id}/supply";
     }
 
     // Owner queries the NFTs of the specified owner
     rpc Owner(QueryOwnerRequest) returns (QueryOwnerResponse) {
-        option (google.api.http).get = "/nft/nfts";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/nfts";
     }
 
     // Collection queries the NFTs of the specified denom
     rpc Collection(QueryCollectionRequest) returns (QueryCollectionResponse) {
-        option (google.api.http).get = "/nft/collections/{denom_id}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/collections/{denom_id}";
     }
 
     // Denom queries the definition of a given denom
     rpc Denom(QueryDenomRequest) returns (QueryDenomResponse) {
-        option (google.api.http).get = "/nft/denoms/{denom_id}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/denoms/{denom_id}";
     }
 
     // DenomByName queries the definition of a given denom by name
     rpc DenomByName(QueryDenomByNameRequest) returns (QueryDenomByNameResponse) {
-        option (google.api.http).get = "/nft/denoms/name/{denom_name}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/denoms/name/{denom_name}";
     }
 
     // Denoms queries all the denoms
     rpc Denoms(QueryDenomsRequest) returns (QueryDenomsResponse) {
-        option (google.api.http).get = "/nft/denoms";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/denoms";
     }
 
     // NFT queries the NFT for the given denom and token ID
     rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
-        option (google.api.http).get = "/nft/nfts/{denom_id}/{token_id}";
+        option (google.api.http).get = "/bitsong/nft/v1beta1/nfts/{denom_id}/{token_id}";
     }
 }
 
@@ -69,7 +69,7 @@ message QueryOwnerRequest {
 
 // QueryOwnerResponse is the response type for the Query/Owner RPC method
 message QueryOwnerResponse {
-    Owner owner = 1;
+    bitsong.nft.v1beta1.Owner owner = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -82,7 +82,7 @@ message QueryCollectionRequest {
 
 // QueryCollectionResponse is the response type for the Query/Collection RPC method
 message QueryCollectionResponse {
-    Collection collection = 1;
+    bitsong.nft.v1beta1.Collection collection = 1;
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -93,7 +93,7 @@ message QueryDenomRequest {
 
 // QueryDenomResponse is the response type for the Query/Denom RPC method
 message QueryDenomResponse {
-    Denom denom = 1;
+    bitsong.nft.v1beta1.Denom denom = 1;
 }
 
 // QueryDenomByNameRequest is the request type for the Query/DenomByName RPC method
@@ -103,7 +103,7 @@ message QueryDenomByNameRequest {
 
 // QueryDenomByNameResponse is the response type for the Query/DenomByName RPC method
 message QueryDenomByNameResponse {
-    Denom denom = 1;
+    bitsong.nft.v1beta1.Denom denom = 1;
 }
 
 // QueryDenomsRequest is the request type for the Query/Denoms RPC method
@@ -127,5 +127,5 @@ message QueryNFTRequest {
 
 // QueryNFTResponse is the response type for the Query/NFT RPC method
 message QueryNFTResponse {
-    BaseNFT nft = 1 [ (gogoproto.customname) = "NFT" ];
+    bitsong.nft.v1beta1.BaseNFT nft = 1 [ (gogoproto.customname) = "NFT" ];
 }

@@ -91,7 +91,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	denomID := gjson.Get(txResp.RawLog, "0.events.0.attributes.0.value").String()
 
 	//------test GetCmdQueryDenom()-------------
-	url := fmt.Sprintf("%s/chainmodules/nft/denoms/%s", baseURL, denomID)
+	url := fmt.Sprintf("%s/bitsong/nft/v1beta1/denoms/%s", baseURL, denomID)
 	resp, err := rest.GetRequest(url)
 	respType = proto.Message(&nfttypes.QueryDenomResponse{})
 	s.Require().NoError(err)
@@ -100,7 +100,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(denomName, denomItem.Denom.Name)
 
 	//------test GetCmdQueryDenomByName()-------------
-	url = fmt.Sprintf("%s/chainmodules/nft/denoms/name/%s", baseURL, denomName)
+	url = fmt.Sprintf("%s/bitsong/nft/v1beta1/denoms/name/%s", baseURL, denomName)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&nfttypes.QueryDenomResponse{})
 	s.Require().NoError(err)
@@ -110,7 +110,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(denomName, denomItem.Denom.Name)
 
 	//------test GetCmdQueryDenoms()-------------
-	url = fmt.Sprintf("%s/chainmodules/nft/denoms", baseURL)
+	url = fmt.Sprintf("%s/bitsong/nft/v1beta1/denoms", baseURL)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&nfttypes.QueryDenomsResponse{})
 	s.Require().NoError(err)
@@ -139,7 +139,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(expectedCode, txResp.Code)
 
 	//------test GetCmdQuerySupply()-------------
-	url = fmt.Sprintf("%s/chainmodules/nft/collections/%s/supply", baseURL, denomID)
+	url = fmt.Sprintf("%s/bitsong/nft/v1beta1/collections/%s/supply", baseURL, denomID)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&nfttypes.QuerySupplyResponse{})
 	s.Require().NoError(err)
@@ -148,7 +148,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(uint64(1), supplyResp.Amount)
 
 	//------test GetCmdQueryNFT()-------------
-	url = fmt.Sprintf("%s/chainmodules/nft/nfts/%s/%s", baseURL, denomID, tokenID)
+	url = fmt.Sprintf("%s/bitsong/nft/v1beta1/nfts/%s/%s", baseURL, denomID, tokenID)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&nfttypes.QueryNFTResponse{})
 	s.Require().NoError(err)
@@ -160,7 +160,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(from.String(), nftItem.NFT.Owner)
 
 	//------test GetCmdQueryOwner()-------------
-	url = fmt.Sprintf("%s/chainmodules/nft/nfts?owner=%s", baseURL, from.String())
+	url = fmt.Sprintf("%s/bitsong/nft/v1beta1/nfts?owner=%s", baseURL, from.String())
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&nfttypes.QueryOwnerResponse{})
 	s.Require().NoError(err)
@@ -171,7 +171,7 @@ func (s *IntegrationTestSuite) TestNft() {
 	s.Require().Equal(tokenID, ownerResp.Owner.IDCollections[0].TokenIds[0])
 
 	//------test GetCmdQueryCollection()-------------
-	url = fmt.Sprintf("%s/chainmodules/nft/collections/%s", baseURL, denomID)
+	url = fmt.Sprintf("%s/bitsong/nft/v1beta1/collections/%s", baseURL, denomID)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&nfttypes.QueryCollectionResponse{})
 	s.Require().NoError(err)
