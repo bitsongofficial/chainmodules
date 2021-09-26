@@ -1,6 +1,8 @@
 package types
 
 import (
+	"time"
+
 	"github.com/gogo/protobuf/proto"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -8,6 +10,15 @@ import (
 
 var (
 	_ proto.Message = &Auction{}
+)
+
+// AuctionStatus is the status of an auction.
+type AuctionStatus int32
+
+const (
+	AUCTION_STATUS_RUNNING   AuctionStatus = 0
+	AUCTION_STATUS_ENDED     AuctionStatus = 1
+	AUCTION_STATUS_CANCELLED AuctionStatus = 2
 )
 
 // AuctionI defines an interface for Auction
@@ -20,12 +31,13 @@ type AuctionI interface {
 	GetMinAmount() sdk.Coin
 	GetOwner() sdk.AccAddress
 	GetLimit() uint32
+	GetStatus() uint32
 }
 
 // NewAuction constructs a new Auction instance
 func NewAuction(
 	id uint64,
-	auctionType uint32,
+	auctionType AuctionType,
 	nftId string,
 	startTime uint64,
 	duration uint64,
@@ -42,6 +54,7 @@ func NewAuction(
 		MinAmount:   minAmount,
 		Owner:       owner.String(),
 		Limit:       limit,
+		Cancelled:   false,
 	}
 }
 
@@ -51,7 +64,7 @@ func (t Auction) GetId() uint64 {
 }
 
 // GetAuctionType implements exported.AuctionI
-func (t Auction) GetAuctionType() uint32 {
+func (t Auction) GetAuctionType() AuctionType {
 	return t.AuctionType
 }
 
@@ -84,4 +97,16 @@ func (t Auction) GetOwner() sdk.AccAddress {
 // GetLimit implements exported.AuctionI
 func (t Auction) GetLimit() uint32 {
 	return t.Limit
+}
+
+// GetStatus implements exported.AuctionI
+func (t Auction) GetStatus() AuctionStatus {
+	if t.Cancelled {
+		return AUCTION_STATUS_CANCELLED
+	}
+	now := time.Now()
+	if uint64(t.StartTime)+uint64(t.Duration) < uint64(now.Unix()) {
+		return AUCTION_STATUS_ENDED
+	}
+	return AUCTION_STATUS_RUNNING
 }

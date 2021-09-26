@@ -11,7 +11,9 @@ const (
 
 	AttributeValueCategory = ModuleName
 
-	// AttributeKeyCreator   = "creator"
-	// AttributeKeyAmount    = "amount"
-	// AttributeKeyOwner     = "owner"
+	AttributeKeyAuctionId = "auction_id"
+	AttributeKeyCreator   = "creator"
+	AttributeKeyBidder    = "bidder"
+	AttributeKeyOwner     = "owner"
+	AttributeKeyRecipient = "recipient"
 )

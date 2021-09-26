@@ -13,4 +13,5 @@ var (
 	ErrInvalidAuctionType  = sdkerrors.Register(ModuleName, 5, "invalid auction type")
 	ErrInvalidAuctionLimit = sdkerrors.Register(ModuleName, 6, "invalid auction limit")
 	ErrInvalidDuration     = sdkerrors.Register(ModuleName, 7, "invalid duration")
+	ErrInvalidAuction      = sdkerrors.Register(ModuleName, 8, "invalid auction")
 )

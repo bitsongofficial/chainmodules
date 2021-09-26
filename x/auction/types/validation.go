@@ -28,7 +28,7 @@ func ValidateAuction(auction Auction) error {
 }
 
 // ValidateAuctionType checks if the given auction type is valid
-func ValidateAuctionType(auctionType uint32) error {
+func ValidateAuctionType(auctionType AuctionType) error {
 	if auctionType > 2 {
 		return sdkerrors.Wrapf(ErrInvalidAuctionType, "invalid auction type (%d)", auctionType)
 	}
@@ -36,8 +36,8 @@ func ValidateAuctionType(auctionType uint32) error {
 }
 
 // ValidateAuctionLimit checks if the given auction limit is valid
-func ValidateAuctionLimit(auctionType uint32, limit uint32) error {
-	if (auctionType == 0 && limit != 1) || (auctionType == 1 && limit != 0) {
+func ValidateAuctionLimit(auctionType AuctionType, limit uint32) error {
+	if (auctionType == Single_Edition && limit != 1) || (auctionType == Open_Edition && limit != 0) {
 		return sdkerrors.Wrapf(ErrInvalidAuctionLimit, "invalid auction limit (%d)", limit)
 	}
 	return nil

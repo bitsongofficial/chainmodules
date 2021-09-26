@@ -30,6 +30,8 @@ var (
 	PrefixBidsByAuctionId = []byte{0x03}
 	// PrefixBidsByOwner defines a prefix for the bids by owner
 	PrefixBidsByOwner = []byte{0x04}
+	// KeyLastAuctionId defines the key for the last auction id
+	KeyLastAuctionId = []byte{0x05}
 )
 
 // KeyAuctionById returns the key of the specified id. Intended for querying the auction by the id.
