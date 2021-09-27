@@ -40,8 +40,13 @@ func KeyAuctionById(id uint64) []byte {
 }
 
 // KeyAuctionsByOwner returns the key of the specified owner. Intended for querying all auctions of an owner
-func KeyAuctionsByOwner(owner sdk.AccAddress) []byte {
-	return append(PrefixAuctionsByOwner, owner.Bytes()...)
+func KeyAuctionsByOwner(owner sdk.AccAddress, id uint64) []byte {
+	return append(append(PrefixAuctionsByOwner, owner.Bytes()...), sdk.Uint64ToBigEndian(id)...)
+}
+
+// KeyBid returns the key of the specified auction id and bidder. Intended for querying a bid of an auction
+func KeyBid(id uint64, bidder sdk.AccAddress) []byte {
+	return append(append(PrefixBidsByAuctionId, sdk.Uint64ToBigEndian(id)...), bidder.Bytes()...)
 }
 
 // KeyBidsByAuctionId returns the key of the specified auction id. Intended for querying all bids of an auction
@@ -50,6 +55,6 @@ func KeyBidsByAuctionId(id uint64) []byte {
 }
 
 // KeyBidsByOwner returns the key of the specified owner. Intended for querying all bids of an owner
-func KeyBidsByOwner(owner sdk.AccAddress) []byte {
-	return append(PrefixBidsByOwner, owner.Bytes()...)
+func KeyBidsByBidder(bidder sdk.AccAddress, auctionId uint64) []byte {
+	return append(append(PrefixBidsByOwner, bidder.Bytes()...), sdk.Uint64ToBigEndian(auctionId)...)
 }

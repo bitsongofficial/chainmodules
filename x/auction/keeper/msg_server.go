@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -38,7 +39,7 @@ func (m msgServer) OpenAuction(goCtx context.Context, msg *types.MsgOpenAuction)
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeOpenAuction,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, string(auctionId)),
+			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprint(auctionId)),
 			sdk.NewAttribute(types.AttributeKeyCreator, msg.Owner),
 		),
 		sdk.NewEvent(
@@ -70,7 +71,7 @@ func (m msgServer) EditAuction(goCtx context.Context, msg *types.MsgEditAuction)
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeEditAuction,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, string(msg.Id)),
+			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprint(msg.Id)),
 			sdk.NewAttribute(types.AttributeKeyOwner, msg.Owner),
 		),
 		sdk.NewEvent(
@@ -100,7 +101,7 @@ func (m msgServer) CancelAuction(goCtx context.Context, msg *types.MsgCancelAuct
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCancelAuction,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, string(msg.Id)),
+			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprint(msg.Id)),
 			sdk.NewAttribute(types.AttributeKeyOwner, msg.Owner),
 		),
 		sdk.NewEvent(
@@ -130,7 +131,7 @@ func (m msgServer) OpenBid(goCtx context.Context, msg *types.MsgOpenBid) (*types
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeOpenBid,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, string(msg.AuctionId)),
+			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprint(msg.AuctionId)),
 			sdk.NewAttribute(types.AttributeKeyBidder, msg.Bidder),
 		),
 		sdk.NewEvent(
@@ -160,7 +161,7 @@ func (m msgServer) CancelBid(goCtx context.Context, msg *types.MsgCancelBid) (*t
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCancelBid,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, string(msg.AuctionId)),
+			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprint(msg.AuctionId)),
 			sdk.NewAttribute(types.AttributeKeyOwner, msg.Bidder),
 		),
 		sdk.NewEvent(
@@ -190,7 +191,7 @@ func (m msgServer) Withdraw(goCtx context.Context, msg *types.MsgWithdraw) (*typ
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeWithdraw,
-			sdk.NewAttribute(types.AttributeKeyAuctionId, string(msg.AuctionId)),
+			sdk.NewAttribute(types.AttributeKeyAuctionId, fmt.Sprint(msg.AuctionId)),
 			sdk.NewAttribute(types.AttributeKeyRecipient, msg.Recipient),
 		),
 		sdk.NewEvent(

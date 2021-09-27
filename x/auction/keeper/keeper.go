@@ -39,7 +39,7 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 // OpenAuction opens a new auction
 func (k Keeper) OpenAuction(
 	ctx sdk.Context,
-	auctionType uint32,
+	auctionType types.AuctionType,
 	nftId string,
 	duration uint64,
 	minAmount sdk.Coin,
@@ -50,8 +50,8 @@ func (k Keeper) OpenAuction(
 	now := time.Now()
 	auction := types.NewAuction(id, auctionType, nftId, uint64(now.Unix()), duration, minAmount, owner, limit)
 
-	if err := k.AddAuction(ctx, auction); err != nil {
-		return err
+	if err := k.addAuction(ctx, auction); err != nil {
+		return 0, err
 	}
 	k.setLastAuctionId(ctx, id+1)
 
@@ -114,6 +114,48 @@ func (k Keeper) CancelAuction(
 	auction.Cancelled = true
 
 	k.setAuction(ctx, auction)
+
+	return nil
+}
+
+// OpenBid opens a new bid
+func (k Keeper) OpenBid(
+	ctx sdk.Context,
+	auctionId uint64,
+	bidder sdk.AccAddress,
+	bidAmount sdk.Coin,
+) error {
+	bid := types.NewBid(auctionId, bidder, bidAmount)
+
+	if err := k.addBid(ctx, bid); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// CancelBid cancels the specified bid
+func (k Keeper) CancelBid(
+	ctx sdk.Context,
+	auctionId uint64,
+	bidder sdk.AccAddress,
+) error {
+	if err := k.cancelBid(ctx, auctionId, bidder); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Withdraw sends nft to the auction winner
+func (k Keeper) Withdraw(
+	ctx sdk.Context,
+	auctionId uint64,
+	recipient sdk.AccAddress,
+) error {
+	if err := k.withdraw(ctx, auctionId, recipient); err != nil {
+		return err
+	}
 
 	return nil
 }
