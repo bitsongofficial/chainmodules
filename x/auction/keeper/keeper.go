@@ -46,14 +46,14 @@ func (k Keeper) OpenAuction(
 	owner sdk.AccAddress,
 	limit uint32,
 ) (uint64, error) {
-	id := k.getLastAuctionId(ctx)
+	id := k.GetLastAuctionId(ctx)
 	now := time.Now()
 	auction := types.NewAuction(id, auctionType, nftId, uint64(now.Unix()), duration, minAmount, owner, limit)
 
-	if err := k.addAuction(ctx, auction); err != nil {
+	if err := k.AddAuction(ctx, auction); err != nil {
 		return 0, err
 	}
-	k.setLastAuctionId(ctx, id+1)
+	k.SetLastAuctionId(ctx, id+1)
 
 	return id, nil
 }
@@ -127,7 +127,7 @@ func (k Keeper) OpenBid(
 ) error {
 	bid := types.NewBid(auctionId, bidder, bidAmount)
 
-	if err := k.addBid(ctx, bid); err != nil {
+	if err := k.AddBid(ctx, bid); err != nil {
 		return err
 	}
 

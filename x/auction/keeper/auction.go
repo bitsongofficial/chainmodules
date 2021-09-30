@@ -10,7 +10,7 @@ import (
 	"github.com/bitsongofficial/chainmodules/x/auction/types"
 )
 
-func (k Keeper) getLastAuctionId(ctx sdk.Context) uint64 {
+func (k Keeper) GetLastAuctionId(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 	bytes := store.Get(types.KeyLastAuctionId)
 	if bytes == nil {
@@ -19,12 +19,12 @@ func (k Keeper) getLastAuctionId(ctx sdk.Context) uint64 {
 	return sdk.BigEndianToUint64(bytes)
 }
 
-func (k Keeper) setLastAuctionId(ctx sdk.Context, id uint64) {
+func (k Keeper) SetLastAuctionId(ctx sdk.Context, id uint64) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.KeyLastAuctionId, sdk.Uint64ToBigEndian(id))
 }
 
-func (k Keeper) getAuctions(ctx sdk.Context, owner sdk.AccAddress) (auctions []types.Auction) {
+func (k Keeper) GetAuctions(ctx sdk.Context, owner sdk.AccAddress) (auctions []types.Auction) {
 	store := ctx.KVStore(k.storeKey)
 
 	var it sdk.Iterator
@@ -70,7 +70,7 @@ func (k Keeper) getAuctionById(ctx sdk.Context, id uint64) (auction types.Auctio
 }
 
 // AddAuction saves a new auction
-func (k Keeper) addAuction(ctx sdk.Context, auction types.Auction) error {
+func (k Keeper) AddAuction(ctx sdk.Context, auction types.Auction) error {
 	if k.hasAuction(ctx, auction.GetId()) {
 		return sdkerrors.Wrapf(types.ErrAuctionAlreadyExists, "auction already exists: %d", auction.GetId())
 	}

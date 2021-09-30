@@ -18,8 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/bitsongofficial/chainmodules/x/auction/client/cli"
-	"github.com/bitsongofficial/chainmodules/x/nft/client/rest"
-	// "github.com/bitsongofficial/chainmodules/x/auction/client/rest"
+	"github.com/bitsongofficial/chainmodules/x/auction/client/rest"
 	"github.com/bitsongofficial/chainmodules/x/auction/keeper"
 	"github.com/bitsongofficial/chainmodules/x/auction/types"
 )

@@ -13,17 +13,17 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, data types.GenesisState) {
 		panic(err.Error())
 	}
 
-	k.setLastAuctionId(ctx, data.LastAuctionId)
+	k.SetLastAuctionId(ctx, data.LastAuctionId)
 	// init auctions
 	for _, auction := range data.Auctions {
-		if err := k.addAuction(ctx, auction); err != nil {
+		if err := k.AddAuction(ctx, auction); err != nil {
 			panic(err.Error())
 		}
 	}
 
 	// init bids
 	for _, bid := range data.Bids {
-		if err := k.addBid(ctx, bid); err != nil {
+		if err := k.AddBid(ctx, bid); err != nil {
 			panic(err.Error())
 		}
 	}
@@ -32,19 +32,17 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, data types.GenesisState) {
 // ExportGenesis outputs the genesis state
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	var auctions []types.Auction
-	for _, auction := range k.getAuctions(ctx, nil) {
-		t := auction.(*types.Auction)
-		auctions = append(auctions, *t)
+	for _, auction := range k.GetAuctions(ctx, nil) {
+		auctions = append(auctions, auction)
 	}
 
 	var bids []types.Bid
-	for _, bid := range k.getBids(ctx, nil) {
-		t := bid.(*types.Bid)
-		bids = append(bids, *t)
+	for _, bid := range k.GetAllBids(ctx) {
+		bids = append(bids, bid)
 	}
 
 	return &types.GenesisState{
-		LastAuctionId: k.getLastAuctionId(),
+		LastAuctionId: k.GetLastAuctionId(ctx),
 		Auctions:      auctions,
 		Bids:          bids,
 	}

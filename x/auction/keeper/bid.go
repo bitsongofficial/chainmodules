@@ -22,6 +22,21 @@ func (k Keeper) getBid(ctx sdk.Context, auctionId uint64, bidder sdk.AccAddress)
 	return bid, nil
 }
 
+func (k Keeper) GetAllBids(ctx sdk.Context) (bids []types.Bid) {
+	store := ctx.KVStore(k.storeKey)
+
+	var it sdk.Iterator = sdk.KVStorePrefixIterator(store, types.PrefixBidsByAuctionId)
+	defer it.Close()
+
+	for ; it.Valid(); it.Next() {
+		var bid types.Bid
+		k.cdc.MustUnmarshalBinaryBare(it.Value(), &bid)
+
+		bids = append(bids, bid)
+	}
+	return
+}
+
 func (k Keeper) getBidsByAuctionId(ctx sdk.Context, auctionId uint64) (bids []types.Bid) {
 	store := ctx.KVStore(k.storeKey)
 
@@ -40,7 +55,7 @@ func (k Keeper) getBidsByAuctionId(ctx sdk.Context, auctionId uint64) (bids []ty
 func (k Keeper) getBidsByBidder(ctx sdk.Context, bidder sdk.AccAddress) (bids []types.Bid) {
 	store := ctx.KVStore(k.storeKey)
 
-	var it sdk.Iterator = sdk.KVStorePrefixIterator(store, append(types.PrefixBidsByOwner, bidder.Bytes()...))
+	var it sdk.Iterator = sdk.KVStorePrefixIterator(store, append(types.PrefixBidsByBidder, bidder.Bytes()...))
 	defer it.Close()
 
 	for ; it.Valid(); it.Next() {
@@ -58,7 +73,7 @@ func (k Keeper) getBidsByBidder(ctx sdk.Context, bidder sdk.AccAddress) (bids []
 }
 
 // AddBid saves a new bid
-func (k Keeper) addBid(ctx sdk.Context, bid types.Bid) error {
+func (k Keeper) AddBid(ctx sdk.Context, bid types.Bid) error {
 	if k.hasBid(ctx, bid.GetAuctionId(), bid.GetBidder()) {
 		return sdkerrors.Wrapf(types.ErrBidAlreadyExists, "bid already exists: %s", bid.GetBidder())
 	}

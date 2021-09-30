@@ -28,8 +28,8 @@ var (
 	PrefixAuctionsByOwner = []byte{0x02}
 	// PrefixBidsByAuctionId defines a prefix for the bids by auction id
 	PrefixBidsByAuctionId = []byte{0x03}
-	// PrefixBidsByOwner defines a prefix for the bids by owner
-	PrefixBidsByOwner = []byte{0x04}
+	// PrefixBidsByBidder defines a prefix for the bids by owner
+	PrefixBidsByBidder = []byte{0x04}
 	// KeyLastAuctionId defines the key for the last auction id
 	KeyLastAuctionId = []byte{0x05}
 )
@@ -56,5 +56,5 @@ func KeyBidsByAuctionId(id uint64) []byte {
 
 // KeyBidsByOwner returns the key of the specified owner. Intended for querying all bids of an owner
 func KeyBidsByBidder(bidder sdk.AccAddress, auctionId uint64) []byte {
-	return append(append(PrefixBidsByOwner, bidder.Bytes()...), sdk.Uint64ToBigEndian(auctionId)...)
+	return append(append(PrefixBidsByBidder, bidder.Bytes()...), sdk.Uint64ToBigEndian(auctionId)...)
 }

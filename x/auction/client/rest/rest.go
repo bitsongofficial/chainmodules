@@ -12,6 +12,7 @@ import (
 const (
 	RestParamAuctionId = "auction-id"
 	RestParamOwner     = "owner"
+	RestParamBidder    = "bidder"
 )
 
 // RegisterHandlers registers token-related REST handlers to a router
@@ -26,12 +27,33 @@ type openAuctionReq struct {
 	NftId       string       `json:"nft_id"`
 	Duration    uint64       `json:"duration"`
 	MinAmount   string       `json:"min_amount"`
-	Owner       string       `json:"owner"` // owner of the token
-	limit       uint32       `json:"limit"`
+	Owner       string       `json:"owner"`
+	Limit       uint32       `json:"limit"`
 }
 
 type editAuctionReq struct {
 	BaseReq  rest.BaseReq `json:"base_req"`
 	Duration uint64       `json:"duration"`
-	Owner    string       `json:"owner"` //  owner of the token
+	Owner    string       `json:"owner"`
+}
+
+type cancelAuctionReq struct {
+	BaseReq rest.BaseReq `json:"base_req"`
+	Owner   string       `json:"owner"`
+}
+
+type openBidReq struct {
+	BaseReq   rest.BaseReq `json:"base_req"`
+	Bidder    string       `json:"bidder"`
+	BidAmount string       `json:"bid_amount"`
+}
+
+type cancelBidReq struct {
+	BaseReq rest.BaseReq `json:"base_req"`
+	Bidder  string       `json:"bidder"`
+}
+
+type withdrawBidReq struct {
+	BaseReq   rest.BaseReq `json:"base_req"`
+	Recipient string       `json:"recipient"`
 }
