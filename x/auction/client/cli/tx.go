@@ -65,7 +65,11 @@ func GetCmdOpenAuction() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			nftId, err := cmd.Flags().GetString(FlagNftId)
+			nftDenomId, err := cmd.Flags().GetString(FlagNftDenomId)
+			if err != nil {
+				return err
+			}
+			nftTokenId, err := cmd.Flags().GetString(FlagNftTokenId)
 			if err != nil {
 				return err
 			}
@@ -86,7 +90,7 @@ func GetCmdOpenAuction() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgOpenAuction(types.AuctionType(auctionType), nftId, duration, minAmount, owner.String(), limit)
+			msg := types.NewMsgOpenAuction(types.AuctionType(auctionType), nftDenomId, nftTokenId, duration, minAmount, owner.String(), limit)
 
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -98,7 +102,8 @@ func GetCmdOpenAuction() *cobra.Command {
 
 	cmd.Flags().AddFlagSet(FsOpenAuction)
 	_ = cmd.MarkFlagRequired(FlagAuctionType)
-	_ = cmd.MarkFlagRequired(FlagNftId)
+	_ = cmd.MarkFlagRequired(FlagNftDenomId)
+	_ = cmd.MarkFlagRequired(FlagNftTokenId)
 	_ = cmd.MarkFlagRequired(FlagDuration)
 	_ = cmd.MarkFlagRequired(FlagMinAmount)
 	_ = cmd.MarkFlagRequired(FlagLimit)

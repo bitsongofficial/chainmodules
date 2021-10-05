@@ -83,6 +83,30 @@ func (k Keeper) AddAuction(ctx sdk.Context, auction types.Auction) error {
 		k.setWithOwner(ctx, auction.GetOwner(), auction.GetId())
 	}
 
+	err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), auction.GetOwner(), k.accountKeeper.GetModuleAddress(types.ModuleName))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (k Keeper) cancelAuction(ctx sdk.Context, auction types.Auction) error {
+	auction.Cancelled = true
+	k.setAuction(ctx, auction)
+
+	bids := k.getBidsByAuctionId(ctx, auction.GetId())
+	for _, bid := range bids {
+		if err := k.cancelBid(ctx, auction.GetId(), bid.GetBidder()); err != nil {
+			return err
+		}
+	}
+
+	err := k.nftKeeper.TransferOwner(ctx, auction.NftDenomId, auction.NftTokenId, k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -105,11 +129,14 @@ func (k Keeper) setWithOwner(ctx sdk.Context, owner sdk.AccAddress, id uint64) {
 	store.Set(types.KeyAuctionsByOwner(owner, id), bz)
 }
 
-// AddAuction saves a new auction
-func (k Keeper) withdraw(ctx sdk.Context, auctionId uint64, recipient sdk.AccAddress) error {
-	if !k.hasAuction(ctx, auctionId) {
-		return sdkerrors.Wrapf(types.ErrAuctionNotExists, "auction not found: %d", auctionId)
+// withdrawCoins send auction coins to the recipient
+func (k Keeper) withdrawCoins(ctx sdk.Context, auctionId uint64, recipient sdk.AccAddress) error {
+	bids := k.getBidsByAuctionId(ctx, auctionId)
+	amount := sdk.NewCoin(bids[0].GetBidAmount().Denom, sdk.ZeroInt())
+	for _, bid := range bids {
+		amount.Add(bid.GetBidAmount())
 	}
+	k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.Coins{amount})
 
 	return nil
 }

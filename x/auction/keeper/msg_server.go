@@ -30,7 +30,7 @@ func (m msgServer) OpenAuction(goCtx context.Context, msg *types.MsgOpenAuction)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	auctionId, err := m.Keeper.OpenAuction(
-		ctx, msg.AuctionType, msg.NftId, msg.Duration, msg.MinAmount, owner, msg.Limit,
+		ctx, msg.AuctionType, msg.NftDenomId, msg.NftTokenId, msg.Duration, msg.MinAmount, owner, msg.Limit,
 	)
 	if err != nil {
 		return nil, err

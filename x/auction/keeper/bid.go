@@ -85,19 +85,30 @@ func (k Keeper) AddBid(ctx sdk.Context, bid types.Bid) error {
 		k.setWithBidder(ctx, bid.GetBidder(), bid.GetAuctionId())
 	}
 
+	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, bid.GetBidder(), types.ModuleName, sdk.Coins{bid.GetBidAmount()})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 // CancelBid removes a bid
 func (k Keeper) cancelBid(ctx sdk.Context, auctionId uint64, bidder sdk.AccAddress) error {
-	if !k.hasBid(ctx, auctionId, bidder) {
-		return sdkerrors.Wrapf(types.ErrBidNotExists, "bid not found: %s", bidder)
+	bid, err := k.getBid(ctx, auctionId, bidder)
+	if err != nil {
+		return err
 	}
 
 	k.removeBid(ctx, auctionId, bidder)
 
 	if len(bidder) != 0 {
 		k.removeWithBidder(ctx, bidder, auctionId)
+	}
+
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, bidder, sdk.Coins{bid.GetBidAmount()})
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -132,4 +143,26 @@ func (k Keeper) removeWithBidder(ctx sdk.Context, bidder sdk.AccAddress, auction
 	store := ctx.KVStore(k.storeKey)
 
 	store.Delete(types.KeyBidsByBidder(bidder, auctionId))
+}
+
+// withdrawNFT send nft to the recipient
+func (k Keeper) withdrawNFT(ctx sdk.Context, auction types.Auction, recipient sdk.AccAddress) error {
+	if !k.hasBid(ctx, auction.GetId(), recipient) {
+		return sdkerrors.Wrapf(types.ErrBidNotExists, "bid not found")
+	}
+
+	if auction.GetLimit() == 1 { // Single Edition
+		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
+		if err != nil {
+			return err
+		}
+	} else { // Open Edition or Limited Edition
+		// will require CloneTransfer function in nft module
+		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

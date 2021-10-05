@@ -25,7 +25,8 @@ const (
 type AuctionI interface {
 	GetId() uint64
 	GetAuctionType() uint32
-	GetNftId() string
+	GetNftDenomId() string
+	GetNftTokenId() string
 	GetStartTime() uint64
 	GetDuration() uint64
 	GetMinAmount() sdk.Coin
@@ -38,7 +39,8 @@ type AuctionI interface {
 func NewAuction(
 	id uint64,
 	auctionType AuctionType,
-	nftId string,
+	nftDenomId string,
+	nftTokenId string,
 	startTime uint64,
 	duration uint64,
 	minAmount sdk.Coin,
@@ -48,7 +50,8 @@ func NewAuction(
 	return Auction{
 		Id:          id,
 		AuctionType: auctionType,
-		NftId:       nftId,
+		NftDenomId:  nftDenomId,
+		NftTokenId:  nftTokenId,
 		StartTime:   startTime,
 		Duration:    duration,
 		MinAmount:   minAmount,
@@ -68,9 +71,14 @@ func (t Auction) GetAuctionType() AuctionType {
 	return t.AuctionType
 }
 
-// GetNftId implements exported.AuctionI
-func (t Auction) GetNftId() string {
-	return t.NftId
+// GetNftDenomId implements exported.AuctionI
+func (t Auction) GetNftDenomId() string {
+	return t.NftDenomId
+}
+
+// GetNftTokenId implements exported.AuctionI
+func (t Auction) GetNftTokenId() string {
+	return t.NftTokenId
 }
 
 // GetStartTime implements exported.AuctionI

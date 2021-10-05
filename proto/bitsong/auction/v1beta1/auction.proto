@@ -13,13 +13,14 @@ message Auction {
 
     uint64 id = 1;
     AuctionType auction_type = 2;
-    string nft_id = 3;
-    uint64 start_time = 4 [(gogoproto.moretags) = "yaml:\"start_time\""];
-    uint64 duration = 5 [(gogoproto.moretags) = "yaml:\"duration\""];
-    cosmos.base.v1beta1.Coin min_amount = 6 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
-    string owner = 7;
-    uint32 limit = 8;
-    bool cancelled = 9;
+    string nft_denom_id = 3;
+    string nft_token_id = 4;
+    uint64 start_time = 5 [(gogoproto.moretags) = "yaml:\"start_time\""];
+    uint64 duration = 6 [(gogoproto.moretags) = "yaml:\"duration\""];
+    cosmos.base.v1beta1.Coin min_amount = 7 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
+    string owner = 8;
+    uint32 limit = 9;
+    bool cancelled = 10;
 }
 
 // AuctionType is the type of an auction.

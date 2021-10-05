@@ -33,12 +33,13 @@ var (
 
 // NewMsgOpenAuction - construct auction open msg.
 func NewMsgOpenAuction(
-	auctionType AuctionType, nftId string, duration uint64,
+	auctionType AuctionType, nftDenomId string, nftTokenId string, duration uint64,
 	minAmount sdk.Coin, owner string, limit uint32,
 ) *MsgOpenAuction {
 	return &MsgOpenAuction{
 		AuctionType: auctionType,
-		NftId:       nftId,
+		NftDenomId:  nftDenomId,
+		NftTokenId:  nftTokenId,
 		Duration:    duration,
 		MinAmount:   minAmount,
 		Owner:       owner,
@@ -60,7 +61,8 @@ func (msg MsgOpenAuction) ValidateBasic() error {
 		NewAuction(
 			1, // auctionIdForValidation
 			msg.AuctionType,
-			msg.NftId,
+			msg.NftDenomId,
+			msg.NftTokenId,
 			uint64(now.Unix()),
 			msg.Duration,
 			msg.MinAmount,

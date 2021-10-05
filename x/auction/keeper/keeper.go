@@ -14,20 +14,25 @@ import (
 )
 
 type Keeper struct {
-	storeKey   sdk.StoreKey
-	cdc        codec.Marshaler
-	bankKeeper types.BankKeeper
+	storeKey      sdk.StoreKey
+	cdc           codec.Marshaler
+	accountKeeper types.AccountKeeper
+	bankKeeper    types.BankKeeper
+	nftKeeper     types.NftKeeper
 }
 
 func NewKeeper(
 	cdc codec.Marshaler,
 	key sdk.StoreKey,
+	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	nftKeeper types.NftKeeper,
 ) Keeper {
 	return Keeper{
 		storeKey:   key,
 		cdc:        cdc,
 		bankKeeper: bankKeeper,
+		nftKeeper:  nftKeeper,
 	}
 }
 
@@ -40,7 +45,8 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 func (k Keeper) OpenAuction(
 	ctx sdk.Context,
 	auctionType types.AuctionType,
-	nftId string,
+	nftDenomId string,
+	nftTokenId string,
 	duration uint64,
 	minAmount sdk.Coin,
 	owner sdk.AccAddress,
@@ -48,7 +54,7 @@ func (k Keeper) OpenAuction(
 ) (uint64, error) {
 	id := k.GetLastAuctionId(ctx)
 	now := time.Now()
-	auction := types.NewAuction(id, auctionType, nftId, uint64(now.Unix()), duration, minAmount, owner, limit)
+	auction := types.NewAuction(id, auctionType, nftDenomId, nftTokenId, uint64(now.Unix()), duration, minAmount, owner, limit)
 
 	if err := k.AddAuction(ctx, auction); err != nil {
 		return 0, err
@@ -111,9 +117,7 @@ func (k Keeper) CancelAuction(
 		return sdkerrors.Wrapf(types.ErrInvalidAuction, "the auction was already ended or cancelled")
 	}
 
-	auction.Cancelled = true
-
-	k.setAuction(ctx, auction)
+	k.cancelAuction(ctx, auction)
 
 	return nil
 }
@@ -125,6 +129,43 @@ func (k Keeper) OpenBid(
 	bidder sdk.AccAddress,
 	bidAmount sdk.Coin,
 ) error {
+	auction, err := k.getAuctionById(ctx, auctionId)
+	if err != nil {
+		return err
+	}
+
+	if auction.GetStatus() != types.AUCTION_STATUS_RUNNING {
+		return sdkerrors.Wrapf(types.ErrInvalidAuction, "the auction was already ended or cancelled")
+	}
+
+	if bidAmount.Denom != auction.GetMinAmount().Denom {
+		return sdkerrors.Wrapf(types.ErrInvalidBidAmountDenom, "bid amount denom is different with auction min amount denom")
+	}
+
+	if bidAmount.Amount.LT(auction.GetMinAmount().Amount) {
+		return sdkerrors.Wrapf(types.ErrNotEnoughBidAmount, "the bid amount is less than the auction min amount")
+	}
+
+	bids := k.getBidsByAuctionId(ctx, auctionId)
+	if auction.GetLimit() != 0 {
+		if len(bids) >= int(auction.GetLimit()) {
+			var minBid types.Bid = bids[0]
+			for _, bid := range bids {
+				if bid.GetBidAmount().Amount.LT(minBid.GetBidAmount().Amount) {
+					minBid = bid
+				}
+			}
+			if bidAmount.Amount.LTE(minBid.GetBidAmount().Amount) {
+				return sdkerrors.Wrapf(types.ErrNotEnoughBidAmount, "the bid amount is not enough to be a winner")
+			} else {
+				err = k.cancelBid(ctx, auctionId, minBid.GetBidder())
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
 	bid := types.NewBid(auctionId, bidder, bidAmount)
 
 	if err := k.AddBid(ctx, bid); err != nil {
@@ -153,7 +194,18 @@ func (k Keeper) Withdraw(
 	auctionId uint64,
 	recipient sdk.AccAddress,
 ) error {
-	if err := k.withdraw(ctx, auctionId, recipient); err != nil {
+	auction, err := k.getAuctionById(ctx, auctionId)
+	if err != nil {
+		return err
+	}
+
+	if recipient.Equals(auction.GetOwner()) {
+		err = k.withdrawCoins(ctx, auctionId, recipient)
+	} else {
+		err = k.withdrawNFT(ctx, auction, recipient)
+	}
+
+	if err != nil {
 		return err
 	}
 

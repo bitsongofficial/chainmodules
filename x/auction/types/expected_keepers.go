@@ -21,3 +21,9 @@ type AccountKeeper interface {
 	GetModuleAddress(name string) sdk.AccAddress
 	GetModuleAccount(ctx sdk.Context, name string) authtypes.ModuleAccountI
 }
+
+type NftKeeper interface {
+	TransferOwner(
+		ctx sdk.Context, denomID, tokenID string, srcOwner, dstOwner sdk.AccAddress,
+	) error
+}

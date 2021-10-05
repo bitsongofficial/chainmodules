@@ -6,7 +6,8 @@ import (
 
 const (
 	FlagAuctionType = "auction-type"
-	FlagNftId       = "nft-id"
+	FlagNftDenomId  = "nft-denom-id"
+	FlagNftTokenId  = "nft-token-id"
 	FlagDuration    = "duration"
 	FlagMinAmount   = "min-amount"
 	FlagLimit       = "limit"
@@ -24,7 +25,8 @@ var (
 
 func init() {
 	FsOpenAuction.Int32(FlagAuctionType, 0, "The auction type 0 ~ 2")
-	FsOpenAuction.String(FlagNftId, "", "The nft id which is auctioned")
+	FsOpenAuction.String(FlagNftDenomId, "", "The nft denom id which is auctioned")
+	FsOpenAuction.String(FlagNftTokenId, "", "The nft token id which is auctioned")
 	FsOpenAuction.Uint64(FlagDuration, 0, "The auction duration")
 	FsOpenAuction.String(FlagMinAmount, "", "The auction min amount")
 	FsOpenAuction.Uint32(FlagLimit, 0, "The auction winner limit")

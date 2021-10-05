@@ -48,7 +48,7 @@ func openAuctionHandlerFn(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		msg := types.NewMsgOpenAuction(types.AuctionType(req.AuctionType), req.NftId, req.Duration, minAmount, req.Owner, req.Limit)
+		msg := types.NewMsgOpenAuction(types.AuctionType(req.AuctionType), req.NftDenomId, req.NftTokenId, req.Duration, minAmount, req.Owner, req.Limit)
 
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

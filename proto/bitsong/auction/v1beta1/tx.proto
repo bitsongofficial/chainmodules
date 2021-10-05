@@ -34,11 +34,12 @@ message MsgOpenAuction {
     option (gogoproto.equal) = true;
 
     AuctionType auction_type = 1 [(gogoproto.moretags) = "yaml:\"auction_type\""];
-    string nft_id = 2;
-    uint64 duration = 3;
-    cosmos.base.v1beta1.Coin min_amount = 4 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
-    string owner = 5;
-    uint32 limit = 6;
+    string nft_denom_id = 2;
+    string nft_token_id = 3;
+    uint64 duration = 4;
+    cosmos.base.v1beta1.Coin min_amount = 5 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
+    string owner = 6;
+    uint32 limit = 7;
 }
 
 // MsgOpenAuctionResponse defines the Msg/OpenAuction response type.

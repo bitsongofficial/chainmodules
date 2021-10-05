@@ -24,7 +24,8 @@ func RegisterHandlers(cliCtx client.Context, r *mux.Router) {
 type openAuctionReq struct {
 	BaseReq     rest.BaseReq `json:"base_req"`
 	AuctionType int32        `json:"auction_type"`
-	NftId       string       `json:"nft_id"`
+	NftDenomId  string       `json:"nft_denom_id"`
+	NftTokenId  string       `json:"nft_token_id"`
 	Duration    uint64       `json:"duration"`
 	MinAmount   string       `json:"min_amount"`
 	Owner       string       `json:"owner"`
