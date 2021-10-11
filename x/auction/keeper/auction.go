@@ -129,14 +129,43 @@ func (k Keeper) setWithOwner(ctx sdk.Context, owner sdk.AccAddress, id uint64) {
 	store.Set(types.KeyAuctionsByOwner(owner, id), bz)
 }
 
-// withdrawCoins send auction coins to the recipient
-func (k Keeper) withdrawCoins(ctx sdk.Context, auctionId uint64, recipient sdk.AccAddress) error {
-	bids := k.getBidsByAuctionId(ctx, auctionId)
+// withdrawCoins send auction coins to the recipient(splitshare, royaltyshare applies here)
+func (k Keeper) withdrawCoins(ctx sdk.Context, auction types.Auction, recipient sdk.AccAddress) error {
+	bids := k.getBidsByAuctionId(ctx, auction.GetId())
 	amount := sdk.NewCoin(bids[0].GetBidAmount().Denom, sdk.ZeroInt())
 	for _, bid := range bids {
 		amount.Add(bid.GetBidAmount())
 	}
-	k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.Coins{amount})
+
+	denom, err := k.nftKeeper.GetDenom(ctx, auction.GetNftDenomId())
+	if err != nil {
+		return err
+	}
+
+	item, err := k.nftKeeper.GetNFT(ctx, auction.GetNftDenomId(), auction.GetNftTokenId())
+	if err != nil {
+		return err
+	}
+
+	multiplier := sdk.NewInt(100)
+	if !item.GetPrimaryStatus() {
+		multiplier = sdk.Int(denom.RoyaltyShare)
+	}
+
+	recipientAmount := amount.Amount
+
+	for i := 0; i < len(denom.Creators); i++ {
+		creatorAmount := amount.Amount.Mul(sdk.Int(denom.SplitShares[i]).Mul(multiplier)).Quo(sdk.NewInt(100))
+		err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(denom.Creators[i]), sdk.Coins{sdk.NewCoin(amount.Denom, creatorAmount)})
+		if err != nil {
+			return err
+		}
+		recipientAmount = recipientAmount.Sub(creatorAmount)
+	}
+
+	if !item.GetPrimaryStatus() {
+		k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.Coins{sdk.NewCoin(amount.Denom, recipientAmount)})
+	}
 
 	return nil
 }

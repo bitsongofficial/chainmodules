@@ -50,7 +50,7 @@ func (k Keeper) MintNFTUnverified(ctx sdk.Context, denomID, tokenID, tokenNm, to
 		return sdkerrors.Wrapf(types.ErrNFTAlreadyExists, "NFT %s already exists in collection %s", tokenID, denomID)
 	}
 
-	k.setNFT(
+	k.SetNFT(
 		ctx, denomID,
 		types.NewBaseNFT(
 			tokenID,
@@ -101,7 +101,7 @@ func (k Keeper) EditNFT(
 		nft.Name = tokenNm
 	}
 
-	k.setNFT(ctx, denomID, nft)
+	k.SetNFT(ctx, denomID, nft)
 
 	return nil
 }
@@ -121,7 +121,7 @@ func (k Keeper) TransferOwner(
 
 	nft.Owner = dstOwner.String()
 
-	k.setNFT(ctx, denomID, nft)
+	k.SetNFT(ctx, denomID, nft)
 	k.swapOwner(ctx, denomID, tokenID, srcOwner, dstOwner)
 	return nil
 }

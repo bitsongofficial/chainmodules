@@ -200,7 +200,7 @@ func (k Keeper) Withdraw(
 	}
 
 	if recipient.Equals(auction.GetOwner()) {
-		err = k.withdrawCoins(ctx, auctionId, recipient)
+		err = k.withdrawCoins(ctx, auction, recipient)
 	} else {
 		err = k.withdrawNFT(ctx, auction, recipient)
 	}

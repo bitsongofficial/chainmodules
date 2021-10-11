@@ -8,6 +8,7 @@ import (
 	gogotypes "github.com/gogo/protobuf/types"
 
 	"github.com/bitsongofficial/chainmodules/x/auction/types"
+	nfttypes "github.com/bitsongofficial/chainmodules/x/nft/types"
 )
 
 func (k Keeper) getBid(ctx sdk.Context, auctionId uint64, bidder sdk.AccAddress) (bid types.Bid, err error) {
@@ -151,11 +152,17 @@ func (k Keeper) withdrawNFT(ctx sdk.Context, auction types.Auction, recipient sd
 		return sdkerrors.Wrapf(types.ErrBidNotExists, "bid not found")
 	}
 
+	item, err := k.nftKeeper.GetNFT(ctx, auction.GetNftDenomId(), auction.GetNftTokenId())
+	if err != nil {
+		return err
+	}
+
 	if auction.GetLimit() == 1 { // Single Edition
 		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
 		if err != nil {
 			return err
 		}
+		k.nftKeeper.SetNFT(ctx, auction.GetNftDenomId(), nfttypes.NewBaseNFT(item.GetID(), item.GetName(), item.GetOwner(), item.GetURI(), true))
 	} else { // Open Edition or Limited Edition
 		// will require CloneTransfer function in nft module
 		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
