@@ -78,25 +78,25 @@ func TestMsgEditNFTGetSignersMethod(t *testing.T) {
 }
 
 func TestMsgMsgMintNFTValidateBasicMethod(t *testing.T) {
-	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, "", address2.String(), true)
+	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, "", address2.String())
 	err := newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT("", denom, nftName, tokenURI, address.String(), address2.String(), true)
+	newMsgMintNFT = types.NewMsgMintNFT("", denom, nftName, tokenURI, address.String(), address2.String())
 	err = newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT(id, "", nftName, tokenURI, address.String(), address2.String(), true)
+	newMsgMintNFT = types.NewMsgMintNFT(id, "", nftName, tokenURI, address.String(), address2.String())
 	err = newMsgMintNFT.ValidateBasic()
 	require.Error(t, err)
 
-	newMsgMintNFT = types.NewMsgMintNFT(id, denom, nftName, tokenURI, address.String(), address2.String(), true)
+	newMsgMintNFT = types.NewMsgMintNFT(id, denom, nftName, tokenURI, address.String(), address2.String())
 	err = newMsgMintNFT.ValidateBasic()
 	require.NoError(t, err)
 }
 
 func TestMsgMintNFTGetSignBytesMethod(t *testing.T) {
-	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, address.String(), address2.String(), true)
+	newMsgMintNFT := types.NewMsgMintNFT(id, denom, nftName, tokenURI, address.String(), address2.String())
 	sortedBytes := newMsgMintNFT.GetSignBytes()
 	expected := `{"type":"bitsong/nft/MsgMintNFT","value":{"denom_id":"denom","id":"id1","isPrimary":true,"name":"report","recipient":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgp0ctjdj","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","uri":"https://google.com/token-1.json"}}`
 	require.Equal(t, expected, string(sortedBytes))

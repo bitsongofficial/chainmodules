@@ -219,7 +219,6 @@ func SimulateMsgMintNFT(k keeper.Keeper, ak types.AccountKeeper, bk types.BankKe
 			simtypes.RandStringOfLength(r, 45), // tokenURI
 			randomSenderAddress.String(),       // sender
 			randomRecipient.Address.String(),   // recipient
-			true,
 		)
 
 		account := ak.GetAccount(ctx, randomSenderAddress)

@@ -4,7 +4,6 @@ package keeper
 
 import (
 	"context"
-	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -71,7 +70,7 @@ func (m msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types
 		msg.URI,
 		sender,
 		recipient,
-		msg.IsPrimary,
+		true,
 	); err != nil {
 		return nil, err
 	}
@@ -83,7 +82,7 @@ func (m msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types
 			sdk.NewAttribute(types.AttributeKeyDenomID, msg.DenomId),
 			sdk.NewAttribute(types.AttributeKeyTokenURI, msg.URI),
 			sdk.NewAttribute(types.AttributeKeyRecipient, msg.Recipient),
-			sdk.NewAttribute(types.AttributeKeyIsPrimary, strconv.FormatBool(msg.IsPrimary)),
+			sdk.NewAttribute(types.AttributeKeyIsPrimary, "true"),
 		),
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
