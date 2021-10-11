@@ -79,6 +79,14 @@ func (k Keeper) MintNFT(
 	return k.MintNFTUnverified(ctx, denomID, tokenID, tokenNm, tokenURI, owner, isPrimary)
 }
 
+// CloneMintNFT mints an NFT by cloning existing one
+func (k Keeper) CloneMintNFT(
+	ctx sdk.Context, denomID, tokenID, tokenNm,
+	tokenURI string, owner sdk.AccAddress,
+) error {
+	return k.MintNFTUnverified(ctx, denomID, tokenID, tokenNm, tokenURI, owner, false)
+}
+
 // EditNFT updates an already existing NFT
 func (k Keeper) EditNFT(
 	ctx sdk.Context, denomID, tokenID, tokenNm string, owner sdk.AccAddress,

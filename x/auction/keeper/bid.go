@@ -158,18 +158,17 @@ func (k Keeper) withdrawNFT(ctx sdk.Context, auction types.Auction, recipient sd
 	}
 
 	if auction.GetLimit() == 1 { // Single Edition
-		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
+		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), recipient)
 		if err != nil {
 			return err
 		}
-		k.nftKeeper.SetNFT(ctx, auction.GetNftDenomId(), nfttypes.NewBaseNFT(item.GetID(), item.GetName(), item.GetOwner(), item.GetURI(), true))
 	} else { // Open Edition or Limited Edition
-		// will require CloneTransfer function in nft module
-		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
+		err := k.nftKeeper.CloneMintNFT(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), item.GetName(), item.GetURI(), recipient)
 		if err != nil {
 			return err
 		}
 	}
+	k.nftKeeper.SetNFT(ctx, auction.GetNftDenomId(), nfttypes.NewBaseNFT(item.GetID(), item.GetName(), item.GetOwner(), item.GetURI(), false))
 
 	return nil
 }
