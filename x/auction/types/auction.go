@@ -24,7 +24,7 @@ const (
 // AuctionI defines an interface for Auction
 type AuctionI interface {
 	GetId() uint64
-	GetAuctionType() uint32
+	GetAuctionType() AuctionType
 	GetNftDenomId() string
 	GetNftTokenId() string
 	GetStartTime() uint64
@@ -32,7 +32,7 @@ type AuctionI interface {
 	GetMinAmount() sdk.Coin
 	GetOwner() sdk.AccAddress
 	GetLimit() uint32
-	GetStatus() uint32
+	GetStatus() AuctionStatus
 }
 
 // NewAuction constructs a new Auction instance

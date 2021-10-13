@@ -29,10 +29,11 @@ func NewKeeper(
 	nftKeeper types.NftKeeper,
 ) Keeper {
 	return Keeper{
-		storeKey:   key,
-		cdc:        cdc,
-		bankKeeper: bankKeeper,
-		nftKeeper:  nftKeeper,
+		storeKey:      key,
+		cdc:           cdc,
+		accountKeeper: accountKeeper,
+		bankKeeper:    bankKeeper,
+		nftKeeper:     nftKeeper,
 	}
 }
 
@@ -72,7 +73,7 @@ func (k Keeper) EditAuction(
 	owner sdk.AccAddress,
 ) error {
 	// get the destination auction
-	auction, err := k.getAuctionById(ctx, id)
+	auction, err := k.GetAuctionById(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -92,7 +93,7 @@ func (k Keeper) EditAuction(
 
 	auction.Duration = duration
 
-	k.setAuction(ctx, auction)
+	k.SetAuction(ctx, auction)
 
 	return nil
 }
@@ -104,7 +105,7 @@ func (k Keeper) CancelAuction(
 	owner sdk.AccAddress,
 ) error {
 	// get the destination auction
-	auction, err := k.getAuctionById(ctx, id)
+	auction, err := k.GetAuctionById(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -129,7 +130,7 @@ func (k Keeper) OpenBid(
 	bidder sdk.AccAddress,
 	bidAmount sdk.Coin,
 ) error {
-	auction, err := k.getAuctionById(ctx, auctionId)
+	auction, err := k.GetAuctionById(ctx, auctionId)
 	if err != nil {
 		return err
 	}
@@ -194,7 +195,7 @@ func (k Keeper) Withdraw(
 	auctionId uint64,
 	recipient sdk.AccAddress,
 ) error {
-	auction, err := k.getAuctionById(ctx, auctionId)
+	auction, err := k.GetAuctionById(ctx, auctionId)
 	if err != nil {
 		return err
 	}

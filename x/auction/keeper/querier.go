@@ -37,7 +37,7 @@ func queryAuction(ctx sdk.Context, req abci.RequestQuery, keeper Keeper, legacyQ
 		return nil, err
 	}
 
-	auction, err := keeper.getAuctionById(ctx, params.Id)
+	auction, err := keeper.GetAuctionById(ctx, params.Id)
 	if err != nil {
 		return nil, err
 	}

@@ -48,7 +48,7 @@ func (k Keeper) GetAuctions(ctx sdk.Context, owner sdk.AccAddress) (auctions []t
 		var id gogotypes.UInt64Value
 		k.cdc.MustUnmarshalBinaryBare(it.Value(), &id)
 
-		auction, err := k.getAuctionById(ctx, id.Value)
+		auction, err := k.GetAuctionById(ctx, id.Value)
 		if err != nil {
 			continue
 		}
@@ -57,7 +57,7 @@ func (k Keeper) GetAuctions(ctx sdk.Context, owner sdk.AccAddress) (auctions []t
 	return
 }
 
-func (k Keeper) getAuctionById(ctx sdk.Context, id uint64) (auction types.Auction, err error) {
+func (k Keeper) GetAuctionById(ctx sdk.Context, id uint64) (auction types.Auction, err error) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.KeyAuctionById(id))
@@ -71,12 +71,12 @@ func (k Keeper) getAuctionById(ctx sdk.Context, id uint64) (auction types.Auctio
 
 // AddAuction saves a new auction
 func (k Keeper) AddAuction(ctx sdk.Context, auction types.Auction) error {
-	if k.hasAuction(ctx, auction.GetId()) {
+	if k.HasAuction(ctx, auction.GetId()) {
 		return sdkerrors.Wrapf(types.ErrAuctionAlreadyExists, "auction already exists: %d", auction.GetId())
 	}
 
 	// set auction
-	k.setAuction(ctx, auction)
+	k.SetAuction(ctx, auction)
 
 	if len(auction.GetOwner()) != 0 {
 		// set token to be prefixed with owner
@@ -93,7 +93,7 @@ func (k Keeper) AddAuction(ctx sdk.Context, auction types.Auction) error {
 
 func (k Keeper) cancelAuction(ctx sdk.Context, auction types.Auction) error {
 	auction.Cancelled = true
-	k.setAuction(ctx, auction)
+	k.SetAuction(ctx, auction)
 
 	bids := k.getBidsByAuctionId(ctx, auction.GetId())
 	for _, bid := range bids {
@@ -110,12 +110,12 @@ func (k Keeper) cancelAuction(ctx sdk.Context, auction types.Auction) error {
 	return nil
 }
 
-func (k Keeper) hasAuction(ctx sdk.Context, id uint64) bool {
+func (k Keeper) HasAuction(ctx sdk.Context, id uint64) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.KeyAuctionById(id))
 }
 
-func (k Keeper) setAuction(ctx sdk.Context, auction types.Auction) {
+func (k Keeper) SetAuction(ctx sdk.Context, auction types.Auction) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshalBinaryBare(&auction)
 

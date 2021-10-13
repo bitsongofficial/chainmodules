@@ -24,7 +24,7 @@ func (k Keeper) Auction(c context.Context, req *types.QueryAuctionRequest) (*typ
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	auction, err := k.getAuctionById(ctx, req.Id)
+	auction, err := k.GetAuctionById(ctx, req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "auction %d not found", req.Id)
 	}
@@ -80,7 +80,7 @@ func (k Keeper) AuctionsByOwner(c context.Context, req *types.QueryAuctionsByOwn
 	pageRes, err = query.Paginate(auctionStore, req.Pagination, func(key []byte, value []byte) error {
 		var auctionId gogotypes.UInt64Value
 		k.cdc.MustUnmarshalBinaryBare(value, &auctionId)
-		auction, err := k.getAuctionById(ctx, auctionId.Value)
+		auction, err := k.GetAuctionById(ctx, auctionId.Value)
 		if err == nil {
 			auctions = append(auctions, auction)
 		}

@@ -13,7 +13,7 @@ var (
 // BidI defines an interface for Bid
 type BidI interface {
 	GetAuctionId() uint64
-	GetBidder() string
+	GetBidder() sdk.AccAddress
 	GetBidAmount() sdk.Coin
 }
 
