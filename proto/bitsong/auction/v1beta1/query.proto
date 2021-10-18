@@ -27,7 +27,7 @@ service Query {
         option (google.api.http).get = "/bitsong/auction/v1beta1/bid/{auction_id}/{bidder}";
     }
     // Bids queries the bids of the given auction id
-    rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
+    rpc BidsByAuction(QueryBidsByAuctionRequest) returns (QueryBidsByAuctionResponse) {
         option (google.api.http).get = "/bitsong/auction/v1beta1/bids/{auction_id}";
     }
     // Bids queries the bids of the given bidder
@@ -84,15 +84,15 @@ message QueryBidResponse {
     Bid bid = 1 [ (gogoproto.nullable) = false ];
 }
 
-// QueryBidsRequest is the request type for the Query/Bids RPC method
-message QueryBidsRequest {
+// QueryBidsByAuctionRequest is the request type for the Query/BidsByAuction RPC method
+message QueryBidsByAuctionRequest {
     uint64 auction_id = 1 [ (gogoproto.moretags) = "yaml:\"auction_id\"" ];
     // pagination defines an optional pagination for the request.
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryBidsResponse is the response type for the Query/Bids RPC method
-message QueryBidsResponse {
+// QueryBidsByAuctionResponse is the response type for the Query/BidsByAuction RPC method
+message QueryBidsByAuctionResponse {
     repeated Bid bids = 1 [ (gogoproto.nullable) = false ];
 
     cosmos.base.query.v1beta1.PageResponse pagination = 2;

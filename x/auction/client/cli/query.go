@@ -219,9 +219,9 @@ func GetCmdQueryBids() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := queryClient.Bids(
+			res, err := queryClient.BidsByAuction(
 				context.Background(),
-				&types.QueryBidsRequest{
+				&types.QueryBidsByAuctionRequest{
 					AuctionId:  auctionId,
 					Pagination: pageReq,
 				},

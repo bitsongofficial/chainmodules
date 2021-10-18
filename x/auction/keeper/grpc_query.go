@@ -116,7 +116,7 @@ func (k Keeper) Bid(c context.Context, req *types.QueryBidRequest) (*types.Query
 	return &types.QueryBidResponse{Bid: bid}, nil
 }
 
-func (k Keeper) Bids(c context.Context, req *types.QueryBidsRequest) (*types.QueryBidsResponse, error) {
+func (k Keeper) BidsByAuction(c context.Context, req *types.QueryBidsByAuctionRequest) (*types.QueryBidsByAuctionResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -138,7 +138,7 @@ func (k Keeper) Bids(c context.Context, req *types.QueryBidsRequest) (*types.Que
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}
 
-	return &types.QueryBidsResponse{Bids: bids, Pagination: pageRes}, nil
+	return &types.QueryBidsByAuctionResponse{Bids: bids, Pagination: pageRes}, nil
 }
 
 func (k Keeper) BidsByBidder(c context.Context, req *types.QueryBidsByBidderRequest) (*types.QueryBidsByBidderResponse, error) {
