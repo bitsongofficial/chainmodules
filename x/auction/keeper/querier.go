@@ -64,7 +64,7 @@ func queryBid(ctx sdk.Context, req abci.RequestQuery, keeper Keeper, legacyQueri
 	if err := legacyQuerierCdc.UnmarshalJSON(req.Data, &params); err != nil {
 		return nil, err
 	}
-	bid, err := keeper.getBid(ctx, params.AuctionId, params.Bidder)
+	bid, err := keeper.GetBid(ctx, params.AuctionId, params.Bidder)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func queryBids(ctx sdk.Context, req abci.RequestQuery, keeper Keeper, legacyQuer
 	if err := legacyQuerierCdc.UnmarshalJSON(req.Data, &params); err != nil {
 		return nil, err
 	}
-	bids := keeper.getBidsByAuctionId(ctx, params.AuctionId)
+	bids := keeper.GetBidsByAuctionId(ctx, params.AuctionId)
 	return codec.MarshalJSONIndent(legacyQuerierCdc, bids)
 }
 

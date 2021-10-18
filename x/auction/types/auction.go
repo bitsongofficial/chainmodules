@@ -1,8 +1,6 @@
 package types
 
 import (
-	"time"
-
 	"github.com/gogo/protobuf/proto"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -32,7 +30,6 @@ type AuctionI interface {
 	GetMinAmount() sdk.Coin
 	GetOwner() sdk.AccAddress
 	GetLimit() uint32
-	GetStatus() AuctionStatus
 }
 
 // NewAuction constructs a new Auction instance
@@ -105,16 +102,4 @@ func (t Auction) GetOwner() sdk.AccAddress {
 // GetLimit implements exported.AuctionI
 func (t Auction) GetLimit() uint32 {
 	return t.Limit
-}
-
-// GetStatus implements exported.AuctionI
-func (t Auction) GetStatus() AuctionStatus {
-	if t.Cancelled {
-		return AUCTION_STATUS_CANCELLED
-	}
-	now := time.Now()
-	if uint64(t.StartTime)+uint64(t.Duration) < uint64(now.Unix()) {
-		return AUCTION_STATUS_ENDED
-	}
-	return AUCTION_STATUS_RUNNING
 }

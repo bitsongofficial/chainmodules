@@ -8,10 +8,9 @@ import (
 	gogotypes "github.com/gogo/protobuf/types"
 
 	"github.com/bitsongofficial/chainmodules/x/auction/types"
-	nfttypes "github.com/bitsongofficial/chainmodules/x/nft/types"
 )
 
-func (k Keeper) getBid(ctx sdk.Context, auctionId uint64, bidder sdk.AccAddress) (bid types.Bid, err error) {
+func (k Keeper) GetBid(ctx sdk.Context, auctionId uint64, bidder sdk.AccAddress) (bid types.Bid, err error) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.KeyBid(auctionId, bidder))
@@ -38,7 +37,7 @@ func (k Keeper) GetAllBids(ctx sdk.Context) (bids []types.Bid) {
 	return
 }
 
-func (k Keeper) getBidsByAuctionId(ctx sdk.Context, auctionId uint64) (bids []types.Bid) {
+func (k Keeper) GetBidsByAuctionId(ctx sdk.Context, auctionId uint64) (bids []types.Bid) {
 	store := ctx.KVStore(k.storeKey)
 
 	var it sdk.Iterator = sdk.KVStorePrefixIterator(store, types.KeyBidsByAuctionId(auctionId))
@@ -63,7 +62,7 @@ func (k Keeper) getBidsByBidder(ctx sdk.Context, bidder sdk.AccAddress) (bids []
 		var id gogotypes.UInt64Value
 		k.cdc.MustUnmarshalBinaryBare(it.Value(), &id)
 
-		bid, err := k.getBid(ctx, id.Value, bidder)
+		bid, err := k.GetBid(ctx, id.Value, bidder)
 		if err != nil {
 			continue
 		}
@@ -86,9 +85,11 @@ func (k Keeper) AddBid(ctx sdk.Context, bid types.Bid) error {
 		k.setWithBidder(ctx, bid.GetBidder(), bid.GetAuctionId())
 	}
 
-	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, bid.GetBidder(), types.ModuleName, sdk.Coins{bid.GetBidAmount()})
-	if err != nil {
-		return err
+	if !bid.GetBidAmount().Amount.IsZero() {
+		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, bid.GetBidder(), types.ModuleName, sdk.Coins{bid.GetBidAmount()})
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -96,7 +97,7 @@ func (k Keeper) AddBid(ctx sdk.Context, bid types.Bid) error {
 
 // CancelBid removes a bid
 func (k Keeper) cancelBid(ctx sdk.Context, auctionId uint64, bidder sdk.AccAddress) error {
-	bid, err := k.getBid(ctx, auctionId, bidder)
+	bid, err := k.GetBid(ctx, auctionId, bidder)
 	if err != nil {
 		return err
 	}
@@ -157,18 +158,17 @@ func (k Keeper) withdrawNFT(ctx sdk.Context, auction types.Auction, recipient sd
 		return err
 	}
 
-	if auction.GetLimit() == 1 { // Single Edition
+	if auction.GetAuctionType() == types.Single_Edition { // Single Edition
 		err := k.nftKeeper.TransferOwner(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), k.accountKeeper.GetModuleAddress(types.ModuleName), recipient)
 		if err != nil {
 			return err
 		}
 	} else { // Open Edition or Limited Edition
-		err := k.nftKeeper.CloneMintNFT(ctx, auction.GetNftDenomId(), auction.GetNftTokenId(), item.GetName(), item.GetURI(), recipient)
+		err := k.nftKeeper.CloneMintNFT(ctx, auction.GetNftDenomId(), auction.GetNftTokenId()+recipient.String(), item.GetName(), item.GetURI(), recipient)
 		if err != nil {
 			return err
 		}
 	}
-	k.nftKeeper.SetNFT(ctx, auction.GetNftDenomId(), nfttypes.NewBaseNFT(item.GetID(), item.GetName(), item.GetOwner(), item.GetURI(), false))
 
 	return nil
 }

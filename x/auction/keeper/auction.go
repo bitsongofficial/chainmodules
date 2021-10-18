@@ -8,6 +8,7 @@ import (
 	gogotypes "github.com/gogo/protobuf/types"
 
 	"github.com/bitsongofficial/chainmodules/x/auction/types"
+	nfttypes "github.com/bitsongofficial/chainmodules/x/nft/types"
 )
 
 func (k Keeper) GetLastAuctionId(ctx sdk.Context) uint64 {
@@ -95,7 +96,7 @@ func (k Keeper) cancelAuction(ctx sdk.Context, auction types.Auction) error {
 	auction.Cancelled = true
 	k.SetAuction(ctx, auction)
 
-	bids := k.getBidsByAuctionId(ctx, auction.GetId())
+	bids := k.GetBidsByAuctionId(ctx, auction.GetId())
 	for _, bid := range bids {
 		if err := k.cancelBid(ctx, auction.GetId(), bid.GetBidder()); err != nil {
 			return err
@@ -131,10 +132,10 @@ func (k Keeper) setWithOwner(ctx sdk.Context, owner sdk.AccAddress, id uint64) {
 
 // withdrawCoins send auction coins to the recipient(splitshare, royaltyshare applies here)
 func (k Keeper) withdrawCoins(ctx sdk.Context, auction types.Auction, recipient sdk.AccAddress) error {
-	bids := k.getBidsByAuctionId(ctx, auction.GetId())
+	bids := k.GetBidsByAuctionId(ctx, auction.GetId())
 	amount := sdk.NewCoin(bids[0].GetBidAmount().Denom, sdk.ZeroInt())
 	for _, bid := range bids {
-		amount.Add(bid.GetBidAmount())
+		amount.Amount = amount.Amount.Add(bid.GetBidAmount().Amount)
 	}
 
 	denom, err := k.nftKeeper.GetDenom(ctx, auction.GetNftDenomId())
@@ -149,14 +150,18 @@ func (k Keeper) withdrawCoins(ctx sdk.Context, auction types.Auction, recipient 
 
 	multiplier := sdk.NewInt(100)
 	if !item.GetPrimaryStatus() {
-		multiplier = sdk.Int(denom.RoyaltyShare)
+		multiplier = denom.RoyaltyShare.RoundInt()
 	}
 
 	recipientAmount := amount.Amount
 
 	for i := 0; i < len(denom.Creators); i++ {
-		creatorAmount := amount.Amount.Mul(sdk.Int(denom.SplitShares[i]).Mul(multiplier)).Quo(sdk.NewInt(100))
-		err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(denom.Creators[i]), sdk.Coins{sdk.NewCoin(amount.Denom, creatorAmount)})
+		creatorAmount := amount.Amount.Mul(denom.SplitShares[i].RoundInt()).Mul(multiplier).Quo(sdk.NewInt(10000))
+		creatorAddr, err := sdk.AccAddressFromBech32(denom.Creators[i])
+		if err != nil {
+			return err
+		}
+		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, creatorAddr, sdk.Coins{sdk.NewCoin(amount.Denom, creatorAmount)})
 		if err != nil {
 			return err
 		}
@@ -165,7 +170,27 @@ func (k Keeper) withdrawCoins(ctx sdk.Context, auction types.Auction, recipient 
 
 	if !item.GetPrimaryStatus() {
 		k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.Coins{sdk.NewCoin(amount.Denom, recipientAmount)})
+	} else {
+		k.nftKeeper.SetNFT(ctx, auction.GetNftDenomId(), nfttypes.NewBaseNFT(item.GetID(), item.GetName(), item.GetOwner(), item.GetURI(), false))
+	}
+
+	if auction.GetAuctionType() != types.Single_Edition {
+		err := k.nftKeeper.TransferOwner(ctx, auction.NftDenomId, auction.NftTokenId, k.accountKeeper.GetModuleAddress(types.ModuleName), auction.GetOwner())
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
+}
+
+func (k Keeper) GetAuctionStatus(ctx sdk.Context, auction types.Auction) types.AuctionStatus {
+	if auction.Cancelled {
+		return types.AUCTION_STATUS_CANCELLED
+	}
+	now := ctx.BlockTime()
+	if auction.StartTime+auction.Duration < uint64(now.Unix()) {
+		return types.AUCTION_STATUS_ENDED
+	}
+	return types.AUCTION_STATUS_RUNNING
 }

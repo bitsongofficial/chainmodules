@@ -108,7 +108,7 @@ func (k Keeper) Bid(c context.Context, req *types.QueryBidRequest) (*types.Query
 		}
 	}
 
-	bid, err := k.getBid(ctx, req.AuctionId, bidder)
+	bid, err := k.GetBid(ctx, req.AuctionId, bidder)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "bid not found")
 	}
@@ -164,7 +164,7 @@ func (k Keeper) BidsByBidder(c context.Context, req *types.QueryBidsByBidderRequ
 	pageRes, err = query.Paginate(bidStore, req.Pagination, func(key []byte, value []byte) error {
 		var auctionId gogotypes.UInt64Value
 		k.cdc.MustUnmarshalBinaryBare(value, &auctionId)
-		bid, err := k.getBid(ctx, auctionId.Value, bidder)
+		bid, err := k.GetBid(ctx, auctionId.Value, bidder)
 		if err == nil {
 			bids = append(bids, bid)
 		}

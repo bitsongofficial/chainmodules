@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -53,14 +52,14 @@ func (k Keeper) OpenAuction(
 	owner sdk.AccAddress,
 	limit uint32,
 ) (uint64, error) {
-	id := k.GetLastAuctionId(ctx)
-	now := time.Now()
+	id := k.GetLastAuctionId(ctx) + 1
+	now := ctx.BlockTime()
 	auction := types.NewAuction(id, auctionType, nftDenomId, nftTokenId, uint64(now.Unix()), duration, minAmount, owner, limit)
 
 	if err := k.AddAuction(ctx, auction); err != nil {
 		return 0, err
 	}
-	k.SetLastAuctionId(ctx, id+1)
+	k.SetLastAuctionId(ctx, id)
 
 	return id, nil
 }
@@ -82,11 +81,11 @@ func (k Keeper) EditAuction(
 		return sdkerrors.Wrapf(types.ErrInvalidOwner, "the address %s is not the owner of the auction %d", owner, id)
 	}
 
-	if auction.GetStatus() != types.AUCTION_STATUS_RUNNING {
+	if k.GetAuctionStatus(ctx, auction) != types.AUCTION_STATUS_RUNNING {
 		return sdkerrors.Wrapf(types.ErrInvalidAuction, "the auction was already ended or cancelled")
 	}
 
-	now := time.Now()
+	now := ctx.BlockTime()
 	if auction.StartTime+duration < uint64(now.Unix()) {
 		return sdkerrors.Wrapf(types.ErrInvalidDuration, "startTime + duration < now")
 	}
@@ -114,7 +113,7 @@ func (k Keeper) CancelAuction(
 		return sdkerrors.Wrapf(types.ErrInvalidOwner, "the address %s is not the owner of the auction %d", owner, id)
 	}
 
-	if auction.GetStatus() != types.AUCTION_STATUS_RUNNING {
+	if k.GetAuctionStatus(ctx, auction) != types.AUCTION_STATUS_RUNNING {
 		return sdkerrors.Wrapf(types.ErrInvalidAuction, "the auction was already ended or cancelled")
 	}
 
@@ -135,7 +134,7 @@ func (k Keeper) OpenBid(
 		return err
 	}
 
-	if auction.GetStatus() != types.AUCTION_STATUS_RUNNING {
+	if k.GetAuctionStatus(ctx, auction) != types.AUCTION_STATUS_RUNNING {
 		return sdkerrors.Wrapf(types.ErrInvalidAuction, "the auction was already ended or cancelled")
 	}
 
@@ -143,12 +142,12 @@ func (k Keeper) OpenBid(
 		return sdkerrors.Wrapf(types.ErrInvalidBidAmountDenom, "bid amount denom is different with auction min amount denom")
 	}
 
-	if bidAmount.Amount.LT(auction.GetMinAmount().Amount) {
+	if auction.GetAuctionType() != types.Open_Edition && bidAmount.Amount.LT(auction.GetMinAmount().Amount) {
 		return sdkerrors.Wrapf(types.ErrNotEnoughBidAmount, "the bid amount is less than the auction min amount")
 	}
 
-	bids := k.getBidsByAuctionId(ctx, auctionId)
-	if auction.GetLimit() != 0 {
+	bids := k.GetBidsByAuctionId(ctx, auctionId)
+	if auction.GetAuctionType() != types.Open_Edition {
 		if len(bids) >= int(auction.GetLimit()) {
 			var minBid types.Bid = bids[0]
 			for _, bid := range bids {
@@ -198,6 +197,10 @@ func (k Keeper) Withdraw(
 	auction, err := k.GetAuctionById(ctx, auctionId)
 	if err != nil {
 		return err
+	}
+
+	if k.GetAuctionStatus(ctx, auction) != types.AUCTION_STATUS_ENDED {
+		return sdkerrors.Wrapf(types.ErrInvalidAuction, "the auction is still in progress or cancelled")
 	}
 
 	if recipient.Equals(auction.GetOwner()) {

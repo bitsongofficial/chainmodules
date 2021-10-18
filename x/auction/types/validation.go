@@ -18,7 +18,7 @@ func ValidateAuction(auction Auction) error {
 	if err := ValidateDuration(auction.Duration); err != nil {
 		return err
 	}
-	if err := ValidateAmount(auction.MinAmount.Amount); err != nil {
+	if err := ValidateAmount(auction.AuctionType, auction.MinAmount.Amount); err != nil {
 		return err
 	}
 	if err := ValidateAuctionLimit(auction.AuctionType, auction.Limit); err != nil {
@@ -37,16 +37,19 @@ func ValidateAuctionType(auctionType AuctionType) error {
 
 // ValidateAuctionLimit checks if the given auction limit is valid
 func ValidateAuctionLimit(auctionType AuctionType, limit uint32) error {
-	if (auctionType == Single_Edition && limit != 1) || (auctionType == Open_Edition && limit != 0) {
+	if (auctionType == Single_Edition && limit != 1) || (auctionType == Open_Edition && limit != 0) || (auctionType != Open_Edition && limit == 0) {
 		return sdkerrors.Wrapf(ErrInvalidAuctionLimit, "invalid auction limit (%d)", limit)
 	}
 	return nil
 }
 
 // ValidateAmount checks if the given amount is valid
-func ValidateAmount(amount sdk.Int) error {
-	if amount.IsZero() {
+func ValidateAmount(auctionType AuctionType, amount sdk.Int) error {
+	if auctionType != Open_Edition && amount.IsZero() {
 		return sdkerrors.Wrapf(ErrInvalidAmount, "invalid amount %d, only accepts positive amount", amount)
+	}
+	if auctionType == Open_Edition && !amount.IsZero() {
+		return sdkerrors.Wrapf(ErrInvalidAmount, "invalid amount %d, only accepts zero amount", amount)
 	}
 	return nil
 }
@@ -65,9 +68,8 @@ func ValidateBid(bid Bid) error {
 		if _, err := sdk.AccAddressFromBech32(bid.Bidder); err != nil {
 			return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid bidder address (%s)", err)
 		}
-	}
-	if err := ValidateAmount(bid.BidAmount.Amount); err != nil {
-		return err
+	} else {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "nil bidder address")
 	}
 	return nil
 }
