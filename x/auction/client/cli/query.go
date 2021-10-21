@@ -28,7 +28,7 @@ func GetQueryCmd() *cobra.Command {
 		GetCmdQueryAllAuctions(),
 		GetCmdQueryAuctionsByOwner(),
 		GetCmdQueryBid(),
-		GetCmdQueryBids(),
+		GetCmdQueryBidsByAuction(),
 		GetCmdQueryBidsByBidder(),
 	)
 
@@ -114,18 +114,16 @@ func GetCmdQueryAuctionsByOwner() *cobra.Command {
 		Use:     "auctions [owner]",
 		Long:    "Query auctions by the owner.",
 		Example: fmt.Sprintf("$ %s query auction auctions <owner>", version.AppName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			var owner sdk.AccAddress
-			if len(args) > 0 {
-				owner, err = sdk.AccAddressFromBech32(args[0])
-				if err != nil {
-					return err
-				}
+			owner, err := sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
@@ -197,7 +195,7 @@ func GetCmdQueryBid() *cobra.Command {
 }
 
 // GetCmdQueryBids implements the query bids command.
-func GetCmdQueryBids() *cobra.Command {
+func GetCmdQueryBidsByAuction() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "bids [auction-id]",
 		Long:    "Query bids by the auction id.",
@@ -245,18 +243,16 @@ func GetCmdQueryBidsByBidder() *cobra.Command {
 		Use:     "bids [bidder]",
 		Long:    "Query bids by the bidder.",
 		Example: fmt.Sprintf("$ %s query auction bids <bidder>", version.AppName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			var bidder sdk.AccAddress
-			if len(args) > 0 {
-				bidder, err = sdk.AccAddressFromBech32(args[0])
-				if err != nil {
-					return err
-				}
+			bidder, err := sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)

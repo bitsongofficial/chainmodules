@@ -56,6 +56,10 @@ func (msg MsgOpenAuction) Type() string { return TypeMsgOpenAuction }
 // ValidateBasic Implements Msg.
 func (msg MsgOpenAuction) ValidateBasic() error {
 	now := time.Now()
+	owner, err := sdk.AccAddressFromBech32(msg.Owner)
+	if err != nil {
+		return err
+	}
 
 	return ValidateAuction(
 		NewAuction(
@@ -66,7 +70,7 @@ func (msg MsgOpenAuction) ValidateBasic() error {
 			uint64(now.Unix()),
 			msg.Duration,
 			msg.MinAmount,
-			sdk.AccAddress(msg.Owner),
+			owner,
 			msg.Limit,
 		),
 	)
@@ -196,10 +200,14 @@ func (msg MsgOpenBid) Type() string { return TypeMsgOpenAuction }
 
 // ValidateBasic Implements Msg.
 func (msg MsgOpenBid) ValidateBasic() error {
+	bidder, err := sdk.AccAddressFromBech32(msg.Bidder)
+	if err != nil {
+		return err
+	}
 	return ValidateBid(
 		NewBid(
 			msg.AuctionId,
-			sdk.AccAddress(msg.Bidder),
+			bidder,
 			msg.BidAmount,
 		),
 	)

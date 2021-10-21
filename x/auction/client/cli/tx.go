@@ -45,7 +45,8 @@ func GetCmdOpenAuction() *cobra.Command {
 		Example: fmt.Sprintf(
 			"$ %s tx auction open-auction "+
 				"--auction-type=<auction-type> "+
-				"--nft-id=<nft-id> "+
+				"--nft-denom-id=<nft-denom-id> "+
+				"--nft-token-id=<nft-token-id> "+
 				"--duration=\"86400\" "+
 				"--min-amount=\"1000000ubtsg\" "+
 				"--limit=<limit> "+
