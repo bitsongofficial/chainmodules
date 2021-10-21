@@ -6,7 +6,8 @@ A new auction is opened using the `MsgOpenAuction` message.
 ```go
 type MsgOpenAuction struct {
 	AuctionType	uint32
-	NftId		string
+	NftDenomId	string
+	NftTokenId	string
 	Duration	uint64
 	MinAmount	sdk.Coin
 	Owner 		string
@@ -15,12 +16,12 @@ type MsgOpenAuction struct {
 ```
 
 ## MsgEditAuction
-The `Duration` of an auction can be updated using the `MsgEditAuction` message.
+The `Duration` of an auction can be edited using the `MsgEditAuction` message.
 
 ```go
 type MsgEditAuction struct {
-	Id			string	// Auction Id
-	Duration	bool
+	Id			uint64	// Auction Id
+	Duration	uint64
 	Owner		string
 }
 ```
@@ -30,7 +31,7 @@ An auction can be cancelled using the `MsgCancelAuction` message.
 
 ```go
 type MsgCancelAuction struct {
-	Id			string	// Auction Id
+	Id			uint64	// Auction Id
 	Owner		string
 }
 ```
@@ -57,7 +58,7 @@ type MsgCancelBid struct {
 ```
 
 ## MsgWithdraw
-The winners can withdraw their NFT from the auction using the `MsgWithdraw` message.
+The winner can get the NFT and the auction owner can withdraw the tokens through `MsgWithdraw` after the auction is ended.
 
 ```go
 type MsgWithdraw struct {
