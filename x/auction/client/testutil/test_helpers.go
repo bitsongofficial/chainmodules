@@ -69,7 +69,7 @@ func WithdrawExec(clientCtx client.Context, from string, auctionId string, extra
 	}
 	args = append(args, extraArgs...)
 
-	return clitestutil.ExecTestCLICmd(clientCtx, auctioncli.GetCmdCancelBid(), args)
+	return clitestutil.ExecTestCLICmd(clientCtx, auctioncli.GetCmdWithdraw(), args)
 }
 
 func QueryAuctionExec(clientCtx client.Context, auctionId string, extraArgs ...string) (testutil.BufferWriter, error) {
