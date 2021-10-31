@@ -32,14 +32,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, data types.GenesisState) {
 // ExportGenesis outputs the genesis state
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	var auctions []types.Auction
-	for _, auction := range k.GetAuctions(ctx, nil) {
-		auctions = append(auctions, auction)
-	}
+	auctions = append(auctions, k.GetAuctions(ctx, nil)...)
 
 	var bids []types.Bid
-	for _, bid := range k.GetAllBids(ctx) {
-		bids = append(bids, bid)
-	}
+	bids = append(bids, k.GetAllBids(ctx)...)
 
 	return &types.GenesisState{
 		LastAuctionId: k.GetLastAuctionId(ctx),
