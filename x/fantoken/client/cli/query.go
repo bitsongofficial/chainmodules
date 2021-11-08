@@ -32,12 +32,12 @@ func GetQueryCmd() *cobra.Command {
 	return queryCmd
 }
 
-// GetCmdQueryToken implements the query token command.
+// GetCmdQueryFanToken implements the query fantoken command.
 func GetCmdQueryFanToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "token [denom]",
-		Long:    "Query a token by symbol or denom.",
-		Example: fmt.Sprintf("$ %s query token token <denom>", version.AppName),
+		Long:    "Query a fantoken by denom.",
+		Example: fmt.Sprintf("$ %s query fantoken token <denom>", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -46,7 +46,7 @@ func GetCmdQueryFanToken() *cobra.Command {
 				return err
 			}
 
-			if err := types.ValidateSymbol(args[0]); err != nil {
+			if err := types.ValidateDenom(args[0]); err != nil {
 				return err
 			}
 
@@ -72,8 +72,8 @@ func GetCmdQueryFanToken() *cobra.Command {
 func GetCmdQueryFanTokens() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "tokens [owner]",
-		Long:    "Query token by the owner.",
-		Example: fmt.Sprintf("$ %s query token tokens <owner>", version.AppName),
+		Long:    "Query fantokens by the owner.",
+		Example: fmt.Sprintf("$ %s query fantoken tokens <owner>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -118,7 +118,7 @@ func GetCmdQueryParams() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "params",
 		Long:    "Query values set as token parameters.",
-		Example: fmt.Sprintf("$ %s query token params", version.AppName),
+		Example: fmt.Sprintf("$ %s query fantoken params", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -144,7 +144,7 @@ func GetCmdQueryTotalBurn() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "total-burn",
 		Long:    "Query the total amount of all burned tokens.",
-		Example: fmt.Sprintf("$ %s query token params", version.AppName),
+		Example: fmt.Sprintf("$ %s query fantoken total-burn", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {

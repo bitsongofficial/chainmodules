@@ -10,9 +10,8 @@ import (
 // Rest variable names
 // nolint
 const (
-	RestParamDenom  = "denom"
-	RestParamSymbol = "symbol"
-	RestParamOwner  = "owner"
+	RestParamDenom = "denom"
+	RestParamOwner = "owner"
 )
 
 // RegisterHandlers registers token-related REST handlers to a router

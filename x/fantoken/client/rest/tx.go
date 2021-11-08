@@ -19,9 +19,9 @@ func registerTxRoutes(cliCtx client.Context, r *mux.Router) {
 	// issue a token
 	r.HandleFunc(fmt.Sprintf("/%s/tokens", tokentypes.ModuleName), issueTokenHandlerFn(cliCtx)).Methods("POST")
 	// edit a token
-	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}", tokentypes.ModuleName, RestParamSymbol), editFanTokenHandlerFn(cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}", tokentypes.ModuleName, RestParamDenom), editFanTokenHandlerFn(cliCtx)).Methods("PUT")
 	// transfer owner
-	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}/transfer", tokentypes.ModuleName, RestParamSymbol), transferOwnerHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}/transfer", tokentypes.ModuleName, RestParamDenom), transferOwnerHandlerFn(cliCtx)).Methods("POST")
 	// mint token
 	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}/mint", tokentypes.ModuleName, RestParamDenom), mintFanTokenHandlerFn(cliCtx)).Methods("POST")
 	// burn token
@@ -73,7 +73,7 @@ func issueTokenHandlerFn(cliCtx client.Context) http.HandlerFunc {
 func editFanTokenHandlerFn(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		symbol := vars[RestParamSymbol]
+		denom := vars[RestParamDenom]
 
 		var req editFanTokenReq
 		if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
@@ -88,7 +88,7 @@ func editFanTokenHandlerFn(cliCtx client.Context) http.HandlerFunc {
 		mintable := req.Mintable
 
 		// create the MsgEditToken message
-		msg := tokentypes.NewMsgEditFanToken(symbol, mintable, req.Owner)
+		msg := tokentypes.NewMsgEditFanToken(denom, mintable, req.Owner)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
@@ -101,7 +101,7 @@ func editFanTokenHandlerFn(cliCtx client.Context) http.HandlerFunc {
 func transferOwnerHandlerFn(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		symbol := vars[RestParamSymbol]
+		denom := vars[RestParamDenom]
 
 		var req transferFanTokenOwnerReq
 		if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
@@ -114,7 +114,7 @@ func transferOwnerHandlerFn(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the MsgTransferTokenOwner message
-		msg := tokentypes.NewMsgTransferFanTokenOwner(symbol, req.SrcOwner, req.DstOwner)
+		msg := tokentypes.NewMsgTransferFanTokenOwner(denom, req.SrcOwner, req.DstOwner)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return

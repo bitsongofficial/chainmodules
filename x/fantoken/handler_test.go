@@ -1,6 +1,7 @@
 package fantoken_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -18,6 +19,7 @@ import (
 	tokenkeeper "github.com/bitsongofficial/chainmodules/x/fantoken/keeper"
 	tokentypes "github.com/bitsongofficial/chainmodules/x/fantoken/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -87,6 +89,7 @@ func (suite *HandlerSuite) TestIssueFanToken() {
 	nativeTokenAmt1 := suite.bk.GetBalance(suite.ctx, owner, types.BondDenom).Amount
 
 	msg := tokentypes.NewMsgIssueFanToken("btc", "satoshi", sdk.NewInt(21000000), "test", owner.String(), issueFee)
+	denom := strings.Replace(common.BytesToHash([]byte(owner.String()+"btc"+"satoshi")).Hex(), "0x", "ft", 1)
 
 	_, err := h(suite.ctx, msg)
 	suite.NoError(err)
@@ -95,17 +98,17 @@ func (suite *HandlerSuite) TestIssueFanToken() {
 
 	suite.Equal(nativeTokenAmt1.Sub(issueFee.Amount), nativeTokenAmt2)
 
-	nativeTokenAmt3 := suite.bk.GetBalance(suite.ctx, owner, "ubtc").Amount
+	nativeTokenAmt3 := suite.bk.GetBalance(suite.ctx, owner, denom).Amount
 	suite.Equal(nativeTokenAmt3, sdk.ZeroInt())
 }
 
 func (suite *HandlerSuite) TestMintFanToken() {
 	denomMetaData := banktypes.Metadata{
 		Description: "test",
-		Base:        "ubtc",
+		Base:        "ftbtc",
 		Display:     "btc",
 		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: "ubtc", Exponent: 0},
+			{Denom: "ftbtc", Exponent: 0},
 			{Denom: "btc", Exponent: tokentypes.FanTokenDecimal},
 		},
 	}
@@ -129,10 +132,10 @@ func (suite *HandlerSuite) TestMintFanToken() {
 func (suite *HandlerSuite) TestBurnFanToken() {
 	denomMetaData := banktypes.Metadata{
 		Description: "test",
-		Base:        "ubtc",
+		Base:        "ftbtc",
 		Display:     "btc",
 		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: "ubtc", Exponent: 0},
+			{Denom: "ftbtc", Exponent: 0},
 			{Denom: "btc", Exponent: tokentypes.FanTokenDecimal},
 		},
 	}

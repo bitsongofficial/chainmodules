@@ -58,11 +58,9 @@ message QueryParamsRequest {}
 // QueryParametersResponse is response type for the Query/Parameters RPC method
 message QueryParamsResponse {
     bitsong.fantoken.v1beta1.Params params = 1 [ (gogoproto.nullable) = false ];
-
-    cosmos.base.query.v1beta1.PageResponse res = 2;
 }
 
-// QueryFanTokenRequest is request type for the Query/TotalBurn RPC method
+// QueryTotalBurnRequest is request type for the Query/TotalBurn RPC method
 message QueryTotalBurnRequest {}
 
 // QueryTotalBurnResponse is response type for the Query/TotalBurn RPC method

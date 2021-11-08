@@ -3,11 +3,11 @@ package cli_test
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/suite"
-	"github.com/tidwall/gjson"
 
 	"github.com/tendermint/tendermint/crypto"
 
@@ -19,6 +19,7 @@ import (
 	tokencli "github.com/bitsongofficial/chainmodules/x/fantoken/client/cli"
 	tokentestutil "github.com/bitsongofficial/chainmodules/x/fantoken/client/testutil"
 	tokentypes "github.com/bitsongofficial/chainmodules/x/fantoken/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 type IntegrationTestSuite struct {
@@ -57,8 +58,8 @@ func (s *IntegrationTestSuite) TestToken() {
 
 	from := val.Address
 	symbol := "kitty"
-	denom := "ukitty"
 	name := "Kitty Token"
+	denom := strings.Replace(common.BytesToHash([]byte(from.String()+symbol+name)).Hex(), "0x", "ft", 1)
 	maxSupply := sdk.NewInt(200000000)
 	mintable := true
 	issueFee := "1000000ubtsg"
@@ -84,7 +85,6 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType), bz.String())
 	txResp := respType.(*sdk.TxResponse)
 	s.Require().Equal(expectedCode, txResp.Code)
-	tokenSymbol := gjson.Get(txResp.RawLog, "0.events.0.attributes.0.value").String()
 
 	//------test GetCmdQueryFanTokens()-------------
 	tokens := &[]tokentypes.FanToken{}
@@ -96,7 +96,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	//------test GetCmdQueryFanToken()-------------
 	var token *tokentypes.FanToken
 	respType = proto.Message(&tokentypes.FanToken{})
-	bz, err = tokentestutil.QueryFanTokenExec(clientCtx, tokenSymbol)
+	bz, err = tokentestutil.QueryFanTokenExec(clientCtx, denom)
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
 	token = respType.(*tokentypes.FanToken)
@@ -183,7 +183,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	}
 
 	respType = proto.Message(&sdk.TxResponse{})
-	bz, err = tokentestutil.EditFanTokenExec(clientCtx, from.String(), symbol, args...)
+	bz, err = tokentestutil.EditFanTokenExec(clientCtx, from.String(), denom, args...)
 
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType), bz.String())
@@ -192,7 +192,7 @@ func (s *IntegrationTestSuite) TestToken() {
 
 	var token2 *tokentypes.FanToken
 	respType = proto.Message(&tokentypes.FanToken{})
-	bz, err = tokentestutil.QueryFanTokenExec(clientCtx, tokenSymbol)
+	bz, err = tokentestutil.QueryFanTokenExec(clientCtx, denom)
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType))
 	token2 = respType.(*tokentypes.FanToken)
@@ -209,7 +209,7 @@ func (s *IntegrationTestSuite) TestToken() {
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
 	}
 	respType = proto.Message(&sdk.TxResponse{})
-	bz, err = tokentestutil.TransferFanTokenOwnerExec(clientCtx, from.String(), symbol, args...)
+	bz, err = tokentestutil.TransferFanTokenOwnerExec(clientCtx, from.String(), denom, args...)
 
 	s.Require().NoError(err)
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType), bz.String())

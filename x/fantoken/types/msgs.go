@@ -1,11 +1,12 @@
 package types
 
 import (
-	fmt "fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -59,7 +60,7 @@ func (msg MsgIssueFanToken) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid owner address (%s)", err)
 	}
 
-	denom := fmt.Sprintf("%s%s", "u", msg.Symbol)
+	denom := strings.Replace(common.BytesToHash([]byte(owner.String()+msg.Symbol+msg.Name)).Hex(), "0x", "ft", 1)
 	denomMetaData := banktypes.Metadata{
 		Description: msg.Description,
 		Base:        denom,
@@ -99,9 +100,9 @@ func (msg MsgIssueFanToken) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgTransferTokenOwner return a instance of MsgTransferTokenOwner
-func NewMsgTransferFanTokenOwner(symbol, srcOwner, dstOwner string) *MsgTransferFanTokenOwner {
+func NewMsgTransferFanTokenOwner(denom, srcOwner, dstOwner string) *MsgTransferFanTokenOwner {
 	return &MsgTransferFanTokenOwner{
-		Symbol:   symbol,
+		Denom:    denom,
 		SrcOwner: srcOwner,
 		DstOwner: dstOwner,
 	}
@@ -144,7 +145,7 @@ func (msg MsgTransferFanTokenOwner) ValidateBasic() error {
 	}
 
 	// check the symbol
-	if err := ValidateSymbol(msg.Symbol); err != nil {
+	if err := ValidateDenom(msg.Denom); err != nil {
 		return err
 	}
 
@@ -158,9 +159,9 @@ func (msg MsgTransferFanTokenOwner) Route() string { return MsgRoute }
 func (msg MsgTransferFanTokenOwner) Type() string { return TypeMsgTransferFanTokenOwner }
 
 // NewMsgEditToken creates a MsgEditToken
-func NewMsgEditFanToken(symbol string, mintable bool, owner string) *MsgEditFanToken {
+func NewMsgEditFanToken(denom string, mintable bool, owner string) *MsgEditFanToken {
 	return &MsgEditFanToken{
-		Symbol:   symbol,
+		Denom:    denom,
 		Mintable: mintable,
 		Owner:    owner,
 	}
@@ -199,7 +200,7 @@ func (msg MsgEditFanToken) ValidateBasic() error {
 	}
 
 	// check symbol
-	return ValidateSymbol(msg.Symbol)
+	return ValidateDenom(msg.Denom)
 }
 
 // NewMsgMintToken creates a MsgMintToken

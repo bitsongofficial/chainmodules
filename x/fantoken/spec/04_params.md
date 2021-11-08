@@ -1,6 +1,6 @@
 # Parameters
 
-Fan Token module parameters.
+Fantoken module parameters.
 
 | Key        | Type     | Value                                   |
 | ---------- | -------- | --------------------------------------- |

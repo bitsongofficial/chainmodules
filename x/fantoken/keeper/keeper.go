@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -12,6 +13,7 @@ import (
 
 	"github.com/bitsongofficial/chainmodules/x/fantoken/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 type Keeper struct {
@@ -51,7 +53,7 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("go-bitsong/%s", types.ModuleName))
 }
 
-// IssueToken issues a new token
+// IssueFanToken issues a new fantoken
 func (k Keeper) IssueFanToken(
 	ctx sdk.Context,
 	symbol string,
@@ -62,11 +64,14 @@ func (k Keeper) IssueFanToken(
 	issueFee sdk.Coin,
 ) error {
 	issuePrice := k.GetParamSet(ctx).IssuePrice
+	if issueFee.Denom != issuePrice.GetDenom() {
+		return sdkerrors.Wrapf(types.ErrInvalidDenom, "the issue fee denom %s is invalid", issueFee.String())
+	}
 	if issueFee.Amount.LT(issuePrice.Amount) {
 		return sdkerrors.Wrapf(types.ErrLessIssueFee, "the issue fee %s is less than %s", issueFee.String(), issuePrice.String())
 	}
 
-	denom := fmt.Sprintf("%s%s", "u", symbol)
+	denom := strings.Replace(common.BytesToHash([]byte(owner.String()+symbol+name)).Hex(), "0x", "ft", 1)
 	denomMetaData := banktypes.Metadata{
 		Description: description,
 		Base:        denom,
@@ -85,25 +90,25 @@ func (k Keeper) IssueFanToken(
 	return nil
 }
 
-// EditToken edits the specified token
+// EditFanToken edits the specified fantoken
 func (k Keeper) EditFanToken(
 	ctx sdk.Context,
-	symbol string,
+	denom string,
 	mintable bool,
 	owner sdk.AccAddress,
 ) error {
 	// get the destination token
-	token, err := k.getFanTokenBySymbol(ctx, symbol)
+	token, err := k.getFanTokenByDenom(ctx, denom)
 	if err != nil {
 		return err
 	}
 
 	if owner.String() != token.Owner {
-		return sdkerrors.Wrapf(types.ErrInvalidOwner, "the address %s is not the owner of the token %s", owner, symbol)
+		return sdkerrors.Wrapf(types.ErrInvalidOwner, "the address %s is not the owner of the token %s", owner, denom)
 	}
 
 	if !token.Mintable {
-		return sdkerrors.Wrapf(types.ErrNotMintable, "the fantoken %s is not mintable", symbol)
+		return sdkerrors.Wrapf(types.ErrNotMintable, "the fantoken %s is not mintable", denom)
 	}
 
 	token.Mintable = mintable
@@ -119,20 +124,20 @@ func (k Keeper) EditFanToken(
 	return nil
 }
 
-// TransferTokenOwner transfers the owner of the specified token to a new one
+// TransferFanTokenOwner transfers the owner of the specified fantoken to a new one
 func (k Keeper) TransferFanTokenOwner(
 	ctx sdk.Context,
-	symbol string,
+	denom string,
 	srcOwner sdk.AccAddress,
 	dstOwner sdk.AccAddress,
 ) error {
-	token, err := k.getFanTokenBySymbol(ctx, symbol)
+	token, err := k.getFanTokenByDenom(ctx, denom)
 	if err != nil {
 		return err
 	}
 
 	if srcOwner.String() != token.Owner {
-		return sdkerrors.Wrapf(types.ErrInvalidOwner, "the address %s is not the owner of the token %s", srcOwner, symbol)
+		return sdkerrors.Wrapf(types.ErrInvalidOwner, "the address %s is not the owner of the token %s", srcOwner, denom)
 	}
 
 	token.Owner = dstOwner.String()
@@ -141,13 +146,12 @@ func (k Keeper) TransferFanTokenOwner(
 	k.setFanToken(ctx, token)
 
 	// reset all indices
-	k.resetStoreKeyForQueryToken(ctx, token.GetSymbol(), srcOwner, dstOwner)
+	k.resetStoreKeyForQueryToken(ctx, token.GetDenom(), srcOwner, dstOwner)
 
 	return nil
 }
 
-// MintToken mints the specified amount of token to the specified recipient
-// NOTE: empty owner means that the external caller is responsible to manage the token authority
+// MintFanToken mints the specified amount of fantoken to the specified recipient
 func (k Keeper) MintFanToken(
 	ctx sdk.Context,
 	recipient sdk.AccAddress,
