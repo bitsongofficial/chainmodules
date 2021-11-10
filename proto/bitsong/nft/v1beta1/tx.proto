@@ -85,7 +85,6 @@ message MsgMintNFT {
     string uri = 4 [ (gogoproto.customname) = "URI" ];
     string sender = 5;
     string recipient = 6;
-    bool isPrimary = 7;
 }
 
 // MsgMintNFTResponse defines the Msg/MintNFT response type.
