@@ -61,7 +61,7 @@ func (k Keeper) HasNFT(ctx sdk.Context, denomID, tokenID string) bool {
 	return store.Has(types.KeyNFT(denomID, tokenID))
 }
 
-func (k Keeper) setNFT(ctx sdk.Context, denomID string, nft types.BaseNFT) {
+func (k Keeper) SetNFT(ctx sdk.Context, denomID string, nft types.BaseNFT) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshalBinaryBare(&nft)

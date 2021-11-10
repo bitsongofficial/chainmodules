@@ -50,7 +50,7 @@ func (k Keeper) MintNFTUnverified(ctx sdk.Context, denomID, tokenID, tokenNm, to
 		return sdkerrors.Wrapf(types.ErrNFTAlreadyExists, "NFT %s already exists in collection %s", tokenID, denomID)
 	}
 
-	k.setNFT(
+	k.SetNFT(
 		ctx, denomID,
 		types.NewBaseNFT(
 			tokenID,
@@ -79,6 +79,14 @@ func (k Keeper) MintNFT(
 	return k.MintNFTUnverified(ctx, denomID, tokenID, tokenNm, tokenURI, owner, isPrimary)
 }
 
+// CloneMintNFT mints an NFT by cloning existing one
+func (k Keeper) CloneMintNFT(
+	ctx sdk.Context, denomID, tokenID, tokenNm,
+	tokenURI string, owner sdk.AccAddress,
+) error {
+	return k.MintNFTUnverified(ctx, denomID, tokenID, tokenNm, tokenURI, owner, false)
+}
+
 // EditNFT updates an already existing NFT
 func (k Keeper) EditNFT(
 	ctx sdk.Context, denomID, tokenID, tokenNm string, owner sdk.AccAddress,
@@ -101,7 +109,7 @@ func (k Keeper) EditNFT(
 		nft.Name = tokenNm
 	}
 
-	k.setNFT(ctx, denomID, nft)
+	k.SetNFT(ctx, denomID, nft)
 
 	return nil
 }
@@ -121,7 +129,7 @@ func (k Keeper) TransferOwner(
 
 	nft.Owner = dstOwner.String()
 
-	k.setNFT(ctx, denomID, nft)
+	k.SetNFT(ctx, denomID, nft)
 	k.swapOwner(ctx, denomID, tokenID, srcOwner, dstOwner)
 	return nil
 }

@@ -12,4 +12,5 @@ type NFT interface {
 	GetName() string
 	GetOwner() sdk.AccAddress
 	GetURI() string
+	GetPrimaryStatus() bool
 }

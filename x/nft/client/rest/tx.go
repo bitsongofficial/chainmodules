@@ -74,7 +74,6 @@ func mintNFTHandlerFn(cliCtx client.Context) http.HandlerFunc {
 			req.URI,
 			req.Owner,
 			req.Recipient,
-			true,
 		)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

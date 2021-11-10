@@ -168,7 +168,6 @@ func GetCmdMintNFT() *cobra.Command {
 				tokenURI,
 				sender,
 				recipient,
-				true,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
