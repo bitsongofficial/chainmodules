@@ -4,7 +4,7 @@
 
 The NFT Module described here is meant to be used as a module across chains for managing non-fungible token that represent individual assets with unique features. This standard was first developed on Ethereum within the ERC-721 and the subsequent EIP of the same name. This standard utilized the features of the Ethereum blockchain as well as the restrictions. The subsequent ERC-1155 standard addressed some of the restrictions of Ethereum regarding storage costs and semi-fungible assets.
 
-NFTs on application specific blockchains share some but not all features as their Ethereum brethren. Since application specific blockchains are more flexible in how their resources are utilized it makes sense that should have the option of exploiting those resources. This includes the aility to use strings as IDs and to optionally store tokenData on chain. The user-flow of composability with smart contracts should also be rethought on application specific blockchains with regard to Inter-Blockchain Communication as it is a different design experience from communication between smart contracts.
+NFTs on application specific blockchains share some but not all features as their Ethereum brethren. Since application specific blockchains are more flexible in how their resources are utilized it makes sense that should have the option of exploiting those resources. This includes the ability to use strings as IDs and to optionally store tokenData on chain. The user-flow of composability with smart contracts should also be rethought on application specific blockchains with regard to Inter-Blockchain Communication as it is a different design experience from communication between smart contracts.
 
 ## Contents
 
@@ -24,7 +24,7 @@ NFTs on application specific blockchains share some but not all features as thei
 
 ## A Note on Metadata & IBC
 
-The BaseNFT includes `tokenURI` in order to be backwards compatible with Ethereum based NFTs. However the `NFT` type is an interface that allows arbitrary tokenData to be stored on chain should it need be. Originally the module included `name`, `description` and `image` to demonstrate these capabilities. They were removed in order for the NFT to be more efficient for use cases that don't include a need for that information to be stored on chain. A demonstration of including them will be included in a sample app. It is also under discussion to move all tokenData to a separate module that can handle arbitrary amounts of data on chain and can be used to describe assets beyond Non-Fungible Tokens, like normal Fungible Tokens `Coin` that could describe attributes like decimal places and vesting status.
+The BaseNFT includes `URI` in order to be backwards compatible with Ethereum based NFTs.
 
 A stand-alone tokenData Module would allow for independent standards to evolve regarding arbitrary asset types with expanding precision. The standards supported by [http://schema.org](http://schema.org) and the process of adding nested information is being considered as a starting point for that standard. The Blockchain Gaming Alliance is working on a tokenData standard to be used for specifically blockchain gaming assets.
 

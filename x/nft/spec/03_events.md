@@ -31,7 +31,6 @@ The nft module emits the following events:
 | :------- | :------------ | :-------------- |
 | edit_nft | token_id      | {tokenID}       |
 | edit_nft | denom_id      | {nftDenomID}    |
-| edit_nft | token_uri     | {tokenURI}      |
 | edit_nft | owner         | {ownerAddress}  |
 | message  | module        | nft             |
 | message  | sender        | {senderAddress} |
@@ -44,6 +43,7 @@ The nft module emits the following events:
 | mint_nft | denom_id      | {nftDenomID}       |
 | mint_nft | token_uri     | {tokenURI}         |
 | mint_nft | recipient     | {recipientAddress} |
+| mint_nft | is_primary    | true               |
 | message  | module        | nft                |
 | message  | sender        | {senderAddress}    |
 

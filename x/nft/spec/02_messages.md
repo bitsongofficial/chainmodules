@@ -2,8 +2,7 @@
 
 ## MsgIssueDenom
 
-This message defines a type of non-fungible tokens, there can be multiple non-fungible tokens of the same type. Note
-that both, `Id` and `Name`, are required to be unique globally.
+This message defines a type of non-fungible tokens, there can be multiple non-fungible tokens of the same type. Note that both, `Id` and `Name`, are required to be unique globally (this could be changed).
 
 | **Field**      | **Type**    | **Description**                                                                                                 |
 | :------------- | :---------- | :-------------------------------------------------------------------------------------------------------------- |
@@ -11,7 +10,7 @@ that both, `Id` and `Name`, are required to be unique globally.
 | Name           | `string`    | The denomination name of the NFT, necessary as multiple denominations are able to be represented on each chain. |
 | Creators       | `[]string`  | The creators of the denomination.                                                                               |
 | SplitShares    | `[]sdk.dec` | Payment % share in the primary sale                                                                             |
-| RoyaltyShare   | `sdk.dec`   | Payment % share in the secondary sale                                                                           |
+| RoyaltyShare   | `sdk.dec`   | The share percentage that creators get in the secondary sale                                                    |
 | Sender         | `string`    | The account address of the user creating the denomination.                                                      |
 
 ```go
@@ -27,11 +26,7 @@ type MsgIssueDenom struct {
 
 ## MsgTransferNFT
 
-This is the most commonly expected message type to be supported across chains. While each application specific
-blockchain will have very different adoption of the `MsgMintNFT`, `MsgBurnNFT` and `MsgEditNFT` it should be expected
-that most chains support the ability to transfer ownership of the non-fungible tokens. The exception to this would be
-non-transferable NFTs that might be attached to reputation or some asset which should not be transferable. It still
-makes sense for this to be represented as an NFT because there are common queriers which will remain relevant to the NFT
+This is the most commonly expected message type to be supported across chains. While each application specific blockchain will have very different adoption of the `MsgMintNFT`, `MsgBurnNFT` and `MsgEditNFT` it should be expected that most chains support the ability to transfer ownership of the non-fungible tokens. The exception to this would be non-transferable NFTs that might be attached to reputation or some asset which should not be transferable. It still makes sense for this to be represented as an NFT because there are common queriers which will remain relevant to the NFT
 type even if non-transferable. `Sender` of this message should be the `Owner` of the NFT.
 
 | **Field** | **Type** | **Description**                                                                                                  |
@@ -53,15 +48,13 @@ type MsgTransferNFT struct {
 
 ## MsgEditNFT
 
-This message type allows the `Name` and `Data` to be updated. `Sender` of this message should be the `Owner` of the NFT and
-`Creator` of the denomination corresponding to `DenomId`.
+This message type allows the `Name` to be updated. `Sender` of this message should be the `Owner` of the NFT and `Creator` of the denomination corresponding to `DenomId`.
 
 | **Field** | **Type** | **Description**                                                                                                  |
 | :-------- | :------- | :--------------------------------------------------------------------------------------------------------------- |
 | Id        | `string` | The unique ID of the NFT being edited.                                                                           |
 | DenomId   | `string` | The unique ID of the denomination, necessary as multiple denominations are able to be represented on each chain. |
 | Name      | `string` | The name of the NFT being edited.                                                                                |
-| Data      | `string` | The data of the NFT                                                                                              |
 | Sender    | `string` | The creator of the message                                                                                       |
 
 ```go
@@ -70,17 +63,13 @@ type MsgEditNFT struct {
     Id      string
     DenomId string
     Name    string
-    Data    string
     Sender  string
 }
 ```
 
 ## MsgMintNFT
 
-This message type is used for minting new non-fungible tokens. If a new token is minted under a new `Denom`, a new
-`Collection` will also be created, otherwise the token is added to the existing `Collection`. `Sender` of the new token
-should be the `Creator` of `Denom`. If `Recipient` is a new account, a new `Owner` is created, otherwise the NFT `Id` is
-added to existing `Owner`'s `IDCollection`.
+This message type is used for minting new non-fungible tokens. If a new token is minted under a new `Denom`, a new `Collection` will also be created, otherwise the token is added to the existing `Collection`. `Sender` of the new token should be the `Creator` of `Denom`. If `Recipient` is a new account, a new `Owner` is created, otherwise the NFT `Id` is added to existing `Owner`'s `IDCollection`.
 
 | **Field** | **Type** | **Description**                                                                            |
 | :-------- | :------- | :----------------------------------------------------------------------------------------- |
@@ -88,10 +77,8 @@ added to existing `Owner`'s `IDCollection`.
 | DenomId   | `string` | The unique ID of the denomination.                                                         |
 | Name      | `string` | The name of the NFT being minted.                                                          |
 | URI       | `string` | The URI pointing to a JSON object that contains subsequent tokenData information off-chain |
-| Data      | `string` | The data of the NFT.                                                                       |
 | Sender    | `string` | The sender of the Message                                                                  |
 | Recipient | `string` | The recipiet of the new NFT                                                                |
-| IsPrimary | `bool`   | The indication flag which shows if the nft was minted from scratch or sold through auction |
 
 ```go
 // MsgMintNFT defines an SDK message for creating a new NFT.
@@ -100,17 +87,14 @@ type MsgMintNFT struct {
     DenomId   string
     Name      string
     URI       string
-    Data      string
     Sender    string
     Recipient string
-    IsPrimary bool
 }
 ```
 
 ### MsgBurnNFT
 
-This message type is used for burning non-fungible tokens which destroys and deletes them. `Sender` of this message
-should be the `Owner` of the NFT and `Creator` of the denomination corresponding to `DenomId`.
+This message type is used for burning non-fungible tokens which destroys and deletes them. `Sender` of this message should be the `Owner` of the NFT and `Creator` of the denomination corresponding to `DenomId`.
 
 | **Field** | **Type** | **Description**                                    |
 | :-------- | :------- | :------------------------------------------------- |
