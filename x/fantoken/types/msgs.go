@@ -1,12 +1,9 @@
 package types
 
 import (
-	"strings"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -60,7 +57,7 @@ func (msg MsgIssueFanToken) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid owner address (%s)", err)
 	}
 
-	denom := strings.Replace(common.BytesToHash([]byte(owner.String()+msg.Symbol+msg.Name)).Hex(), "0x", "ft", 1)
+	denom := GetFantokenDenom(owner, msg.Symbol, msg.Name)
 	denomMetaData := banktypes.Metadata{
 		Description: msg.Description,
 		Base:        denom,

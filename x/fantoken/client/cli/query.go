@@ -35,9 +35,9 @@ func GetQueryCmd() *cobra.Command {
 // GetCmdQueryFanToken implements the query fantoken command.
 func GetCmdQueryFanToken() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "token [denom]",
+		Use:     "denom [denom]",
 		Long:    "Query a fantoken by denom.",
-		Example: fmt.Sprintf("$ %s query fantoken token <denom>", version.AppName),
+		Example: fmt.Sprintf("$ %s query fantoken denom <denom>", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -71,9 +71,9 @@ func GetCmdQueryFanToken() *cobra.Command {
 // GetCmdQueryTokens implements the query tokens command.
 func GetCmdQueryFanTokens() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "tokens [owner]",
+		Use:     "owner [owner]",
 		Long:    "Query fantokens by the owner.",
-		Example: fmt.Sprintf("$ %s query fantoken tokens <owner>", version.AppName),
+		Example: fmt.Sprintf("$ %s query fantoken owner <owner>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {

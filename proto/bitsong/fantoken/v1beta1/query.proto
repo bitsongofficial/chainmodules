@@ -13,11 +13,11 @@ option go_package = "github.com/bitsongofficial/chainmodules/x/fantoken/types";
 service Query {
     // FanToken returns fantoken with fantoken name
     rpc FanToken(QueryFanTokenRequest) returns (QueryFanTokenResponse) {
-        option (google.api.http).get = "/bitsong/fantoken/v1beta1/tokens/{denom}";
+        option (google.api.http).get = "/bitsong/fantoken/v1beta1/denom/{denom}";
     }
     // FanTokens returns the fantoken list
     rpc FanTokens(QueryFanTokensRequest) returns (QueryFanTokensResponse) {
-        option (google.api.http).get = "/bitsong/fantoken/v1beta1/tokens";
+        option (google.api.http).get = "/bitsong/fantoken/v1beta1/fantokens";
     }
     // Params queries the fantoken parameters
     rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {

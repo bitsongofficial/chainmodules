@@ -17,15 +17,15 @@ import (
 
 func registerTxRoutes(cliCtx client.Context, r *mux.Router) {
 	// issue a token
-	r.HandleFunc(fmt.Sprintf("/%s/tokens", tokentypes.ModuleName), issueTokenHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/denom", tokentypes.ModuleName), issueTokenHandlerFn(cliCtx)).Methods("POST")
 	// edit a token
-	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}", tokentypes.ModuleName, RestParamDenom), editFanTokenHandlerFn(cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/denom/{%s}", tokentypes.ModuleName, RestParamDenom), editFanTokenHandlerFn(cliCtx)).Methods("PUT")
 	// transfer owner
-	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}/transfer", tokentypes.ModuleName, RestParamDenom), transferOwnerHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/denom/{%s}/transfer", tokentypes.ModuleName, RestParamDenom), transferOwnerHandlerFn(cliCtx)).Methods("POST")
 	// mint token
-	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}/mint", tokentypes.ModuleName, RestParamDenom), mintFanTokenHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/denom/{%s}/mint", tokentypes.ModuleName, RestParamDenom), mintFanTokenHandlerFn(cliCtx)).Methods("POST")
 	// burn token
-	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}/burn", tokentypes.ModuleName, RestParamDenom), burnFanTokenHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/denom/{%s}/burn", tokentypes.ModuleName, RestParamDenom), burnFanTokenHandlerFn(cliCtx)).Methods("POST")
 }
 
 func issueTokenHandlerFn(cliCtx client.Context) http.HandlerFunc {

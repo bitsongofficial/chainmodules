@@ -64,9 +64,6 @@ func (k Keeper) AddFanToken(ctx sdk.Context, token tokentypes.FanToken) error {
 	// set token
 	k.setFanToken(ctx, token)
 
-	// set token to be prefixed with symbol
-	k.setWithSymbol(ctx, token.GetDenom(), token.GetSymbol())
-
 	if len(token.Owner) != 0 {
 		// set token to be prefixed with owner
 		k.setWithOwner(ctx, token.GetOwner(), token.GetDenom())
@@ -156,14 +153,6 @@ func (k Keeper) setWithOwner(ctx sdk.Context, owner sdk.AccAddress, denom string
 	bz := k.cdc.MustMarshalBinaryBare(&gogotypes.StringValue{Value: denom})
 
 	store.Set(tokentypes.KeyFanTokens(owner, denom), bz)
-}
-
-func (k Keeper) setWithSymbol(ctx sdk.Context, denom, symbol string) {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := k.cdc.MustMarshalBinaryBare(&gogotypes.StringValue{Value: denom})
-
-	store.Set(tokentypes.KeySymbol(symbol), bz)
 }
 
 func (k Keeper) setFanToken(ctx sdk.Context, token tokentypes.FanToken) {

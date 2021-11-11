@@ -3,7 +3,6 @@ package cli_test
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
@@ -19,7 +18,6 @@ import (
 	tokencli "github.com/bitsongofficial/chainmodules/x/fantoken/client/cli"
 	tokentestutil "github.com/bitsongofficial/chainmodules/x/fantoken/client/testutil"
 	tokentypes "github.com/bitsongofficial/chainmodules/x/fantoken/types"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 type IntegrationTestSuite struct {
@@ -59,7 +57,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	from := val.Address
 	symbol := "kitty"
 	name := "Kitty Token"
-	denom := strings.Replace(common.BytesToHash([]byte(from.String()+symbol+name)).Hex(), "0x", "ft", 1)
+	denom := tokentypes.GetFantokenDenom(from, symbol, name)
 	maxSupply := sdk.NewInt(200000000)
 	mintable := true
 	issueFee := "1000000ubtsg"

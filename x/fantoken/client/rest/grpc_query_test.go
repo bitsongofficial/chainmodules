@@ -3,7 +3,6 @@ package rest_test
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
@@ -18,7 +17,6 @@ import (
 	tokencli "github.com/bitsongofficial/chainmodules/x/fantoken/client/cli"
 	tokentestutil "github.com/bitsongofficial/chainmodules/x/fantoken/client/testutil"
 	tokentypes "github.com/bitsongofficial/chainmodules/x/fantoken/types"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 type IntegrationTestSuite struct {
@@ -63,7 +61,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	issueFee := "1000000ubtsg"
 	description := "Kitty Token"
 	baseURL := val.APIAddress
-	denom := strings.Replace(common.BytesToHash([]byte(from.String()+symbol+name)).Hex(), "0x", "ft", 1)
+	denom := tokentypes.GetFantokenDenom(from, symbol, name)
 
 	//------test GetCmdIssueFanToken()-------------
 	args := []string{
@@ -88,7 +86,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().Equal(expectedCode, txResp.Code)
 
 	//------test GetCmdQueryFanTokens()-------------
-	url := fmt.Sprintf("%s/bitsong/fantoken/v1beta1/tokens", baseURL)
+	url := fmt.Sprintf("%s/bitsong/fantoken/v1beta1/fantokens", baseURL)
 	resp, err := rest.GetRequest(url)
 	respType = proto.Message(&tokentypes.QueryFanTokensResponse{})
 	s.Require().NoError(err)
@@ -97,7 +95,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().Equal(1, len(tokensResp.Tokens))
 
 	//------test GetCmdQueryFanToken()-------------
-	url = fmt.Sprintf("%s/bitsong/fantoken/v1beta1/tokens/%s", baseURL, denom)
+	url = fmt.Sprintf("%s/bitsong/fantoken/v1beta1/denom/%s", baseURL, denom)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&tokentypes.QueryFanTokenResponse{})
 	var token tokentypes.FanTokenI

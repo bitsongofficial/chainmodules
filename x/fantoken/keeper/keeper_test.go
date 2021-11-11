@@ -72,16 +72,19 @@ func (suite *KeeperTestSuite) issueFanToken(token tokentypes.FanToken) {
 }
 
 func (suite *KeeperTestSuite) TestIssueFanToken() {
+	symbol := "btc"
+	name := "Bitcoin Network"
+	denom := tokentypes.GetFantokenDenom(owner, symbol, name)
 	denomMetaData := banktypes.Metadata{
 		Description: "test",
-		Base:        "ft73676a7961793266743066347032627463426974636f696e204e6574776f726b",
-		Display:     "btc",
+		Base:        denom,
+		Display:     symbol,
 		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: "ft73676a7961793266743066347032627463426974636f696e204e6574776f726b", Exponent: 0},
-			{Denom: "btc", Exponent: tokentypes.FanTokenDecimal},
+			{Denom: denom, Exponent: 0},
+			{Denom: symbol, Exponent: tokentypes.FanTokenDecimal},
 		},
 	}
-	token := tokentypes.NewFanToken("Bitcoin Network", sdk.NewInt(21000000), owner, denomMetaData)
+	token := tokentypes.NewFanToken(name, sdk.NewInt(21000000), owner, denomMetaData)
 
 	err := suite.keeper.IssueFanToken(
 		suite.ctx, token.GetSymbol(), token.Name,

@@ -1,7 +1,6 @@
 package fantoken_test
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -19,7 +18,6 @@ import (
 	tokenkeeper "github.com/bitsongofficial/chainmodules/x/fantoken/keeper"
 	tokentypes "github.com/bitsongofficial/chainmodules/x/fantoken/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -89,7 +87,7 @@ func (suite *HandlerSuite) TestIssueFanToken() {
 	nativeTokenAmt1 := suite.bk.GetBalance(suite.ctx, owner, types.BondDenom).Amount
 
 	msg := tokentypes.NewMsgIssueFanToken("btc", "satoshi", sdk.NewInt(21000000), "test", owner.String(), issueFee)
-	denom := strings.Replace(common.BytesToHash([]byte(owner.String()+"btc"+"satoshi")).Hex(), "0x", "ft", 1)
+	denom := tokentypes.GetFantokenDenom(owner, msg.Symbol, msg.Name)
 
 	_, err := h(suite.ctx, msg)
 	suite.NoError(err)
