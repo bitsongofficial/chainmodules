@@ -434,7 +434,7 @@ func New(
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		fantoken.NewAppModule(appCodec, app.FanTokenKeeper, app.AccountKeeper, app.BankKeeper),
 		nft.NewAppModule(appCodec, app.NFTKeeper, app.AccountKeeper, app.BankKeeper),
-		// auction.NewAppModule(appCodec, app.AuctionKeeper, app.AccountKeeper, app.BankKeeper, app.NFTKeeper),
+		auction.NewAppModule(appCodec, app.AuctionKeeper, app.AccountKeeper, app.BankKeeper, app.NFTKeeper),
 	)
 
 	app.sm.RegisterStoreDecoders()

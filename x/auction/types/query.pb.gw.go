@@ -728,11 +728,11 @@ var (
 
 	pattern_Query_AllAuctions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"bitsong", "auction", "v1beta1", "auctions"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_AuctionsByOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"bitsong", "auction", "v1beta1", "auctions", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_AuctionsByOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 4}, []string{"bitsong", "auction", "v1beta1", "auctions", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Bid_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"bitsong", "auction", "v1beta1", "bid", "auction_id", "bidder"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Bid_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"bitsong", "auction", "v1beta1", "auction_id", "bid", "bidder"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_BidsByAuction_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"bitsong", "auction", "v1beta1", "bids", "auction_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_BidsByAuction_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"bitsong", "auction", "v1beta1", "auction_id", "bids"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_BidsByBidder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"bitsong", "auction", "v1beta1", "bids-by-bidder", "bidder"}, "", runtime.AssumeColonVerbOpt(true)))
 )

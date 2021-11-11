@@ -20,11 +20,11 @@ func registerQueryRoutes(cliCtx client.Context, r *mux.Router) {
 	// Query all auctions
 	r.HandleFunc(fmt.Sprintf("/%s/auctions", types.ModuleName), queryAllAuctionsHandlerFn(cliCtx)).Methods("GET")
 	// Query auctions by owner
-	r.HandleFunc(fmt.Sprintf("/%s/auctions/{%s}", types.ModuleName, RestParamOwner), queryAuctionsByOwnerHandlerFn(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/auctions/owner/{%s}", types.ModuleName, RestParamOwner), queryAuctionsByOwnerHandlerFn(cliCtx)).Methods("GET")
 	// Query bid
-	r.HandleFunc(fmt.Sprintf("/%s/bid/{%s}/{%s}", types.ModuleName, RestParamAuctionId, RestParamBidder), queryBidHandlerFn(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}/bid/{%s}", types.ModuleName, RestParamAuctionId, RestParamBidder), queryBidHandlerFn(cliCtx)).Methods("GET")
 	// Query bids
-	r.HandleFunc(fmt.Sprintf("/%s/bids/{%s}", types.ModuleName, RestParamAuctionId), queryBidsHandlerFn(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}/bids", types.ModuleName, RestParamAuctionId), queryBidsHandlerFn(cliCtx)).Methods("GET")
 	// Query bids by bidder
 	r.HandleFunc(fmt.Sprintf("/%s/bids-by-bidder/{%s}", types.ModuleName, RestParamOwner), queryBidsByBidderHandlerFn(cliCtx)).Methods("GET")
 }

@@ -40,10 +40,10 @@ func NewTxCmd() *cobra.Command {
 // GetCmdOpenAuction implements the open auction command
 func GetCmdOpenAuction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "open-auction",
+		Use:  "open",
 		Long: "open a new auction",
 		Example: fmt.Sprintf(
-			"$ %s tx auction open-auction "+
+			"$ %s tx auction open "+
 				"--auction-type=<auction-type> "+
 				"--nft-denom-id=<nft-denom-id> "+
 				"--nft-token-id=<nft-token-id> "+
@@ -116,10 +116,10 @@ func GetCmdOpenAuction() *cobra.Command {
 // GetCmdEditAuction implements the edit auction command
 func GetCmdEditAuction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "edit-auction",
+		Use:  "edit",
 		Long: "Edit an existing auction",
 		Example: fmt.Sprintf(
-			"$ %s tx auction edit-auction [id] "+
+			"$ %s tx auction edit [id] "+
 				"--duration=\"86400\" "+
 				"--from=<key-name> "+
 				"--chain-id=<chain-id> "+
@@ -164,10 +164,10 @@ func GetCmdEditAuction() *cobra.Command {
 // GetCmdCancelAuction implements the cancel auction command
 func GetCmdCancelAuction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "cancel-auction",
+		Use:  "cancel",
 		Long: "Cancel an existing auction",
 		Example: fmt.Sprintf(
-			"$ %s tx auction cancel-auction [id] "+
+			"$ %s tx auction cancel [id] "+
 				"--from=<key-name> "+
 				"--chain-id=<chain-id> "+
 				"--fees=<fee>",

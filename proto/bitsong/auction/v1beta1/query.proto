@@ -20,15 +20,15 @@ service Query {
     }
     // AuctionsByOwner queries the Auctions of the given owner
     rpc AuctionsByOwner(QueryAuctionsByOwnerRequest) returns (QueryAuctionsByOwnerResponse) {
-        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions/{owner}";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions/owner/{owner}";
     }
     // Bid queries the bid of the given auction id and bidder
     rpc Bid(QueryBidRequest) returns (QueryBidResponse) {
-        option (google.api.http).get = "/bitsong/auction/v1beta1/bid/{auction_id}/{bidder}";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auction/{auction_id}/bid/{bidder}";
     }
     // Bids queries the bids of the given auction id
     rpc BidsByAuction(QueryBidsByAuctionRequest) returns (QueryBidsByAuctionResponse) {
-        option (google.api.http).get = "/bitsong/auction/v1beta1/bids/{auction_id}";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auction/{auction_id}/bids";
     }
     // Bids queries the bids of the given bidder
     rpc BidsByBidder(QueryBidsByBidderRequest) returns (QueryBidsByBidderResponse) {

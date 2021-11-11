@@ -19,15 +19,15 @@ func registerTxRoutes(cliCtx client.Context, r *mux.Router) {
 	// open an auction
 	r.HandleFunc(fmt.Sprintf("/%s/auction", types.ModuleName), openAuctionHandlerFn(cliCtx)).Methods("POST")
 	// edit an auction
-	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}", types.ModuleName, RestParamAuctionId), editAuctionHandlerFn(cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}/edit", types.ModuleName, RestParamAuctionId), editAuctionHandlerFn(cliCtx)).Methods("PUT")
 	// cancel an auction
-	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}", types.ModuleName, RestParamAuctionId), cancelAuctionHandlerFn(cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}/cancel", types.ModuleName, RestParamAuctionId), cancelAuctionHandlerFn(cliCtx)).Methods("PUT")
 	// open a bid
-	r.HandleFunc(fmt.Sprintf("/%s/bid/{%s}", types.ModuleName, RestParamAuctionId), openBidHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}/bid", types.ModuleName, RestParamAuctionId), openBidHandlerFn(cliCtx)).Methods("POST")
 	// cancel a bid
-	r.HandleFunc(fmt.Sprintf("/%s/bid/{%s}", types.ModuleName, RestParamAuctionId), cancelBidHandlerFn(cliCtx)).Methods("DELETE")
+	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}/bid/cancel", types.ModuleName, RestParamAuctionId), cancelBidHandlerFn(cliCtx)).Methods("DELETE")
 	// withdraw
-	r.HandleFunc(fmt.Sprintf("/%s/withdraw/{%s}", types.ModuleName, RestParamAuctionId), withdrawHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/auction/{%s}/withdraw", types.ModuleName, RestParamAuctionId), withdrawHandlerFn(cliCtx)).Methods("POST")
 }
 
 func openAuctionHandlerFn(cliCtx client.Context) http.HandlerFunc {

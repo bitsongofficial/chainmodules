@@ -38,9 +38,9 @@ func GetQueryCmd() *cobra.Command {
 // GetCmdQueryAuction implements the query auction command.
 func GetCmdQueryAuction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "auction [id]",
+		Use:     "id [id]",
 		Long:    "Query an auction by id.",
-		Example: fmt.Sprintf("$ %s query auction auction <id>", version.AppName),
+		Example: fmt.Sprintf("$ %s query auction id <id>", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -75,9 +75,9 @@ func GetCmdQueryAuction() *cobra.Command {
 // GetCmdQueryAllAuctions implements the query all auctions command.
 func GetCmdQueryAllAuctions() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "auctions",
+		Use:     "list",
 		Long:    "Query all auctions.",
-		Example: fmt.Sprintf("$ %s query auction auctions", version.AppName),
+		Example: fmt.Sprintf("$ %s query auction list", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -111,9 +111,9 @@ func GetCmdQueryAllAuctions() *cobra.Command {
 // GetCmdQueryAuctionsByOwner implements the query auctions by owner command.
 func GetCmdQueryAuctionsByOwner() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "auctions [owner]",
+		Use:     "owner [owner]",
 		Long:    "Query auctions by the owner.",
-		Example: fmt.Sprintf("$ %s query auction auctions <owner>", version.AppName),
+		Example: fmt.Sprintf("$ %s query auction owner <owner>", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)

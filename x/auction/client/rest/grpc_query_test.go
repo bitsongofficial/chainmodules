@@ -153,7 +153,7 @@ func (s *IntegrationTestSuite) TestAuction() {
 	s.Require().Equal(1, len(auctionsResp.Auctions))
 
 	//------test GetCmdQueryAuctionsByOwner()-------------
-	url = fmt.Sprintf("%s/bitsong/auction/v1beta1/auctions/%s", baseURL, from.String())
+	url = fmt.Sprintf("%s/bitsong/auction/v1beta1/auctions/owner/%s", baseURL, from.String())
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&auctiontypes.QueryAuctionsByOwnerResponse{})
 	s.Require().NoError(err)
@@ -198,7 +198,7 @@ func (s *IntegrationTestSuite) TestAuction() {
 	s.Require().Equal(expectedCode, txResp.Code)
 
 	//------test GetCmdQueryBid()-------------
-	url = fmt.Sprintf("%s/bitsong/auction/v1beta1/bid/%s/%s", baseURL, auctionId, bidder.String())
+	url = fmt.Sprintf("%s/bitsong/auction/v1beta1/auction/%s/bid/%s", baseURL, auctionId, bidder.String())
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&auctiontypes.QueryBidResponse{})
 	s.Require().NoError(err)
@@ -210,7 +210,7 @@ func (s *IntegrationTestSuite) TestAuction() {
 	s.Require().Equal(bidder.String(), bid.Bidder)
 
 	//------test GetCmdQueryBidsByAuction()-------------
-	url = fmt.Sprintf("%s/bitsong/auction/v1beta1/bids/%s", baseURL, auctionId)
+	url = fmt.Sprintf("%s/bitsong/auction/v1beta1/auction/%s/bids", baseURL, auctionId)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&auctiontypes.QueryBidsByAuctionResponse{})
 	s.Require().NoError(err)
