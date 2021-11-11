@@ -12,13 +12,24 @@ message Auction {
     option (gogoproto.equal) = true;
 
     uint64 id = 1;
-    uint32 auction_type = 2;
-    string nft_id = 3;
-    uint64 start_time = 4 [(gogoproto.moretags) = "yaml:\"start_time\""];
-    uint64 duration = 5 [(gogoproto.moretags) = "yaml:\"duration\""];
-    cosmos.base.v1beta1.Coin min_amount = 6 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
-    string owner = 7;
-    uint32 limit = 8;
+    AuctionType auction_type = 2;
+    string nft_denom_id = 3;
+    string nft_token_id = 4;
+    uint64 start_time = 5 [(gogoproto.moretags) = "yaml:\"start_time\""];
+    uint64 duration = 6 [(gogoproto.moretags) = "yaml:\"duration\""];
+    cosmos.base.v1beta1.Coin min_amount = 7 [(gogoproto.moretags) = "yaml:\"min_amount\"", (gogoproto.nullable) = false];
+    string owner = 8;
+    uint32 limit = 9;
+    bool cancelled = 10;
+}
+
+// AuctionType is the type of an auction.
+enum AuctionType {
+    option (gogoproto.goproto_enum_prefix) = false;
+  
+    AUCTION_TYPE_SINGLE_EDITION = 0 [(gogoproto.enumvalue_customname) = "Single_Edition"];
+    AUCTION_TYPE_OPEN_EDITION = 1 [(gogoproto.enumvalue_customname) = "Open_Edition"];
+    AUCTION_TYPE_LIMITED_EDITION = 2 [(gogoproto.enumvalue_customname) = "Limited_Edition"];
 }
 
 // Bid defines auction bidder and its amount
