@@ -87,6 +87,7 @@ func (suite *HandlerSuite) TestIssueFanToken() {
 	nativeTokenAmt1 := suite.bk.GetBalance(suite.ctx, owner, types.BondDenom).Amount
 
 	msg := tokentypes.NewMsgIssueFanToken("btc", "satoshi", sdk.NewInt(21000000), "test", owner.String(), issueFee)
+	denom := tokentypes.GetFantokenDenom(owner, msg.Symbol, msg.Name)
 
 	_, err := h(suite.ctx, msg)
 	suite.NoError(err)
@@ -95,17 +96,17 @@ func (suite *HandlerSuite) TestIssueFanToken() {
 
 	suite.Equal(nativeTokenAmt1.Sub(issueFee.Amount), nativeTokenAmt2)
 
-	nativeTokenAmt3 := suite.bk.GetBalance(suite.ctx, owner, "ubtc").Amount
+	nativeTokenAmt3 := suite.bk.GetBalance(suite.ctx, owner, denom).Amount
 	suite.Equal(nativeTokenAmt3, sdk.ZeroInt())
 }
 
 func (suite *HandlerSuite) TestMintFanToken() {
 	denomMetaData := banktypes.Metadata{
 		Description: "test",
-		Base:        "ubtc",
+		Base:        "ftbtc",
 		Display:     "btc",
 		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: "ubtc", Exponent: 0},
+			{Denom: "ftbtc", Exponent: 0},
 			{Denom: "btc", Exponent: tokentypes.FanTokenDecimal},
 		},
 	}
@@ -129,10 +130,10 @@ func (suite *HandlerSuite) TestMintFanToken() {
 func (suite *HandlerSuite) TestBurnFanToken() {
 	denomMetaData := banktypes.Metadata{
 		Description: "test",
-		Base:        "ubtc",
+		Base:        "ftbtc",
 		Display:     "btc",
 		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: "ubtc", Exponent: 0},
+			{Denom: "ftbtc", Exponent: 0},
 			{Denom: "btc", Exponent: tokentypes.FanTokenDecimal},
 		},
 	}

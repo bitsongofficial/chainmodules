@@ -69,7 +69,7 @@ func (m msgServer) EditFanToken(goCtx context.Context, msg *types.MsgEditFanToke
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if err := m.Keeper.EditFanToken(
-		ctx, msg.Symbol, msg.Mintable, owner,
+		ctx, msg.Denom, msg.Mintable, owner,
 	); err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (m msgServer) EditFanToken(goCtx context.Context, msg *types.MsgEditFanToke
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeEditFanToken,
-			sdk.NewAttribute(types.AttributeKeySymbol, msg.Symbol),
+			sdk.NewAttribute(types.AttributeKeyDenom, msg.Denom),
 			sdk.NewAttribute(types.AttributeKeyOwner, msg.Owner),
 		),
 		sdk.NewEvent(
@@ -178,14 +178,14 @@ func (m msgServer) TransferFanTokenOwner(goCtx context.Context, msg *types.MsgTr
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.TransferFanTokenOwner(ctx, msg.Symbol, srcOwner, dstOwner); err != nil {
+	if err := m.Keeper.TransferFanTokenOwner(ctx, msg.Denom, srcOwner, dstOwner); err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeTransferFanTokenOwner,
-			sdk.NewAttribute(types.AttributeKeySymbol, msg.Symbol),
+			sdk.NewAttribute(types.AttributeKeyDenom, msg.Denom),
 			sdk.NewAttribute(types.AttributeKeyOwner, msg.SrcOwner),
 			sdk.NewAttribute(types.AttributeKeyDstOwner, msg.DstOwner),
 		),

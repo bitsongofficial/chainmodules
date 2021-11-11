@@ -22,9 +22,9 @@ func IssueFanTokenExec(clientCtx client.Context, from string, extraArgs ...strin
 	return clitestutil.ExecTestCLICmd(clientCtx, tokencli.GetCmdIssueFanToken(), args)
 }
 
-func EditFanTokenExec(clientCtx client.Context, from string, symbol string, extraArgs ...string) (testutil.BufferWriter, error) {
+func EditFanTokenExec(clientCtx client.Context, from string, denom string, extraArgs ...string) (testutil.BufferWriter, error) {
 	args := []string{
-		symbol,
+		denom,
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
 	}
 	args = append(args, extraArgs...)
@@ -32,9 +32,9 @@ func EditFanTokenExec(clientCtx client.Context, from string, symbol string, extr
 	return clitestutil.ExecTestCLICmd(clientCtx, tokencli.GetCmdEditFanToken(), args)
 }
 
-func MintFanTokenExec(clientCtx client.Context, from string, symbol string, extraArgs ...string) (testutil.BufferWriter, error) {
+func MintFanTokenExec(clientCtx client.Context, from string, denom string, extraArgs ...string) (testutil.BufferWriter, error) {
 	args := []string{
-		symbol,
+		denom,
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
 	}
 	args = append(args, extraArgs...)
@@ -42,9 +42,9 @@ func MintFanTokenExec(clientCtx client.Context, from string, symbol string, extr
 	return clitestutil.ExecTestCLICmd(clientCtx, tokencli.GetCmdMintFanToken(), args)
 }
 
-func BurnFanTokenExec(clientCtx client.Context, from string, symbol string, extraArgs ...string) (testutil.BufferWriter, error) {
+func BurnFanTokenExec(clientCtx client.Context, from string, denom string, extraArgs ...string) (testutil.BufferWriter, error) {
 	args := []string{
-		symbol,
+		denom,
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
 	}
 	args = append(args, extraArgs...)
@@ -52,9 +52,9 @@ func BurnFanTokenExec(clientCtx client.Context, from string, symbol string, extr
 	return clitestutil.ExecTestCLICmd(clientCtx, tokencli.GetCmdBurnFanToken(), args)
 }
 
-func TransferFanTokenOwnerExec(clientCtx client.Context, from string, symbol string, extraArgs ...string) (testutil.BufferWriter, error) {
+func TransferFanTokenOwnerExec(clientCtx client.Context, from string, denom string, extraArgs ...string) (testutil.BufferWriter, error) {
 	args := []string{
-		symbol,
+		denom,
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
 	}
 	args = append(args, extraArgs...)

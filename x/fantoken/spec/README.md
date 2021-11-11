@@ -1,7 +1,11 @@
 # Fan Token Specification
 
 ## Abstract
-This specification describes how to issue a new Fan Token on the chain. A Fan Token is a simple Fungible Token interface.
+This specification describes how to issue a new fantoken on the chain. A fantoken is a simple Fungible Token interface.
+There are two keys to identify a fantoken. It is denom and symbol.
+Both represents the fantoken but they are different.
+Denom is unique and calculated by tendermint crypto hash with creator, symbol and name.
+Symbol is defined by the user.
 
 ## Contents
 

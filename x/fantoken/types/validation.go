@@ -36,9 +36,6 @@ var (
 
 	regexpSymbolFmt = fmt.Sprintf("^[a-z][a-z0-9]{%d,%d}$", MinimumSymbolLen-1, MaximumSymbolLen-1)
 	regexpSymbol    = regexp.MustCompile(regexpSymbolFmt).MatchString
-
-	regexpDenomFmt = fmt.Sprintf("^[a-z][a-z0-9]{%d,%d}$", MinimumDenomLen-1, MaximumDenomLen-1)
-	regexpDenom    = regexp.MustCompile(regexpDenomFmt).MatchString
 )
 
 // ValidateToken checks if the given token is valid
@@ -62,8 +59,8 @@ func ValidateToken(token FanToken) error {
 
 // ValidateDenom checks if the given denom is valid
 func ValidateDenom(denom string) error {
-	if !regexpDenom(denom) {
-		return sdkerrors.Wrapf(ErrInvalidDenom, "invalid denom: %s, only accepts english lowercase letters and numbers, length [%d, %d], and begin with an english letter, regexp: %s", denom, MinimumDenomLen, MaximumDenomLen, regexpDenomFmt)
+	if !strings.HasPrefix(denom, "ft") {
+		return sdkerrors.Wrapf(ErrInvalidDenom, "invalid denom: %s, denom starts with ft", denom)
 	}
 	return ValidateKeywords(denom)
 }
@@ -92,7 +89,7 @@ func ValidateKeywords(denom string) error {
 	return nil
 }
 
-// ValidateAmount checks if the given symbol begins with `TokenKeywords`
+// ValidateAmount checks if the given amount is positive amount
 func ValidateAmount(amount sdk.Int) error {
 	if amount.IsZero() {
 		return sdkerrors.Wrapf(ErrInvalidMaxSupply, "invalid token amount %d, only accepts positive amount", amount)

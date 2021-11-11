@@ -47,7 +47,7 @@ message MsgIssueFanTokenResponse {}
 
 // MsgTransferFanTokenOwner defines an SDK message for transferring the token owner
 message MsgTransferFanTokenOwner {
-    string symbol = 1;
+    string denom = 1;
     string src_owner = 2 [ (gogoproto.moretags) = "yaml:\"src_owner\"" ];
     string dst_owner = 3 [ (gogoproto.moretags) = "yaml:\"dst_owner\"" ];
 }
@@ -57,7 +57,7 @@ message MsgTransferFanTokenOwnerResponse {}
 
 // MsgEditFanToken defines an SDK message for editing a fan token
 message MsgEditFanToken {
-    string symbol = 1;
+    string denom = 1;
     bool mintable = 2;
     string owner = 3;
 }

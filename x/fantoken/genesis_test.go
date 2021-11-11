@@ -36,10 +36,10 @@ func TestInitGenesis(t *testing.T) {
 	addr := sdk.AccAddress(tmhash.SumTruncated([]byte("addr1")))
 	denomMetaData := banktypes.Metadata{
 		Description: "test",
-		Base:        "ubtc",
+		Base:        "ftbtc",
 		Display:     "btc",
 		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: "ubtc", Exponent: 0},
+			{Denom: "ftbtc", Exponent: 0},
 			{Denom: "btc", Exponent: types.FanTokenDecimal},
 		},
 	}
