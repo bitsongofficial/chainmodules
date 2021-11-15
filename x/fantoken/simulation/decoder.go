@@ -18,21 +18,16 @@ import (
 func NewDecodeStore(cdc codec.Marshaler) func(kvA, kvB kv.Pair) string {
 	return func(kvA, kvB kv.Pair) string {
 		switch {
-		case bytes.Equal(kvA.Key[:1], types.PrefixFanTokenForSymbol):
+		case bytes.Equal(kvA.Key[:1], types.PrefixFanTokenForDenom):
 			var tokenA, tokenB types.FanToken
 			cdc.MustUnmarshalBinaryBare(kvA.Value, &tokenA)
 			cdc.MustUnmarshalBinaryBare(kvB.Value, &tokenB)
 			return fmt.Sprintf("%v\n%v", tokenA, tokenB)
 		case bytes.Equal(kvA.Key[:1], types.PrefixFanTokens):
-			var symbolA, symbolB gogotypes.Value
-			cdc.MustUnmarshalBinaryBare(kvA.Value, &symbolA)
-			cdc.MustUnmarshalBinaryBare(kvB.Value, &symbolB)
-			return fmt.Sprintf("%v\n%v", symbolA, symbolB)
-		case bytes.Equal(kvA.Key[:1], types.PrefixTokenForDenom):
-			var symbolA, symbolB gogotypes.StringValue
-			cdc.MustUnmarshalBinaryBare(kvA.Value, &symbolA)
-			cdc.MustUnmarshalBinaryBare(kvB.Value, &symbolB)
-			return fmt.Sprintf("%v\n%v", symbolA, symbolB)
+			var denomA, denomB gogotypes.Value
+			cdc.MustUnmarshalBinaryBare(kvA.Value, &denomA)
+			cdc.MustUnmarshalBinaryBare(kvB.Value, &denomB)
+			return fmt.Sprintf("%v\n%v", denomA, denomB)
 		default:
 			panic(fmt.Sprintf("invalid %s key prefix %X", types.ModuleName, kvA.Key[:1]))
 		}

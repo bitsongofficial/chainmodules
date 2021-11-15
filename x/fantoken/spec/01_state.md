@@ -5,12 +5,11 @@ Definition of data structure of Fungible Token
 
 ```go
 type FanToken struct {
-	Denom		string
 	Name		string
 	MaxSupply	sdk.Int
 	Mintable	bool
-	MetadataUri string
 	Owner		string
+	MetaData	bank.Metadata
 }
 ```
 

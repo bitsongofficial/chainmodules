@@ -14,10 +14,10 @@ import (
 )
 
 func registerQueryRoutes(cliCtx client.Context, r *mux.Router) {
-	// Query the token by symbol or denom
-	r.HandleFunc(fmt.Sprintf("/%s/tokens/{%s}", types.ModuleName, RestParamDenom), queryFanTokenHandlerFn(cliCtx)).Methods("GET")
+	// Query the token by denom
+	r.HandleFunc(fmt.Sprintf("/%s/denom/{%s}", types.ModuleName, RestParamDenom), queryFanTokenHandlerFn(cliCtx)).Methods("GET")
 	// Query tokens by owner
-	r.HandleFunc(fmt.Sprintf("/%s/tokens", types.ModuleName), queryFanTokensHandlerFn(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/fantokens", types.ModuleName), queryFanTokensHandlerFn(cliCtx)).Methods("GET")
 	// Query token params
 	r.HandleFunc(fmt.Sprintf("/%s/params", types.ModuleName), queryFanTokenParamsHandlerFn(cliCtx)).Methods("GET")
 	// Query the total amount of all burned tokens

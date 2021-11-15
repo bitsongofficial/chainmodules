@@ -5,19 +5,19 @@ The fantoken module emits the following events:
 
 | Type            | Attribute Key | Attribute Value  |
 | :-------------- | :------------ | :--------------- |
-| issue_fan_token | denom         | {Denom}          |
+| issue_fan_token | symbol        | {Symbol}         |
 | issue_fan_token | creator       | {creatorAddress} |
 | message         | module        | fantoken         |
 | message         | sender        | {ownerAddress}   |
 
 ## MsgEditFanToken
 
-| Type                      | Attribute Key | Attribute Value |
-| :------------------------ | :------------ | :-------------- |
-| edit_fan_token_mintable | denom         | {Denom}         |
-| edit_fan_token_mintable | owner         | {ownerAddress}  |
-| message                   | module        | fantoken        |
-| message                   | sender        | {ownerAddress}  |
+| Type            | Attribute Key | Attribute Value |
+| :-------------- | :------------ | :-------------- |
+| edit_fan_token  | denom         | {Denom}         |
+| edit_fan_token  | owner         | {ownerAddress}  |
+| message         | module        | fantoken        |
+| message         | sender        | {ownerAddress}  |
 
 ## MsgTransferFanTokenOwner
 

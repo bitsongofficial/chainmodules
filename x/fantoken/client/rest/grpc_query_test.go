@@ -7,7 +7,6 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/suite"
-	"github.com/tidwall/gjson"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
@@ -62,6 +61,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	issueFee := "1000000ubtsg"
 	description := "Kitty Token"
 	baseURL := val.APIAddress
+	denom := tokentypes.GetFantokenDenom(from, symbol, name)
 
 	//------test GetCmdIssueFanToken()-------------
 	args := []string{
@@ -84,10 +84,9 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().NoError(clientCtx.JSONMarshaler.UnmarshalJSON(bz.Bytes(), respType), bz.String())
 	txResp := respType.(*sdk.TxResponse)
 	s.Require().Equal(expectedCode, txResp.Code)
-	tokenSymbol := gjson.Get(txResp.RawLog, "0.events.0.attributes.0.value").String()
 
 	//------test GetCmdQueryFanTokens()-------------
-	url := fmt.Sprintf("%s/bitsong/fantoken/v1beta1/tokens", baseURL)
+	url := fmt.Sprintf("%s/bitsong/fantoken/v1beta1/fantokens", baseURL)
 	resp, err := rest.GetRequest(url)
 	respType = proto.Message(&tokentypes.QueryFanTokensResponse{})
 	s.Require().NoError(err)
@@ -96,7 +95,7 @@ func (s *IntegrationTestSuite) TestToken() {
 	s.Require().Equal(1, len(tokensResp.Tokens))
 
 	//------test GetCmdQueryFanToken()-------------
-	url = fmt.Sprintf("%s/bitsong/fantoken/v1beta1/tokens/%s", baseURL, tokenSymbol)
+	url = fmt.Sprintf("%s/bitsong/fantoken/v1beta1/denom/%s", baseURL, denom)
 	resp, err = rest.GetRequest(url)
 	respType = proto.Message(&tokentypes.QueryFanTokenResponse{})
 	var token tokentypes.FanTokenI

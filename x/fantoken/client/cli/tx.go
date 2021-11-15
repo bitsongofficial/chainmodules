@@ -42,9 +42,9 @@ func NewTxCmd() *cobra.Command {
 func GetCmdIssueFanToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "issue",
-		Long: "Issue a new fan token.",
+		Long: "Issue a new fantoken.",
 		Example: fmt.Sprintf(
-			"$ %s tx token issue "+
+			"$ %s tx fantoken issue "+
 				"--name=\"Kitty Token\" "+
 				"--symbol=\"kitty\" "+
 				"--max-supply=\"1000000000000\" "+
@@ -125,7 +125,7 @@ func GetCmdIssueFanToken() *cobra.Command {
 func GetCmdEditFanToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "edit [denom]",
-		Long: "Edit an existing fan token mintable.",
+		Long: "Edit an existing fantoken.",
 		Example: fmt.Sprintf(
 			"$ %s tx fantoken edit <denom> "+
 				"--mintable=true "+
@@ -170,9 +170,9 @@ func GetCmdEditFanToken() *cobra.Command {
 func GetCmdMintFanToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "mint [denom]",
-		Long: "Mint tokens to a specified address.",
+		Long: "Mint fantokens to a specified address.",
 		Example: fmt.Sprintf(
-			"$ %s tx token mint <denom> "+
+			"$ %s tx fantoken mint <denom> "+
 				"--recipient=<recipient>"+
 				"--amount=<amount> "+
 				"--from=<key-name> "+
@@ -231,9 +231,9 @@ func GetCmdMintFanToken() *cobra.Command {
 func GetCmdBurnFanToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "burn [denom]",
-		Long: "Burn fan tokens.",
+		Long: "Burn fantoken.",
 		Example: fmt.Sprintf(
-			"$ %s tx token burn <denom> "+
+			"$ %s tx fantoken burn <denom> "+
 				"--amount=<amount> "+
 				"--from=<key-name> "+
 				"--chain-id=<chain-id> "+
@@ -291,10 +291,10 @@ func GetCmdBurnFanToken() *cobra.Command {
 // GetCmdTransferFanTokenOwner implements the transfer fan token owner command
 func GetCmdTransferFanTokenOwner() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "transfer [symbol]",
+		Use:  "transfer [denom]",
 		Long: "Transfer the owner of a fantoken to a new owner.",
 		Example: fmt.Sprintf(
-			"$ %s tx fantoken transfer <symbol> "+
+			"$ %s tx fantoken transfer <denom> "+
 				"--recipient=<recipient> "+
 				"--from=<key-name> "+
 				"--chain-id=<chain-id> "+

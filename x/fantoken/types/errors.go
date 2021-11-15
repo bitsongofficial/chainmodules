@@ -15,7 +15,7 @@ var (
 	ErrInvalidScale        = sdkerrors.Register(ModuleName, 7, "invalid token scale")
 	ErrSymbolAlreadyExists = sdkerrors.Register(ModuleName, 8, "symbol already exists")
 	ErrDenomAlreadyExists  = sdkerrors.Register(ModuleName, 9, "denom already exists")
-	ErrTokenNotExists      = sdkerrors.Register(ModuleName, 10, "token does not exist")
+	ErrFanTokenNotExists   = sdkerrors.Register(ModuleName, 10, "fantoken does not exist")
 	ErrInvalidToAddress    = sdkerrors.Register(ModuleName, 11, "the new owner must not be same as the original owner")
 	ErrInvalidOwner        = sdkerrors.Register(ModuleName, 12, "invalid token owner")
 	ErrNotMintable         = sdkerrors.Register(ModuleName, 13, "token is not mintable")

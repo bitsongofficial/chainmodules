@@ -1,21 +1,22 @@
 # Messages
 
 ## MsgIssueFanToken
-A new token is created using the `MsgIssueFanToken` message.
+A new fantoken is created using the `MsgIssueFanToken` message.
 
 ```go
 type MsgIssueFanToken struct {
-	Denom		string
+	Symbol		string
 	Name		string
 	MaxSupply	sdk.Int
 	Mintable	bool
-	MetadataUri string
+	Description string
 	Owner		string
+	IssueFee	sdk.Coin
 }
 ```
 
 # MsgEditFanToken
-The `Mintable` of a token can be updated using the `MsgEditFanToken`.
+The `Mintable` of a fantoken can be updated using the `MsgEditFanToken`.
 
 ```go
 type MsgEditFanToken struct {
@@ -26,7 +27,7 @@ type MsgEditFanToken struct {
 ```
 
 ## MsgMintFanToken
-Only the owner of the fan token can mint new token to a specified account. It fail if the total supply > max supply
+Only the owner of the fantoken can mint new fantoken to a specified account. It fails if the total supply > max supply
 
 ```go
 type MsgMintFanToken struct {
@@ -38,7 +39,7 @@ type MsgMintFanToken struct {
 ```
 
 ## MsgBurnFanToken
-The action will be completed if the sender balance > balance to burn
+The action will be completed if the sender balance > amount to burn
 
 ```go
 type MsgBurnFanToken struct {
@@ -50,7 +51,7 @@ type MsgBurnFanToken struct {
 
 ## MsgTransferFanTokenOwner
 
-Transfer the ownership of the Fan token to another account owner
+Transfer the ownership of the fantoken to another account owner
 
 ```go
 type MsgTransferFanTokenOwner struct {

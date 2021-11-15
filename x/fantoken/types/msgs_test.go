@@ -56,7 +56,7 @@ func TestMsgEditFanToken(t *testing.T) {
 		*MsgEditFanToken
 		expectPass bool
 	}{
-		{"native basic good", NewMsgEditFanToken("btc", mintable, owner), true},
+		{"native basic good", NewMsgEditFanToken("ftbtc", mintable, owner), true},
 		{"wrong denom", NewMsgEditFanToken("BT", mintable, owner), false},
 		{"loss owner", NewMsgEditFanToken("btc", mintable, ""), false},
 	}
@@ -71,12 +71,12 @@ func TestMsgEditFanToken(t *testing.T) {
 }
 
 func TestMsgEditFanTokenRoute(t *testing.T) {
-	symbol := "btc"
+	denom := "ubtc"
 	mintable := false
 
 	// build a MsgEditToken
 	msg := MsgEditFanToken{
-		Symbol:   symbol,
+		Denom:    denom,
 		Mintable: mintable,
 	}
 
@@ -88,13 +88,13 @@ func TestMsgEditFanTokenGetSignBytes(t *testing.T) {
 
 	var msg = MsgEditFanToken{
 		Owner:    sdk.AccAddress(tmhash.SumTruncated([]byte("owner"))).String(),
-		Symbol:   "btc",
+		Denom:    "ubtc",
 		Mintable: mintable,
 	}
 
 	res := msg.GetSignBytes()
 
-	expected := `{"type":"go-bitsong/token/MsgEditFanToken","value":{"mintable":true,"owner":"cosmos1fsgzj6t7udv8zhf6zj32mkqhcjcpv52ygswxa5","symbol":"btc"}}`
+	expected := `{"type":"go-bitsong/token/MsgEditFanToken","value":{"denom":"ubtc","mintable":true,"owner":"cosmos1fsgzj6t7udv8zhf6zj32mkqhcjcpv52ygswxa5"}}`
 	require.Equal(t, expected, string(res))
 }
 
@@ -110,10 +110,10 @@ func TestMsgMintFanTokenValidateBasic(t *testing.T) {
 		{"empty denom", "", addr1, addr2, sdk.NewInt(1000), false},
 		{"wrong denom", "bt", addr1, addr2, sdk.NewInt(1000), false},
 		{"empty owner", "btc", emptyAddr, addr2, sdk.NewInt(1000), false},
-		{"empty to", "btc", addr1, emptyAddr, sdk.NewInt(1000), true},
-		{"not empty to", "btc", addr1, addr2, sdk.NewInt(1000), true},
+		{"empty to", "ftbtc", addr1, emptyAddr, sdk.NewInt(1000), true},
+		{"not empty to", "ftbtc", addr1, addr2, sdk.NewInt(1000), true},
 		{"invalid amount", "btc", addr1, addr2, sdk.ZeroInt(), false},
-		{"basic good", "btc", addr1, addr2, sdk.NewInt(1000), true},
+		{"basic good", "ftbtc", addr1, addr2, sdk.NewInt(1000), true},
 	}
 
 	for _, td := range testData {
@@ -134,7 +134,7 @@ func TestMsgBurnFanTokenValidateBasic(t *testing.T) {
 		amount     sdk.Int
 		expectPass bool
 	}{
-		{"basic good", "btc", addr1, sdk.NewInt(1000), true},
+		{"basic good", "ftbtc", addr1, sdk.NewInt(1000), true},
 		{"empty denom", "", addr1, sdk.NewInt(1000), false},
 		{"wrong demp,", "bt", addr1, sdk.NewInt(1000), false},
 		{"empty sender", "btc", emptyAddr, sdk.NewInt(1000), false},
@@ -163,7 +163,7 @@ func TestMsgTransferFanTokenOwnerValidation(t *testing.T) {
 		{"empty denom", addr1, "", addr2, false},
 		{"empty dstOwner", addr1, "btc", emptyAddr, false},
 		{"invalid denom", addr1, "btc_min", addr2, false},
-		{"basic good", addr1, "btc", addr2, true},
+		{"basic good", addr1, "ftbtc", addr2, true},
 	}
 
 	for _, td := range testData {
