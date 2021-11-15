@@ -15,6 +15,9 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	appparams "github.com/bitsongofficial/chainmodules/app/params"
+	"github.com/bitsongofficial/chainmodules/x/auction"
+	auctionkeeper "github.com/bitsongofficial/chainmodules/x/auction/keeper"
+	auctiontypes "github.com/bitsongofficial/chainmodules/x/auction/types"
 	"github.com/bitsongofficial/chainmodules/x/fantoken"
 	fantokenkeeper "github.com/bitsongofficial/chainmodules/x/fantoken/keeper"
 	fantokentypes "github.com/bitsongofficial/chainmodules/x/fantoken/types"
@@ -132,6 +135,7 @@ var (
 		vesting.AppModuleBasic{},
 		fantoken.AppModuleBasic{},
 		nft.AppModuleBasic{},
+		auction.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -144,6 +148,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		fantokentypes.ModuleName:       {authtypes.Minter, authtypes.Burner},
+		auctiontypes.ModuleName:        {},
 	}
 )
 
@@ -200,6 +205,7 @@ type Bitsong struct {
 
 	FanTokenKeeper fantokenkeeper.Keeper
 	NFTKeeper      nftkeeper.Keeper
+	AuctionKeeper  auctionkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -230,7 +236,7 @@ func New(
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey,
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
-		fantokentypes.StoreKey, nfttypes.StoreKey,
+		fantokentypes.StoreKey, nfttypes.StoreKey, auctiontypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -336,6 +342,8 @@ func New(
 
 	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
 
+	app.AuctionKeeper = auctionkeeper.NewKeeper(appCodec, keys[auctiontypes.StoreKey], app.AccountKeeper, app.BankKeeper, app.NFTKeeper)
+
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
@@ -371,6 +379,7 @@ func New(
 		transferModule,
 		fantoken.NewAppModule(appCodec, app.FanTokenKeeper, app.AccountKeeper, app.BankKeeper),
 		nft.NewAppModule(appCodec, app.NFTKeeper, app.AccountKeeper, app.BankKeeper),
+		auction.NewAppModule(appCodec, app.AuctionKeeper, app.AccountKeeper, app.BankKeeper, app.NFTKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -405,6 +414,7 @@ func New(
 		ibctransfertypes.ModuleName,
 		fantokentypes.ModuleName,
 		nfttypes.ModuleName,
+		auctiontypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -424,6 +434,7 @@ func New(
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		fantoken.NewAppModule(appCodec, app.FanTokenKeeper, app.AccountKeeper, app.BankKeeper),
 		nft.NewAppModule(appCodec, app.NFTKeeper, app.AccountKeeper, app.BankKeeper),
+		auction.NewAppModule(appCodec, app.AuctionKeeper, app.AccountKeeper, app.BankKeeper, app.NFTKeeper),
 	)
 
 	app.sm.RegisterStoreDecoders()

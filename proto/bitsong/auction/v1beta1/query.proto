@@ -20,11 +20,19 @@ service Query {
     }
     // AuctionsByOwner queries the Auctions of the given owner
     rpc AuctionsByOwner(QueryAuctionsByOwnerRequest) returns (QueryAuctionsByOwnerResponse) {
-        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions/{owner}";
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auctions/owner/{owner}";
+    }
+    // Bid queries the bid of the given auction id and bidder
+    rpc Bid(QueryBidRequest) returns (QueryBidResponse) {
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auction/{auction_id}/bid/{bidder}";
     }
     // Bids queries the bids of the given auction id
-    rpc Bids(QueryBidsRequest) returns (QueryBidsResponse) {
-        option (google.api.http).get = "/bitsong/auction/v1beta1/bids/{auction_id}";
+    rpc BidsByAuction(QueryBidsByAuctionRequest) returns (QueryBidsByAuctionResponse) {
+        option (google.api.http).get = "/bitsong/auction/v1beta1/auction/{auction_id}/bids";
+    }
+    // Bids queries the bids of the given bidder
+    rpc BidsByBidder(QueryBidsByBidderRequest) returns (QueryBidsByBidderResponse) {
+        option (google.api.http).get = "/bitsong/auction/v1beta1/bids-by-bidder/{bidder}";
     }
 }
 
@@ -65,15 +73,40 @@ message QueryAuctionsByOwnerResponse {
     cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-// QueryBidsRequest is the request type for the Query/Bids RPC method
-message QueryBidsRequest {
+// QueryBidRequest is the request type for the Query/Bid RPC method
+message QueryBidRequest {
+    uint64 auction_id = 1 [ (gogoproto.moretags) = "yaml:\"auction_id\"" ];
+    string bidder = 2;
+}
+
+// QueryBidResponse is the response type for the Query/Bid RPC method
+message QueryBidResponse {
+    Bid bid = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryBidsByAuctionRequest is the request type for the Query/BidsByAuction RPC method
+message QueryBidsByAuctionRequest {
     uint64 auction_id = 1 [ (gogoproto.moretags) = "yaml:\"auction_id\"" ];
     // pagination defines an optional pagination for the request.
     cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryBidsResponse is the response type for the Query/Bids RPC method
-message QueryBidsResponse {
+// QueryBidsByAuctionResponse is the response type for the Query/BidsByAuction RPC method
+message QueryBidsByAuctionResponse {
+    repeated Bid bids = 1 [ (gogoproto.nullable) = false ];
+
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBidsByBidderRequest is the request type for the Query/BidsByBidder RPC method
+message QueryBidsByBidderRequest {
+    string bidder = 1;
+    // pagination defines an optional pagination for the request.
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryBidsByBidderResponse is the response type for the Query/BidsByBidder RPC method
+message QueryBidsByBidderResponse {
     repeated Bid bids = 1 [ (gogoproto.nullable) = false ];
 
     cosmos.base.query.v1beta1.PageResponse pagination = 2;

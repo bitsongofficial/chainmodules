@@ -26,9 +26,10 @@ The auction type where limited number of highest bidders can be the winners.
     - [MsgCancelBid](02_messages.md#MsgCancelBid)
     - [MsgWithdraw](02_messages.md#MsgWithdraw)
 3. **[Events](03_events.md)**
-    - [MsgIssueFanToken](03_events.md#MsgIssueFanToken)
-    - [MsgEditFanToken](03_events.md#MsgEditFanToken)
-    - [MsgMintFanToken](03_events.md#MsgMintFanToken)
-    - [MsgBurnFanToken](03_events.md#MsgBurnFanToken)
-    - [MsgTransferFanTokenOwner](03_events.md#MsgTransferFanTokenOwner)
+    - [MsgOpenAuction](03_events.md#MsgOpenAuction)
+    - [MsgEditAuction](03_events.md#MsgEditAuction)
+    - [MsgCancelAuction](03_events.md#MsgCancelAuction)
+    - [MsgOpenBid](03_events.md#MsgOpenBid)
+    - [MsgCancelBid](03_events.md#MsgCancelBid)
+    - [MsgWithdraw](03_events.md#MsgWithdraw)
 4. **[Future Improvements](04_future_improvements.md)**
