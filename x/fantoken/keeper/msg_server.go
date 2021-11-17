@@ -33,9 +33,11 @@ func (m msgServer) IssueFanToken(goCtx context.Context, msg *types.MsgIssueFanTo
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.IssueFanToken(
+	denom, err := m.Keeper.IssueFanToken(
 		ctx, msg.Symbol, msg.Name, msg.MaxSupply, msg.Description, owner, msg.IssueFee,
-	); err != nil {
+	)
+
+	if err != nil {
 		return nil, err
 	}
 
@@ -47,6 +49,7 @@ func (m msgServer) IssueFanToken(goCtx context.Context, msg *types.MsgIssueFanTo
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeIssueFanToken,
+			sdk.NewAttribute(types.AttributeKeyDenom, denom),
 			sdk.NewAttribute(types.AttributeKeySymbol, msg.Symbol),
 			sdk.NewAttribute(types.AttributeKeyCreator, msg.Owner),
 		),

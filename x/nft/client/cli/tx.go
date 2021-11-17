@@ -49,7 +49,7 @@ func GetCmdIssueDenom() *cobra.Command {
 				"--name=<denom-name> "+
 				"--creators=<creators> "+
 				"--split-shares=<split-shares> "+
-				"--royalty-shares=<royalty-shares> "+
+				"--royalty-share=<royalty-share> "+
 				"--chain-id=<chain-id> "+
 				"--fees=<fee>",
 			version.AppName,

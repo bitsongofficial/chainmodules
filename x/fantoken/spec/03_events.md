@@ -5,6 +5,7 @@ The fantoken module emits the following events:
 
 | Type            | Attribute Key | Attribute Value  |
 | :-------------- | :------------ | :--------------- |
+| issue_fan_token | denom         | {Denom}          |
 | issue_fan_token | symbol        | {Symbol}         |
 | issue_fan_token | creator       | {creatorAddress} |
 | message         | module        | fantoken         |

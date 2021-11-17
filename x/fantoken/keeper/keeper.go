@@ -60,16 +60,16 @@ func (k Keeper) IssueFanToken(
 	description string,
 	owner sdk.AccAddress,
 	issueFee sdk.Coin,
-) error {
+) (denom string, err error) {
 	issuePrice := k.GetParamSet(ctx).IssuePrice
 	if issueFee.Denom != issuePrice.GetDenom() {
-		return sdkerrors.Wrapf(types.ErrInvalidDenom, "the issue fee denom %s is invalid", issueFee.String())
+		return denom, sdkerrors.Wrapf(types.ErrInvalidDenom, "the issue fee denom %s is invalid", issueFee.String())
 	}
 	if issueFee.Amount.LT(issuePrice.Amount) {
-		return sdkerrors.Wrapf(types.ErrLessIssueFee, "the issue fee %s is less than %s", issueFee.String(), issuePrice.String())
+		return denom, sdkerrors.Wrapf(types.ErrLessIssueFee, "the issue fee %s is less than %s", issueFee.String(), issuePrice.String())
 	}
 
-	denom := types.GetFantokenDenom(owner, symbol, name)
+	denom = types.GetFantokenDenom(owner, symbol, name)
 	denomMetaData := banktypes.Metadata{
 		Description: description,
 		Base:        denom,
@@ -82,10 +82,10 @@ func (k Keeper) IssueFanToken(
 	fantoken := types.NewFanToken(name, maxSupply, owner, denomMetaData)
 
 	if err := k.AddFanToken(ctx, fantoken); err != nil {
-		return err
+		return denom, err
 	}
 
-	return nil
+	return denom, nil
 }
 
 // EditFanToken edits the specified fantoken

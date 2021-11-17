@@ -18,10 +18,8 @@ const (
 )
 
 var (
-	// IsAlphaNumeric only accepts [a-z0-9]
-	IsAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
-	// IsBeginWithAlpha only begin with [a-z]
-	IsBeginWithAlpha = regexp.MustCompile(`^[a-z].*`).MatchString
+	// IsAlphaNumeric only accepts [ A-Za-z0-9_@./#&+-]
+	IsAlphaNumeric = regexp.MustCompile(`^[ A-Za-z0-9_@./#&+-]+$`).MatchString
 )
 
 // ValidateDenomID verifies whether the  parameters are legal
@@ -29,8 +27,8 @@ func ValidateDenomID(denomID string) error {
 	if len(denomID) < MinDenomLen || len(denomID) > MaxDenomLen {
 		return sdkerrors.Wrapf(ErrInvalidDenom, "the length of denom(%s) only accepts value [%d, %d]", denomID, MinDenomLen, MaxDenomLen)
 	}
-	if !IsBeginWithAlpha(denomID) || !IsAlphaNumeric(denomID) {
-		return sdkerrors.Wrapf(ErrInvalidDenom, "the denom(%s) only accepts lowercase alphanumeric characters, and begin with an english letter", denomID)
+	if !IsAlphaNumeric(denomID) {
+		return sdkerrors.Wrapf(ErrInvalidDenom, "the denom(%s) only accepts alphanumeric characters", denomID)
 	}
 	return nil
 }
@@ -49,8 +47,8 @@ func ValidateTokenID(tokenID string) error {
 	if len(tokenID) < MinDenomLen || len(tokenID) > MaxDenomLen {
 		return sdkerrors.Wrapf(ErrInvalidTokenID, "the length of nft id(%s) only accepts value [%d, %d]", tokenID, MinDenomLen, MaxDenomLen)
 	}
-	if !IsBeginWithAlpha(tokenID) || !IsAlphaNumeric(tokenID) {
-		return sdkerrors.Wrapf(ErrInvalidTokenID, "nft id(%s) only accepts lowercase alphanumeric characters, and begin with an english letter", tokenID)
+	if !IsAlphaNumeric(tokenID) {
+		return sdkerrors.Wrapf(ErrInvalidTokenID, "nft id(%s) only accepts alphanumeric characters", tokenID)
 	}
 	return nil
 }
